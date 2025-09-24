@@ -1,0 +1,109 @@
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Index from "./pages/Index";
+import Dashboard from "./pages/Dashboard";
+import Marketplace from "./pages/Marketplace";
+import PatientPortal from "./pages/PatientPortal";
+import { DoctorDashboard, ProviderProfile } from "./pages/users/doctor";
+import { NurseDashboard } from "./pages/users/nurse";
+import { PatientDashboard, PatientProfile } from "./pages/users/patient";
+import { ClinicDashboard, ClinicManagement } from "./pages/users/clinic";
+import { PharmacistDashboard } from "./pages/users/pharmacist";
+import { AdminDashboard } from "./pages/users/admin";
+import Analytics from "./pages/Analytics";
+import Telemedicine from "./pages/Telemedicine";
+import SmartScheduling from "./pages/SmartScheduling";
+import EHR from "./pages/EHR";
+import Pharmacy from "./pages/Pharmacy";
+import NotFound from "./pages/NotFound";
+
+// Authentication Pages
+import Welcome from "./pages/auth/Welcome";
+import RoleSelection from "./pages/auth/RoleSelection";
+import SignUp from "./pages/auth/SignUp";
+import SignIn from "./pages/auth/SignIn";
+import PatientSignUp from "./pages/auth/PatientSignUp";
+import PatientSignIn from "./pages/auth/PatientSignIn";
+import ProviderSignUp from "./pages/auth/ProviderSignUp";
+import ProviderSignIn from "./pages/auth/ProviderSignIn";
+import VerifyEmail from "./pages/auth/VerifyEmail";
+import MFASetup from "./pages/auth/MFASetup";
+import ProfileSetup from "./pages/auth/ProfileSetup";
+
+// Patient Pages
+import DoctorSearch from "./pages/DoctorSearch";
+import Booking from "./pages/Booking";
+import Teleconsultation from "./pages/Teleconsultation";
+import MarketplaceHub from "./pages/MarketplaceHub";
+
+const queryClient = new QueryClient();
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          
+              {/* Authentication Routes */}
+              <Route path="/auth/welcome" element={<Welcome />} />
+              <Route path="/auth/role-selection" element={<RoleSelection />} />
+              
+              {/* Patient Authentication */}
+          <Route path="/auth/patient-signup" element={<PatientSignUp />} />
+          <Route path="/auth/patient-signin" element={<PatientSignIn />} />
+          
+          {/* Provider Authentication */}
+          <Route path="/auth/provider-signup" element={<ProviderSignUp />} />
+          <Route path="/auth/provider-signin" element={<ProviderSignIn />} />
+          
+          {/* Legacy Auth Routes */}
+          <Route path="/auth/signup" element={<SignUp />} />
+          <Route path="/auth/signin" element={<SignIn />} />
+          
+          {/* Common Auth Routes */}
+          <Route path="/auth/verify-email" element={<VerifyEmail />} />
+          <Route path="/auth/mfa-setup" element={<MFASetup />} />
+          <Route path="/auth/profile-setup" element={<ProfileSetup />} />
+          
+              {/* Patient Routes */}
+              <Route path="/dashboard" element={<PatientDashboard />} />
+              <Route path="/profile" element={<PatientProfile />} />
+              <Route path="/search/doctors" element={<DoctorSearch />} />
+              <Route path="/booking" element={<Booking />} />
+              <Route path="/consultation" element={<Teleconsultation />} />
+              <Route path="/marketplace" element={<MarketplaceHub />} />
+          
+              {/* Provider Routes */}
+              <Route path="/provider-profile" element={<ProviderProfile />} />
+              
+              {/* User-specific Dashboard Routes */}
+              <Route path="/pharmacist-dashboard" element={<PharmacistDashboard />} />
+              <Route path="/clinic-dashboard" element={<ClinicDashboard />} />
+              <Route path="/admin-dashboard" element={<AdminDashboard />} />
+              
+              {/* Legacy Routes */}
+              <Route path="/patient-portal" element={<PatientPortal />} />
+              <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
+              <Route path="/nurse-dashboard" element={<NurseDashboard />} />
+              <Route path="/clinic-management" element={<ClinicManagement />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/telemedicine" element={<Telemedicine />} />
+          <Route path="/scheduling" element={<SmartScheduling />} />
+          <Route path="/ehr" element={<EHR />} />
+          <Route path="/pharmacy" element={<Pharmacy />} />
+          
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
+
+export default App;

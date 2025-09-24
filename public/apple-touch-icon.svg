@@ -1,0 +1,21 @@
+<svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle for Apple touch icon -->
+  <circle cx="90" cy="90" r="90" fill="#ffffff"/>
+  
+  <!-- Stethoscope Icon with K (larger, no container) -->
+  <g id="stethoscope-icon">
+    <!-- Chest piece (circular) -->
+    <circle cx="90" cy="135" r="26" fill="none" stroke="#3B82F6" stroke-width="8"/>
+    
+    <!-- Stem with curved tubing -->
+    <path d="M90 109 L90 58 Q90 45, 72 45" stroke="#3B82F6" stroke-width="8" fill="none" stroke-linecap="round"/>
+    
+    <!-- Ear tips -->
+    <circle cx="68" cy="45" r="8" fill="#4ADE80"/>
+    <circle cx="56" cy="45" r="8" fill="#4ADE80"/>
+    
+    <!-- K letter in chest piece -->
+    <text x="90" y="145" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+          font-size="32" font-weight="bold" fill="#3B82F6" text-anchor="middle">K</text>
+  </g>
+</svg>
