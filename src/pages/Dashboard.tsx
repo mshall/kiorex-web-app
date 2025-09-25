@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
+import RoleBasedNavigation from "@/components/RoleBasedNavigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -19,9 +21,11 @@ import {
   ArrowDown,
   Sparkles
 } from "lucide-react";
-import KiorexLogo from "@/components/KiorexLogo";
 
 const Dashboard = () => {
+  const location = useLocation();
+  const userType = location.state?.userType || 'patient';
+  const providerType = location.state?.providerType || 'Patient';
   const [notifications] = useState([
     { id: 1, title: "Appointment Reminder", message: "Dr. Smith consultation in 30 minutes", time: "2 min ago", type: "warning" },
     { id: 2, title: "Lab Results Ready", message: "Your blood test results are available", time: "1 hour ago", type: "info" },
@@ -37,34 +41,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-muted/50">
       {/* Header */}
-      <header className="bg-background border-b border-border sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <KiorexLogo size="sm" showText={false} />
-                <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                  Kiorex
-                </span>
-              </div>
-              <span className="text-muted-foreground">Dashboard</span>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="w-5 h-5" />
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-destructive rounded-full"></div>
-              </Button>
-              <Button variant="ghost" size="icon">
-                <Settings className="w-5 h-5" />
-              </Button>
-              <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center">
-                <span className="text-white font-semibold text-sm">S</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <RoleBasedNavigation userType={userType} userName={providerType} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}

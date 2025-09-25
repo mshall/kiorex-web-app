@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
+import RoleBasedNavigation from "@/components/RoleBasedNavigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -21,9 +23,11 @@ import {
   Filter,
   RefreshCw
 } from "lucide-react";
-import KiorexLogo from "@/components/KiorexLogo";
 
 const Analytics = () => {
+  const location = useLocation();
+  const userType = location.state?.userType || 'patient';
+  const providerType = location.state?.providerType || 'Patient';
   const [timeRange, setTimeRange] = useState("7d");
   
   const metrics = [
@@ -123,36 +127,7 @@ const Analytics = () => {
   return (
     <div className="min-h-screen bg-muted/50">
       {/* Header */}
-      <header className="bg-background border-b border-border sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <KiorexLogo size="sm" showText={false} />
-                <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                  Kiorex
-                </span>
-              </div>
-              <span className="text-muted-foreground">Analytics Dashboard</span>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <Button variant="outline" size="sm">
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Refresh
-              </Button>
-              <Button variant="outline" size="sm">
-                <Download className="w-4 h-4 mr-2" />
-                Export
-              </Button>
-              <Button variant="outline" size="sm">
-                <Filter className="w-4 h-4 mr-2" />
-                Filters
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <RoleBasedNavigation userType={userType} userName={providerType} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Section */}

@@ -161,7 +161,9 @@ const MarketplaceHub = () => {
   });
 
   const handleServiceClick = (service: any) => {
-    navigate(`/marketplace/${service.category}`, { state: { service } });
+    // Remove icon from service data to avoid DataCloneError
+    const { icon, ...serviceData } = service;
+    navigate(`/marketplace/${service.category}`, { state: { service: serviceData } });
   };
 
   const getCategoryStats = () => {
