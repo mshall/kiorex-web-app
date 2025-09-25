@@ -709,6 +709,7 @@ const PatientDashboard = () => {
           </div>
         </TabsContent>
       </Tabs>
+      </div>
     </div>
   );
 };
