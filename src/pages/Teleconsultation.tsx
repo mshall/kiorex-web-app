@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import RoleBasedNavigation from "@/components/RoleBasedNavigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { 
-  Heart, 
   Video,
   VideoOff,
   Mic,
@@ -36,9 +36,13 @@ import {
   Users,
   Shield
 } from "lucide-react";
+import KiorexLogo from "@/components/KiorexLogo";
 
 const Teleconsultation = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const userType = location.state?.userType || 'patient';
+  const providerType = location.state?.providerType || 'Patient';
   const [isVideoOn, setIsVideoOn] = useState(true);
   const [isMicOn, setIsMicOn] = useState(true);
   const [isSpeakerOn, setIsSpeakerOn] = useState(true);
@@ -96,24 +100,7 @@ const Teleconsultation = () => {
   if (!isCallActive) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
-        {/* Header */}
-        <header className="bg-background border-b border-border sticky top-0 z-40">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-                    <Heart className="w-5 h-5 text-white" />
-                  </div>
-                  <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                    Kiorex
-                  </span>
-                </div>
-                <span className="text-muted-foreground">Video Consultation</span>
-              </div>
-            </div>
-          </div>
-        </header>
+        <RoleBasedNavigation userType={userType} userName={providerType} />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center mb-8">

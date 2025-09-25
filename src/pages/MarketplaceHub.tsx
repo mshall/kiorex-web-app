@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import RoleBasedNavigation from "@/components/RoleBasedNavigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { 
-  Heart, 
   Search,
   ArrowRight,
   Star,
@@ -31,9 +31,13 @@ import {
   List,
   ChevronDown
 } from "lucide-react";
+import KiorexLogo from "@/components/KiorexLogo";
 
 const MarketplaceHub = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const userType = location.state?.userType || 'patient';
+  const providerType = location.state?.providerType || 'Patient';
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -174,24 +178,7 @@ const MarketplaceHub = () => {
 
   return (
     <div className="min-h-screen bg-muted/50">
-      {/* Header */}
-      <header className="bg-background border-b border-border sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-                  <Heart className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                  Kiorex
-                </span>
-              </div>
-              <span className="text-muted-foreground">Healthcare Marketplace</span>
-            </div>
-          </div>
-        </div>
-      </header>
+      <RoleBasedNavigation userType={userType} userName={providerType} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section */}

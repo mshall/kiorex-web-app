@@ -96,6 +96,17 @@ const PatientDashboard = () => {
           <p className="text-muted-foreground">Here's your comprehensive health overview</p>
         </div>
 
+        {/* Enhanced Tabs System */}
+        <Tabs defaultValue="overview" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="appointments">Appointments</TabsTrigger>
+            <TabsTrigger value="health">Health</TabsTrigger>
+            <TabsTrigger value="records">Records</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="overview" className="space-y-6">
+
         {/* Quick Actions */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
           {quickActions.map((action, index) => (
@@ -461,7 +472,236 @@ const PatientDashboard = () => {
               </CardContent>
             </Card>
           </div>
-        </div>
+        </TabsContent>
+
+        <TabsContent value="appointments" className="space-y-6">
+          {/* Appointments Tab Content */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Calendar className="w-5 h-5 mr-2" />
+                  Upcoming Appointments
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {appointments.map((appointment) => (
+                    <div key={appointment.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                      <div className="flex-1">
+                        <h3 className="font-semibold">{appointment.doctor}</h3>
+                        <p className="text-sm text-muted-foreground">{appointment.specialty}</p>
+                        <div className="flex items-center space-x-4 mt-2 text-sm">
+                          <span className="flex items-center">
+                            <Calendar className="w-3 h-3 mr-1" />
+                            {appointment.date}
+                          </span>
+                          <span className="flex items-center">
+                            <Clock className="w-3 h-3 mr-1" />
+                            {appointment.time}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Badge variant={appointment.status === 'upcoming' ? 'default' : 'secondary'}>
+                          {appointment.status}
+                        </Badge>
+                        <Button size="sm" variant="outline">
+                          <Eye className="w-3 h-3 mr-1" />
+                          View
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Video className="w-5 h-5 mr-2" />
+                  Recent Consultations
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {recentConsultations.map((consultation) => (
+                    <div key={consultation.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                      <div className="flex-1">
+                        <h3 className="font-semibold">{consultation.doctor}</h3>
+                        <p className="text-sm text-muted-foreground">{consultation.specialty}</p>
+                        <p className="text-sm text-muted-foreground mt-1">{consultation.date}</p>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Badge variant="outline">Completed</Badge>
+                        {consultation.prescription && (
+                          <Badge variant="secondary">Prescription</Badge>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="health" className="space-y-6">
+          {/* Health Tab Content */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Heart Rate</p>
+                    <p className="text-2xl font-bold text-primary">{healthMetrics.heartRate.value}</p>
+                    <p className="text-sm text-muted-foreground">{healthMetrics.heartRate.unit}</p>
+                  </div>
+                  <Heart className="w-8 h-8 text-red-500" />
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Blood Pressure</p>
+                    <p className="text-2xl font-bold text-primary">{healthMetrics.bloodPressure.value}</p>
+                    <p className="text-sm text-muted-foreground">{healthMetrics.bloodPressure.unit}</p>
+                  </div>
+                  <Activity className="w-8 h-8 text-blue-500" />
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Weight</p>
+                    <p className="text-2xl font-bold text-primary">{healthMetrics.weight.value}</p>
+                    <p className="text-sm text-muted-foreground">{healthMetrics.weight.unit}</p>
+                  </div>
+                  <TrendingUp className="w-8 h-8 text-green-500" />
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Steps Today</p>
+                    <p className="text-2xl font-bold text-primary">{healthMetrics.steps.value.toLocaleString()}</p>
+                    <p className="text-sm text-muted-foreground">{healthMetrics.steps.unit}</p>
+                  </div>
+                  <Activity className="w-8 h-8 text-purple-500" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Daily Tasks</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {upcomingTasks.map((task) => (
+                  <div key={task.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <Checkbox checked={task.completed} />
+                      <div>
+                        <p className="font-medium">{task.title}</p>
+                        <p className="text-sm text-muted-foreground">{task.time}</p>
+                      </div>
+                    </div>
+                    <Badge variant={task.completed ? 'default' : 'secondary'}>
+                      {task.completed ? 'Completed' : 'Pending'}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="records" className="space-y-6">
+          {/* Records Tab Content */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <FileText className="w-5 h-5 mr-2" />
+                  Medical Records
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                    <div>
+                      <h3 className="font-semibold">Blood Test Results</h3>
+                      <p className="text-sm text-muted-foreground">December 15, 2024</p>
+                    </div>
+                    <Button size="sm" variant="outline">
+                      <Download className="w-3 h-3 mr-1" />
+                      Download
+                    </Button>
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                    <div>
+                      <h3 className="font-semibold">X-Ray Report</h3>
+                      <p className="text-sm text-muted-foreground">December 10, 2024</p>
+                    </div>
+                    <Button size="sm" variant="outline">
+                      <Download className="w-3 h-3 mr-1" />
+                      Download
+                    </Button>
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                    <div>
+                      <h3 className="font-semibold">Prescription History</h3>
+                      <p className="text-sm text-muted-foreground">December 8, 2024</p>
+                    </div>
+                    <Button size="sm" variant="outline">
+                      <Eye className="w-3 h-3 mr-1" />
+                      View
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Pill className="w-5 h-5 mr-2" />
+                  Current Medications
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                    <div>
+                      <h3 className="font-semibold">Metformin</h3>
+                      <p className="text-sm text-muted-foreground">500mg - Twice daily</p>
+                      <p className="text-sm text-muted-foreground">Dr. Smith</p>
+                    </div>
+                    <Badge variant="default">Active</Badge>
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+                    <div>
+                      <h3 className="font-semibold">Lisinopril</h3>
+                      <p className="text-sm text-muted-foreground">10mg - Once daily</p>
+                      <p className="text-sm text-muted-foreground">Dr. Johnson</p>
+                    </div>
+                    <Badge variant="default">Active</Badge>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

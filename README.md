@@ -20,7 +20,7 @@ To run this project locally, follow these steps:
 git clone <YOUR_GIT_URL>
 
 # Step 2: Navigate to the project directory
-cd kiorex-app-blueprint-main
+cd kiorex-healthcare-web-app
 
 # Step 3: Install dependencies
 npm install

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import RoleBasedNavigation from "@/components/RoleBasedNavigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +10,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
-  Heart, 
   ArrowLeft,
   Calendar,
   Clock,
@@ -29,10 +29,13 @@ import {
   Award,
   Languages
 } from "lucide-react";
+import KiorexLogo from "@/components/KiorexLogo";
 
 const Booking = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const userType = location.state?.userType || 'patient';
+  const providerType = location.state?.providerType || 'Patient';
   const doctor = location.state?.doctor || {
     id: 1,
     name: "Dr. Emily Smith",
@@ -349,27 +352,7 @@ const Booking = () => {
 
   return (
     <div className="min-h-screen bg-muted/50">
-      {/* Header */}
-      <header className="bg-background border-b border-border sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
-                <ArrowLeft className="w-5 h-5" />
-              </Button>
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-                  <Heart className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                  Kiorex
-                </span>
-              </div>
-              <span className="text-muted-foreground">Book Appointment</span>
-            </div>
-          </div>
-        </div>
-      </header>
+      <RoleBasedNavigation userType={userType} userName={providerType} />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Progress Steps */}

@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { 
-  Heart, 
   User,
   MapPin,
   Phone,
@@ -21,6 +20,7 @@ import {
   Plus,
   X
 } from "lucide-react";
+import KiorexLogo from "@/components/KiorexLogo";
 
 const ProfileSetup = () => {
   const location = useLocation();
@@ -649,9 +649,7 @@ const ProfileSetup = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-                <Heart className="w-5 h-5 text-white" />
-              </div>
+              <KiorexLogo size="sm" showText={false} />
               <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
                 Kiorex
               </span>

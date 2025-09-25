@@ -32,11 +32,11 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
-const PharmacistDashboard = () => {
+const PharmacyDashboard = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const userType = location.state?.userType || 'pharmacist';
-  const providerType = location.state?.providerType || 'Pharmacist';
+  const userType = location.state?.userType || 'pharmacy';
+  const providerType = location.state?.providerType || 'Pharmacy';
 
   const [prescriptions] = useState([
     { id: 1, patient: "John Doe", medication: "Lisinopril 10mg", status: "pending", priority: "normal", date: "2024-01-15" },
@@ -205,4 +205,4 @@ const PharmacistDashboard = () => {
   );
 };
 
-export default PharmacistDashboard;
+export default PharmacyDashboard;

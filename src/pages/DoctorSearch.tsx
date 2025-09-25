@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import RoleBasedNavigation from "@/components/RoleBasedNavigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,7 +9,6 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { 
-  Heart, 
   Search,
   Filter,
   MapPin,
@@ -29,9 +29,13 @@ import {
   Eye,
   BookOpen
 } from "lucide-react";
+import KiorexLogo from "@/components/KiorexLogo";
 
 const DoctorSearch = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const userType = location.state?.userType || 'patient';
+  const providerType = location.state?.providerType || 'Patient';
   const [searchFilters, setSearchFilters] = useState({
     specialty: 'all',
     location: '',
@@ -187,27 +191,7 @@ const DoctorSearch = () => {
 
   return (
     <div className="min-h-screen bg-muted/50">
-      {/* Header */}
-      <header className="bg-background border-b border-border sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
-                <ArrowLeft className="w-5 h-5" />
-              </Button>
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-                  <Heart className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                  Kiorex
-                </span>
-              </div>
-              <span className="text-muted-foreground">Find Doctors</span>
-            </div>
-          </div>
-        </div>
-      </header>
+      <RoleBasedNavigation userType={userType} userName={providerType} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Search Section */}

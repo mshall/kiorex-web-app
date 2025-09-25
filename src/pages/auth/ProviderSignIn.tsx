@@ -43,7 +43,7 @@ const ProviderSignIn = () => {
     'Doctor',
     'Nurse', 
     'Physiotherapist',
-    'Pharmacist',
+        'Pharmacy',
     'Clinic',
     'Admin',
     'Lab Technician',
@@ -59,7 +59,7 @@ const ProviderSignIn = () => {
     'doctor': 'Doctor',
     'nurse': 'Nurse',
     'physiotherapist': 'Physiotherapist',
-    'pharmacist': 'Pharmacist',
+        'pharmacy': 'Pharmacy',
     'clinic': 'Clinic',
     'admin': 'Admin'
   };
@@ -112,8 +112,8 @@ const ProviderSignIn = () => {
               dashboardPath = '/nurse-dashboard';
             } else if (formData.providerType === 'Physiotherapist') {
               dashboardPath = '/doctor-dashboard'; // Use doctor dashboard for now
-            } else if (formData.providerType === 'Pharmacist') {
-              dashboardPath = '/pharmacist-dashboard';
+            } else if (formData.providerType === 'Pharmacy') {
+              dashboardPath = '/pharmacy-dashboard';
             } else if (formData.providerType === 'Doctor') {
               dashboardPath = '/doctor-dashboard';
             } else if (formData.providerType === 'Clinic') {
@@ -287,7 +287,7 @@ const ProviderSignIn = () => {
                           <ul className="mt-1 text-xs space-y-1">
                             <li>• doctor@kiorex.com → Doctor Dashboard</li>
                             <li>• nurse@kiorex.com → Nurse Dashboard</li>
-                            <li>• pharmacist@kiorex.com → Pharmacist Dashboard</li>
+                            <li>• pharmacy@kiorex.com → Pharmacy Dashboard</li>
                           </ul>
                         </div>
                       </div>

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Play, ArrowRight, Sparkles, Shield, Clock } from "lucide-react";
+import { Play, ArrowRight, Sparkles, Shield, Clock, Heart, Wind } from "lucide-react";
 
 export const HeroSection = () => {
   return (
@@ -98,10 +98,16 @@ export const HeroSection = () => {
                 {/* Quick Stats */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-success/10 rounded-2xl p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <Heart className="w-5 h-5 text-success" />
+                    </div>
                     <div className="text-2xl font-bold text-success">72</div>
                     <div className="text-sm text-muted-foreground">Heart Rate</div>
                   </div>
                   <div className="bg-info/10 rounded-2xl p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <Wind className="w-5 h-5 text-info" />
+                    </div>
                     <div className="text-2xl font-bold text-info">98%</div>
                     <div className="text-sm text-muted-foreground">Blood Oxygen</div>
                   </div>
