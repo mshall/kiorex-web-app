@@ -18,18 +18,32 @@ import {
 
 const ProfessionalCalendarPage = () => {
   const location = useLocation();
-  const userType = location.state?.userType || 'doctor';
-  const providerType = location.state?.providerType || 'Doctor';
-
+  
+  // Get user type from URL path or state, with intelligent defaults
+  const getUserTypeFromPath = () => {
+    const path = location.pathname;
+    if (path.includes('/doctor')) return 'doctor';
+    if (path.includes('/nurse')) return 'nurse';
+    if (path.includes('/clinic')) return 'clinic';
+    if (path.includes('/pharmacy')) return 'pharmacy';
+    if (path.includes('/admin')) return 'admin';
+    return 'doctor'; // Default fallback
+  };
+  
   const getRoleDisplayName = () => {
-    switch (userType) {
+    const currentUserType = location.state?.userType || getUserTypeFromPath();
+    switch (currentUserType) {
       case 'doctor': return 'Doctor';
       case 'nurse': return 'Nurse';
       case 'clinic': return 'Clinic';
       case 'pharmacy': return 'Pharmacy';
+      case 'admin': return 'Admin';
       default: return 'Professional';
     }
   };
+
+  const userType = location.state?.userType || getUserTypeFromPath();
+  const providerType = location.state?.providerType || getRoleDisplayName();
 
   const getRoleColor = () => {
     switch (userType) {

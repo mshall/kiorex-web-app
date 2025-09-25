@@ -214,6 +214,7 @@ const RoleBasedNavigation = ({
               <Link
                 key={link.href}
                 to={link.href}
+                state={link.href === '/professional-calendar' ? { userType, providerType: userName } : undefined}
                 className={`text-sm font-medium transition-colors hover:text-primary ${
                   isActive(link.href)
                     ? "text-primary"
@@ -331,6 +332,7 @@ const RoleBasedNavigation = ({
                     <span>Today's Schedule</span>
                     <Link 
                       to="/professional-calendar" 
+                      state={{ userType, providerType: userName }}
                       className="text-xs text-primary hover:underline"
                     >
                       View Calendar
@@ -388,6 +390,7 @@ const RoleBasedNavigation = ({
                   <DropdownMenuItem asChild>
                     <Link 
                       to="/professional-calendar" 
+                      state={{ userType, providerType: userName }}
                       className="cursor-pointer text-center justify-center"
                     >
                       View Full Calendar
@@ -496,6 +499,7 @@ const RoleBasedNavigation = ({
                 <Link
                   key={link.href}
                   to={link.href}
+                  state={link.href === '/professional-calendar' ? { userType, providerType: userName } : undefined}
                   className={`block px-3 py-2 text-sm font-medium transition-colors hover:text-primary hover:bg-muted rounded-md ${
                     isActive(link.href)
                       ? "text-primary bg-muted"
