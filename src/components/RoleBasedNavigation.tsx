@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import i18n from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Menu, X, User, LogOut, Settings, Bell, LayoutDashboard, Stethoscope, Users, Pill, FileText, Calendar, Video, BarChart3, Package, Truck, DollarSign, LifeBuoy, ArrowLeft, ChevronRight } from "lucide-react";
+import { Menu, X, User, LogOut, Settings, Bell, LayoutDashboard, Stethoscope, Users, Pill, FileText, Calendar, Video, BarChart3, Package, Truck, DollarSign, LifeBuoy, ArrowLeft, ChevronRight, Globe } from "lucide-react";
 import KiorexLogo from "@/components/KiorexLogo";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -249,6 +250,13 @@ const RoleBasedNavigation = ({
           <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
             {/* Language Switcher */}
             <LanguageSwitcher />
+            
+            {/* Language Indicator Badge */}
+            <div className="hidden sm:flex items-center">
+              <Badge variant="outline" className="text-xs font-medium">
+                {i18n.language.toUpperCase()}
+              </Badge>
+            </div>
             {/* Notifications Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -517,6 +525,17 @@ const RoleBasedNavigation = ({
                   {link.label}
                 </Link>
               ))}
+              
+              {/* Mobile Language Indicator */}
+              <div className="px-3 py-2 border-t border-border mt-2">
+                <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
+                  <Globe className="w-4 h-4" />
+                  <span className="text-sm text-muted-foreground">{t('settings.language')}:</span>
+                  <Badge variant="outline" className="text-xs font-medium">
+                    {i18n.language.toUpperCase()}
+                  </Badge>
+                </div>
+              </div>
             </div>
           </div>
         )}
