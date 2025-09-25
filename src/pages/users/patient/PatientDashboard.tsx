@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import RoleBasedNavigation from "@/components/RoleBasedNavigation";
+import { useRTL } from "@/hooks/useRTL";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -46,6 +48,8 @@ const PatientDashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const userType = location.state?.userType || 'patient';
+  const { t } = useTranslation();
+  const { isRTL, direction } = useRTL();
   const [notifications] = useState([
     { id: 1, title: "Appointment Reminder", message: "Dr. Smith consultation in 30 minutes", time: "2 min ago", type: "warning", unread: true },
     { id: 2, title: "Lab Results Ready", message: "Your blood test results are available", time: "1 hour ago", type: "info", unread: true },
@@ -87,24 +91,24 @@ const PatientDashboard = () => {
   ]);
 
   return (
-    <div className="min-h-screen bg-muted/50">
+    <div className="min-h-screen bg-muted/50" dir={direction}>
       {/* Role-based Navigation */}
       <RoleBasedNavigation userType={userType} userName="Patient User" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Welcome back, Patient! 👋</h1>
+          <h1 className="text-3xl font-bold mb-2">{t('dashboard.welcome')}, {t('auth.patient')}! 👋</h1>
           <p className="text-muted-foreground">Here's your comprehensive health overview</p>
         </div>
 
         {/* Enhanced Tabs System */}
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="appointments">Appointments</TabsTrigger>
-            <TabsTrigger value="health">Health</TabsTrigger>
-            <TabsTrigger value="records">Records</TabsTrigger>
+            <TabsTrigger value="overview">{t('dashboard.overview')}</TabsTrigger>
+            <TabsTrigger value="appointments">{t('navigation.appointments')}</TabsTrigger>
+            <TabsTrigger value="health">{t('navigation.health')}</TabsTrigger>
+            <TabsTrigger value="records">{t('navigation.records')}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">

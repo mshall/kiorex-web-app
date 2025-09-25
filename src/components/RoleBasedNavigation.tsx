@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Menu, X, User, LogOut, Settings, Bell, LayoutDashboard, Stethoscope, Users, Pill, FileText, Calendar, Video, BarChart3, Package, Truck, DollarSign, LifeBuoy, ArrowLeft, ChevronRight } from "lucide-react";
 import KiorexLogo from "@/components/KiorexLogo";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useRTL } from "@/hooks/useRTL";
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -29,93 +32,95 @@ const RoleBasedNavigation = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { isRTL, direction } = useRTL();
 
   // Navigation items based on user role
   const getNavigationItems = () => {
     switch (userType) {
       case 'patient':
         return [
-          { href: "/dashboard", label: "Dashboard" },
-          { href: "/patient-appointments", label: "Appointments" },
-          { href: "/search/doctors", label: "Find Doctors" },
-          { href: "/marketplace", label: "Services" },
-          { href: "/notifications", label: "Notifications" }
+          { href: "/dashboard", label: t('navigation.dashboard') },
+          { href: "/patient-appointments", label: t('navigation.appointments') },
+          { href: "/search/doctors", label: t('navigation.doctors') },
+          { href: "/marketplace", label: t('navigation.services') },
+          { href: "/notifications", label: t('navigation.notifications') }
         ];
       
       case 'doctor':
         return [
-          { href: "/doctor-dashboard", label: "Dashboard" },
-          { href: "/doctor-patients", label: "Patients" },
-          { href: "/doctor-revenue", label: "Revenue" },
-          { href: "/professional-calendar", label: "Calendar" },
-          { href: "/provider-appointments", label: "Appointments" },
-          { href: "/provider-ehr", label: "EHR" },
-          { href: "/provider-teleconsult", label: "Teleconsult" },
-          { href: "/provider-settings", label: "Settings" }
+          { href: "/doctor-dashboard", label: t('navigation.dashboard') },
+          { href: "/doctor-patients", label: t('navigation.patients') },
+          { href: "/doctor-revenue", label: t('navigation.revenue') },
+          { href: "/professional-calendar", label: t('navigation.calendar') },
+          { href: "/provider-appointments", label: t('navigation.appointments') },
+          { href: "/provider-ehr", label: t('navigation.ehr') },
+          { href: "/provider-teleconsult", label: t('navigation.teleconsult') },
+          { href: "/provider-settings", label: t('navigation.settings') }
         ];
       
       case 'nurse':
         return [
-          { href: "/nurse-dashboard", label: "Dashboard" },
-          { href: "/nurse-schedule", label: "Schedule" },
-          { href: "/nurse-patients", label: "Patients" },
-          { href: "/nurse-care-plans", label: "Care Plans" },
-          { href: "/professional-calendar", label: "Calendar" },
-          { href: "/nurse-documents", label: "Documents" },
-          { href: "/nurse-earnings", label: "Earnings" }
+          { href: "/nurse-dashboard", label: t('navigation.dashboard') },
+          { href: "/nurse-schedule", label: t('navigation.schedule') },
+          { href: "/nurse-patients", label: t('navigation.patients') },
+          { href: "/nurse-care-plans", label: t('navigation.carePlans') },
+          { href: "/professional-calendar", label: t('navigation.calendar') },
+          { href: "/nurse-documents", label: t('navigation.documents') },
+          { href: "/nurse-earnings", label: t('navigation.earnings') }
         ];
       
       case 'pharmacy':
         return [
-          { href: "/pharmacy-dashboard", label: "Dashboard" },
-          { href: "/pharmacy-orders", label: "Orders" },
-          { href: "/pharmacy-revenues", label: "Revenues" },
-          { href: "/pharmacy-pending", label: "Pending Approval" },
-          { href: "/professional-calendar", label: "Calendar" },
-          { href: "/pharmacy-inventory", label: "Inventory" },
-          { href: "/pharmacy-delivery", label: "Delivery" }
+          { href: "/pharmacy-dashboard", label: t('navigation.dashboard') },
+          { href: "/pharmacy-orders", label: t('navigation.orders') },
+          { href: "/pharmacy-revenues", label: t('navigation.revenues') },
+          { href: "/pharmacy-pending", label: t('navigation.pendingApproval') },
+          { href: "/professional-calendar", label: t('navigation.calendar') },
+          { href: "/pharmacy-inventory", label: t('navigation.inventory') },
+          { href: "/pharmacy-delivery", label: t('navigation.delivery') }
         ];
       
       case 'clinic':
         return [
-          { href: "/clinic-dashboard", label: "Dashboard" },
-          { href: "/clinic-appointments", label: "Appointments" },
-          { href: "/clinic-staff", label: "Staff" },
-          { href: "/clinic-patients", label: "Patients" },
-          { href: "/professional-calendar", label: "Calendar" },
-          { href: "/clinic-billing", label: "Billing" },
-          { href: "/clinic-analytics", label: "Analytics" }
+          { href: "/clinic-dashboard", label: t('navigation.dashboard') },
+          { href: "/clinic-appointments", label: t('navigation.appointments') },
+          { href: "/clinic-staff", label: t('navigation.staff') },
+          { href: "/clinic-patients", label: t('navigation.patients') },
+          { href: "/professional-calendar", label: t('navigation.calendar') },
+          { href: "/clinic-billing", label: t('navigation.billing') },
+          { href: "/clinic-analytics", label: t('navigation.analytics') }
         ];
       
       case 'admin':
         return [
-          { href: "/admin-dashboard", label: "Dashboard" },
-          { href: "/admin-users", label: "Users" },
-          { href: "/admin-providers", label: "Providers" },
-          { href: "/admin-transactions", label: "Transactions" },
-          { href: "/professional-calendar", label: "Calendar" },
-          { href: "/admin-analytics", label: "Analytics" },
-          { href: "/admin-support", label: "Support" },
-          { href: "/admin-settings", label: "Settings" }
+          { href: "/admin-dashboard", label: t('navigation.dashboard') },
+          { href: "/admin-users", label: t('navigation.users') },
+          { href: "/admin-providers", label: t('navigation.providers') },
+          { href: "/admin-transactions", label: t('navigation.transactions') },
+          { href: "/professional-calendar", label: t('navigation.calendar') },
+          { href: "/admin-analytics", label: t('navigation.analytics') },
+          { href: "/admin-support", label: t('navigation.support') },
+          { href: "/admin-settings", label: t('navigation.settings') }
         ];
       
       default:
         return [
-          { href: "/dashboard", label: "Dashboard" },
-          { href: "/marketplace", label: "Marketplace" }
+          { href: "/dashboard", label: t('navigation.dashboard') },
+          { href: "/marketplace", label: t('navigation.marketplace') }
         ];
     }
   };
 
   const getRoleDisplayName = () => {
     switch (userType) {
-      case 'patient': return 'Patient';
-      case 'doctor': return 'Doctor';
-      case 'nurse': return 'Nurse';
-      case 'pharmacy': return 'Pharmacy';
-      case 'clinic': return 'Clinic';
-      case 'admin': return 'Admin';
-      default: return 'User';
+      case 'patient': return t('auth.patient');
+      case 'doctor': return t('auth.doctor');
+      case 'nurse': return t('auth.nurse');
+      case 'pharmacy': return t('auth.pharmacy');
+      case 'clinic': return t('auth.clinic');
+      case 'admin': return t('auth.admin');
+      default: return t('common.user');
     }
   };
 
@@ -155,7 +160,7 @@ const RoleBasedNavigation = ({
     if (currentItem) {
       return {
         current: currentItem.label,
-        dashboard: getRoleDisplayName() + ' Dashboard'
+        dashboard: getRoleDisplayName() + ' ' + t('navigation.dashboard')
       };
     }
     
@@ -163,8 +168,8 @@ const RoleBasedNavigation = ({
     const pathSegments = path.split('/').filter(Boolean);
     const lastSegment = pathSegments[pathSegments.length - 1];
     return {
-      current: lastSegment ? lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1).replace('-', ' ') : 'Page',
-      dashboard: getRoleDisplayName() + ' Dashboard'
+      current: lastSegment ? lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1).replace('-', ' ') : t('common.page'),
+      dashboard: getRoleDisplayName() + ' ' + t('navigation.dashboard')
     };
   };
 
@@ -182,23 +187,23 @@ const RoleBasedNavigation = ({
   };
 
   return (
-    <nav className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border sticky top-0 z-50">
+    <nav className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border sticky top-0 z-50" dir={direction}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className={`flex justify-between items-center h-16 ${isRTL ? 'flex-row-reverse' : ''}`}>
           {/* Logo and Back Button */}
-          <div className="flex items-center space-x-4">
+          <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
             {breadcrumb && (
               <Button 
                 variant="ghost" 
                 size="sm" 
                 onClick={handleBackToDashboard}
-                className="flex items-center space-x-2"
+                className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}
               >
-                <ArrowLeft className="w-4 h-4" />
-                <span className="hidden sm:inline">Back</span>
+                <ArrowLeft className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />
+                <span className="hidden sm:inline">{t('common.back')}</span>
               </Button>
             )}
-            <div className="flex items-center space-x-2">
+            <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
               <Link to="/" className="flex items-center">
                 <KiorexLogo size="md" showText={true} />
               </Link>
@@ -209,7 +214,7 @@ const RoleBasedNavigation = ({
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className={`hidden md:flex items-center ${isRTL ? 'space-x-reverse space-x-8' : 'space-x-8'}`}>
             {navItems.map((link) => (
               <Link
                 key={link.href}
@@ -228,20 +233,22 @@ const RoleBasedNavigation = ({
 
           {/* Breadcrumb */}
           {breadcrumb && (
-            <div className="hidden lg:flex items-center space-x-2 text-sm text-muted-foreground">
+            <div className={`hidden lg:flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'} text-sm text-muted-foreground`}>
               <Link 
                 to={getMainDashboardPath()} 
                 className="hover:text-primary transition-colors"
               >
                 {breadcrumb.dashboard}
               </Link>
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />
               <span className="text-foreground font-medium">{breadcrumb.current}</span>
             </div>
           )}
 
           {/* User Menu */}
-          <div className="flex items-center space-x-4">
+          <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
+            {/* Language Switcher */}
+            <LanguageSwitcher />
             {/* Notifications Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -250,54 +257,54 @@ const RoleBasedNavigation = ({
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-destructive rounded-full"></div>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-80" align="end">
+              <DropdownMenuContent className="w-80" align={isRTL ? 'start' : 'end'}>
                 <DropdownMenuLabel className="flex items-center justify-between">
-                  <span>Notifications</span>
+                  <span>{t('navigation.notifications')}</span>
                   <Link 
                     to="/notifications" 
                     className="text-xs text-primary hover:underline"
                   >
-                    View All
+                    {t('notifications.viewAll')}
                   </Link>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <div className="max-h-96 overflow-y-auto">
                   {/* Sample notifications */}
                   <div className="p-3 hover:bg-muted/50 cursor-pointer">
-                    <div className="flex items-start space-x-3">
+                    <div className={`flex items-start ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                       <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium">New Message</p>
+                        <p className="text-sm font-medium">{t('notifications.newMessage')}</p>
                         <p className="text-xs text-muted-foreground">You have a new message from Dr. Smith</p>
                         <p className="text-xs text-muted-foreground mt-1">2 minutes ago</p>
                       </div>
                     </div>
                   </div>
                   <div className="p-3 hover:bg-muted/50 cursor-pointer">
-                    <div className="flex items-start space-x-3">
+                    <div className={`flex items-start ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                       <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium">Appointment Reminder</p>
+                        <p className="text-sm font-medium">{t('notifications.appointmentReminder')}</p>
                         <p className="text-xs text-muted-foreground">Your appointment is scheduled for tomorrow</p>
                         <p className="text-xs text-muted-foreground mt-1">1 hour ago</p>
                       </div>
                     </div>
                   </div>
                   <div className="p-3 hover:bg-muted/50 cursor-pointer">
-                    <div className="flex items-start space-x-3">
+                    <div className={`flex items-start ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                       <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium">System Update</p>
+                        <p className="text-sm font-medium">{t('notifications.systemUpdate')}</p>
                         <p className="text-xs text-muted-foreground">Platform maintenance scheduled</p>
                         <p className="text-xs text-muted-foreground mt-1">3 hours ago</p>
                       </div>
                     </div>
                   </div>
                   <div className="p-3 hover:bg-muted/50 cursor-pointer">
-                    <div className="flex items-start space-x-3">
+                    <div className={`flex items-start ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                       <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium">Payment Received</p>
+                        <p className="text-sm font-medium">{t('notifications.paymentReceived')}</p>
                         <p className="text-xs text-muted-foreground">Payment of $150.00 received</p>
                         <p className="text-xs text-muted-foreground mt-1">1 day ago</p>
                       </div>
@@ -310,7 +317,7 @@ const RoleBasedNavigation = ({
                     to="/notifications" 
                     className="cursor-pointer text-center justify-center"
                   >
-                    View All Notifications
+                    {t('notifications.viewAll')} {t('navigation.notifications')}
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -322,67 +329,67 @@ const RoleBasedNavigation = ({
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="relative">
                     <Calendar className="w-5 h-5" />
-                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full text-xs text-white flex items-center justify-center">
+                    <div className={`absolute -top-1 ${isRTL ? '-left-1' : '-right-1'} w-3 h-3 bg-blue-500 rounded-full text-xs text-white flex items-center justify-center`}>
                       3
                     </div>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-80" align="end">
+                <DropdownMenuContent className="w-80" align={isRTL ? 'start' : 'end'}>
                   <DropdownMenuLabel className="flex items-center justify-between">
-                    <span>Today's Schedule</span>
+                    <span>{t('calendar.today')} {t('calendar.schedule')}</span>
                     <Link 
                       to="/professional-calendar" 
                       state={{ userType, providerType: userName }}
                       className="text-xs text-primary hover:underline"
                     >
-                      View Calendar
+                      {t('calendar.viewCalendar')}
                     </Link>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <div className="max-h-96 overflow-y-auto">
                     {/* Sample appointments */}
                     <div className="p-3 hover:bg-muted/50 cursor-pointer">
-                      <div className="flex items-start space-x-3">
+                      <div className={`flex items-start ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                         <div className="w-3 h-3 bg-blue-500 rounded-full mt-2"></div>
                         <div className="flex-1">
                           <p className="text-sm font-medium">Consultation - Sarah Johnson</p>
                           <p className="text-xs text-muted-foreground">09:00 AM - 10:00 AM</p>
-                          <p className="text-xs text-muted-foreground">Video Call</p>
+                          <p className="text-xs text-muted-foreground">{t('appointments.videoCall')}</p>
                         </div>
-                        <Badge variant="outline" className="text-xs">Confirmed</Badge>
+                        <Badge variant="outline" className="text-xs">{t('appointments.confirmed')}</Badge>
                       </div>
                     </div>
                     <div className="p-3 hover:bg-muted/50 cursor-pointer">
-                      <div className="flex items-start space-x-3">
+                      <div className={`flex items-start ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                         <div className="w-3 h-3 bg-green-500 rounded-full mt-2"></div>
                         <div className="flex-1">
                           <p className="text-sm font-medium">Check-up - Michael Brown</p>
                           <p className="text-xs text-muted-foreground">10:30 AM - 11:30 AM</p>
-                          <p className="text-xs text-muted-foreground">In-Person Visit</p>
+                          <p className="text-xs text-muted-foreground">{t('appointments.inPerson')}</p>
                         </div>
-                        <Badge variant="outline" className="text-xs">Scheduled</Badge>
+                        <Badge variant="outline" className="text-xs">{t('appointments.scheduled')}</Badge>
                       </div>
                     </div>
                     <div className="p-3 hover:bg-muted/50 cursor-pointer">
-                      <div className="flex items-start space-x-3">
+                      <div className={`flex items-start ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                         <div className="w-3 h-3 bg-red-500 rounded-full mt-2"></div>
                         <div className="flex-1">
                           <p className="text-sm font-medium">Emergency - Emily Davis</p>
                           <p className="text-xs text-muted-foreground">02:00 PM - 03:00 PM</p>
-                          <p className="text-xs text-muted-foreground">Video Call</p>
+                          <p className="text-xs text-muted-foreground">{t('appointments.videoCall')}</p>
                         </div>
                         <Badge variant="destructive" className="text-xs">Urgent</Badge>
                       </div>
                     </div>
                     <div className="p-3 hover:bg-muted/50 cursor-pointer">
-                      <div className="flex items-start space-x-3">
+                      <div className={`flex items-start ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                         <div className="w-3 h-3 bg-yellow-500 rounded-full mt-2"></div>
                         <div className="flex-1">
                           <p className="text-sm font-medium">Follow-up - Robert Wilson</p>
                           <p className="text-xs text-muted-foreground">03:30 PM - 04:30 PM</p>
-                          <p className="text-xs text-muted-foreground">Phone Call</p>
+                          <p className="text-xs text-muted-foreground">{t('appointments.phoneCall')}</p>
                         </div>
-                        <Badge variant="outline" className="text-xs">Pending</Badge>
+                        <Badge variant="outline" className="text-xs">{t('appointments.pending')}</Badge>
                       </div>
                     </div>
                   </div>
@@ -393,7 +400,7 @@ const RoleBasedNavigation = ({
                       state={{ userType, providerType: userName }}
                       className="cursor-pointer text-center justify-center"
                     >
-                      View Full Calendar
+                      {t('calendar.viewFullCalendar')}
                     </Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -404,7 +411,7 @@ const RoleBasedNavigation = ({
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-auto p-2 rounded-full">
-                  <div className="flex items-center space-x-2">
+                  <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
                     <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center overflow-hidden">
                       {userProfilePicture ? (
                         <img 
@@ -424,7 +431,7 @@ const RoleBasedNavigation = ({
                   </div>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end" forceMount>
+              <DropdownMenuContent className="w-56" align={isRTL ? 'start' : 'end'} forceMount>
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium leading-none">{userFirstName}</p>
@@ -439,20 +446,20 @@ const RoleBasedNavigation = ({
                     to={userType === 'patient' ? '/profile' : '/provider-profile'} 
                     className="cursor-pointer"
                   >
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Profile</span>
+                    <User className={`${isRTL ? 'ml-2' : 'mr-2'} h-4 w-4`} />
+                    <span>{t('navigation.profile')}</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/settings" className="cursor-pointer">
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Settings</span>
+                    <Settings className={`${isRTL ? 'ml-2' : 'mr-2'} h-4 w-4`} />
+                    <span>{t('navigation.settings')}</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
+                  <LogOut className={`${isRTL ? 'ml-2' : 'mr-2'} h-4 w-4`} />
+                  <span>{t('navigation.logout')}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -476,11 +483,11 @@ const RoleBasedNavigation = ({
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden border-t border-border">
+          <div className="md:hidden border-t border-border" dir={direction}>
             {/* Mobile Breadcrumb */}
             {breadcrumb && (
               <div className="px-4 py-3 bg-muted/50 border-b border-border">
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'} text-sm text-muted-foreground`}>
                   <Link 
                     to={getMainDashboardPath()} 
                     className="hover:text-primary transition-colors"
@@ -488,7 +495,7 @@ const RoleBasedNavigation = ({
                   >
                     {breadcrumb.dashboard}
                   </Link>
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />
                   <span className="text-foreground font-medium">{breadcrumb.current}</span>
                 </div>
               </div>
@@ -504,7 +511,7 @@ const RoleBasedNavigation = ({
                     isActive(link.href)
                       ? "text-primary bg-muted"
                       : "text-muted-foreground"
-                  }`}
+                  } ${isRTL ? 'text-right' : 'text-left'}`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.label}
