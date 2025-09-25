@@ -159,10 +159,8 @@ const RoleBasedNavigation = ({
     // Get the current page name from the navigation items
     const currentItem = navItems.find(item => item.href === path);
     if (currentItem) {
-      return {
-        current: currentItem.label,
-        dashboard: getRoleDisplayName() + ' ' + t('navigation.dashboard')
-      };
+      // Don't show breadcrumb for navigation items - they're already in the nav
+      return null;
     }
     
     // Fallback for pages not in navigation
