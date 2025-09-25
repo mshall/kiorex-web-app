@@ -33,7 +33,7 @@ const RoleBasedNavigation = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, ready } = useTranslation();
   const { isRTL, direction } = useRTL();
 
   // Navigation items based on user role
@@ -262,12 +262,12 @@ const RoleBasedNavigation = ({
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-80" align="end">
                 <DropdownMenuLabel className="flex items-center justify-between">
-                  <span>{t('navigation.notifications')}</span>
+                  <span>{ready ? t('navigation.notifications') : 'Notifications'}</span>
                   <Link 
                     to="/notifications" 
                     className="text-xs text-primary hover:underline"
                   >
-                    {t('notifications.viewAll')}
+                    {ready ? t('notifications.viewAll') : 'View All'}
                   </Link>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
@@ -277,7 +277,7 @@ const RoleBasedNavigation = ({
                     <div className={`flex items-start ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                       <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium">{t('notifications.newMessage')}</p>
+                        <p className="text-sm font-medium">{ready ? t('notifications.newMessage') : 'New Message'}</p>
                         <p className="text-xs text-muted-foreground">You have a new message from Dr. Smith</p>
                         <p className="text-xs text-muted-foreground mt-1">2 minutes ago</p>
                       </div>
@@ -287,7 +287,7 @@ const RoleBasedNavigation = ({
                     <div className={`flex items-start ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                       <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium">{t('notifications.appointmentReminder')}</p>
+                        <p className="text-sm font-medium">{ready ? t('notifications.appointmentReminder') : 'Appointment Reminder'}</p>
                         <p className="text-xs text-muted-foreground">Your appointment is scheduled for tomorrow</p>
                         <p className="text-xs text-muted-foreground mt-1">1 hour ago</p>
                       </div>
@@ -297,7 +297,7 @@ const RoleBasedNavigation = ({
                     <div className={`flex items-start ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                       <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium">{t('notifications.systemUpdate')}</p>
+                        <p className="text-sm font-medium">{ready ? t('notifications.systemUpdate') : 'System Update'}</p>
                         <p className="text-xs text-muted-foreground">Platform maintenance scheduled</p>
                         <p className="text-xs text-muted-foreground mt-1">3 hours ago</p>
                       </div>
@@ -307,7 +307,7 @@ const RoleBasedNavigation = ({
                     <div className={`flex items-start ${isRTL ? 'space-x-reverse space-x-3' : 'space-x-3'}`}>
                       <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium">{t('notifications.paymentReceived')}</p>
+                        <p className="text-sm font-medium">{ready ? t('notifications.paymentReceived') : 'Payment Received'}</p>
                         <p className="text-xs text-muted-foreground">Payment of $150.00 received</p>
                         <p className="text-xs text-muted-foreground mt-1">1 day ago</p>
                       </div>
@@ -320,7 +320,7 @@ const RoleBasedNavigation = ({
                     to="/notifications" 
                     className="cursor-pointer text-center justify-center"
                   >
-                    {t('notifications.viewAll')} {t('navigation.notifications')}
+                        {ready ? t('notifications.viewAll') : 'View All'} {ready ? t('navigation.notifications') : 'Notifications'}
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
