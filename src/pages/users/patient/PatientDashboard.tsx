@@ -479,9 +479,9 @@ const PatientDashboard = () => {
             </Card>
           </div>
         </div>
-        </TabsContent>
+          </TabsContent>
 
-        <TabsContent value="appointments" className="space-y-6">
+          <TabsContent value="appointments" className="space-y-6">
           {/* Appointments Tab Content */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
