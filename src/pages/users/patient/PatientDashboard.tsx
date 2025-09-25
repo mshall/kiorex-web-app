@@ -708,8 +708,7 @@ const PatientDashboard = () => {
             </Card>
           </div>
         </TabsContent>
-        </Tabs>
-      </div>
+      </Tabs>
     </div>
   );
 };
