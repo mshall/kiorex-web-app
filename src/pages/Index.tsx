@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import KiorexLogo from "@/components/KiorexLogo";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useRTL } from "@/hooks/useRTL";
 import { 
   Activity, 
   Calendar, 
@@ -30,37 +33,41 @@ import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { CTASection } from "@/components/CTASection";
 
 const Index = () => {
+  const { t } = useTranslation();
+  const { isRTL, direction } = useRTL();
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" dir={direction}>
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-background/95 backdrop-blur-md border-b border-border z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
+          <div className={`flex justify-between items-center h-16 ${isRTL ? 'flex-row-reverse' : ''}`}>
+            <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
               <KiorexLogo size="md" showText={true} />
             </div>
 
-            <div className="hidden md:flex items-center space-x-8">
+            <div className={`hidden md:flex items-center ${isRTL ? 'space-x-reverse space-x-8' : 'space-x-8'}`}>
               <a href="#features" className="text-foreground/80 hover:text-primary transition-colors">
-                Features
+                {t('navigation.features')}
               </a>
               <a href="#services" className="text-foreground/80 hover:text-primary transition-colors">
-                Services
+                {t('navigation.services')}
               </a>
               <a href="#about" className="text-foreground/80 hover:text-primary transition-colors">
-                About
+                {t('navigation.about')}
               </a>
               <a href="#contact" className="text-foreground/80 hover:text-primary transition-colors">
-                Contact
+                {t('navigation.contact')}
               </a>
             </div>
 
-            <div className="flex items-center space-x-4">
+            <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
+              <LanguageSwitcher />
               <Link to="/auth/role-selection">
-                <Button variant="ghost">Sign In</Button>
+                <Button variant="ghost">{t('auth.signIn')}</Button>
               </Link>
               <Link to="/auth/welcome">
-                <Button variant="medical">Get Started</Button>
+                <Button variant="medical">{t('auth.getStarted')}</Button>
               </Link>
             </div>
           </div>

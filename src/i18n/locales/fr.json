@@ -53,12 +53,15 @@
     "about": "À propos",
     "contact": "Contact",
     "help": "Aide",
-    "support": "Support"
+    "support": "Support",
+    "features": "Fonctionnalités",
+    "services": "Services"
   },
   "auth": {
     "welcome": "Bienvenue chez Kiorex Healthcare",
     "signIn": "Se connecter",
     "signUp": "S'inscrire",
+    "getStarted": "Commencer",
     "email": "E-mail",
     "password": "Mot de passe",
     "confirmPassword": "Confirmer le mot de passe",
