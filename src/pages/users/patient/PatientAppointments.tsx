@@ -345,6 +345,7 @@ const PatientAppointments = () => {
           </div>
         </TabsContent>
       </Tabs>
+      </div>
     </div>
   );
 };
