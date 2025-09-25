@@ -338,15 +338,15 @@ const PatientAppointments = () => {
         </TabsContent>
 
         <TabsContent value="cancelled" className="space-y-6">
-            <div className="text-center py-8">
-              <X className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No cancelled appointments</h3>
-              <p className="text-muted-foreground">Your cancelled appointments will appear here.</p>
-              </div>
+          <div className="text-center py-8">
+            <X className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+            <h3 className="text-lg font-semibold mb-2">No cancelled appointments</h3>
+            <p className="text-muted-foreground">Your cancelled appointments will appear here.</p>
+          </div>
         </TabsContent>
-        </Tabs>
-      </div>
+      </Tabs>
     </div>
+  </div>
   );
 };
 
