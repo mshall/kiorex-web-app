@@ -262,7 +262,7 @@ const RoleBasedNavigation = ({
                   <div className="absolute -top-1 -right-1 w-3 h-3 bg-destructive rounded-full"></div>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-80" align={isRTL ? 'start' : 'end'}>
+              <DropdownMenuContent className="w-80" align="end">
                 <DropdownMenuLabel className="flex items-center justify-between">
                   <span>{t('navigation.notifications')}</span>
                   <Link 
@@ -339,7 +339,7 @@ const RoleBasedNavigation = ({
                     </div>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-80" align={isRTL ? 'start' : 'end'}>
+                <DropdownMenuContent className="w-80" align="end">
                   <DropdownMenuLabel className="flex items-center justify-between">
                     <span>{t('calendar.today')} {t('calendar.schedule')}</span>
                     <Link 
@@ -436,7 +436,7 @@ const RoleBasedNavigation = ({
                   </div>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align={isRTL ? 'start' : 'end'} forceMount>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium leading-none">{userFirstName}</p>

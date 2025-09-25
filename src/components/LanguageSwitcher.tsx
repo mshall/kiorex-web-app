@@ -45,9 +45,9 @@ const LanguageSwitcher = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
-        align={isCurrentRTL ? 'start' : 'end'} 
+        align="end" 
         className="w-56"
-        side={isCurrentRTL ? 'left' : 'right'}
+        side="bottom"
       >
         <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
           {t('settings.language')}
