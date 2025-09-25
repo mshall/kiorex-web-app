@@ -48,71 +48,49 @@ const PatientAppointments = () => {
       type: "Video Call", 
       status: "confirmed",
       location: "Teleconsultation",
-      duration: "30 min",
-      reason: "Follow-up consultation",
-      notes: "Discuss test results"
+      notes: "Follow-up consultation"
     },
     { 
       id: 2, 
       doctor: "Dr. Michael Brown", 
-      specialty: "General Medicine", 
-      time: "02:30 PM", 
+      specialty: "Dermatology", 
+      time: "2:30 PM", 
       date: "2024-01-22",
       type: "In-Person", 
       status: "pending",
-      location: "City Medical Center, Room 205",
-      duration: "45 min",
-      reason: "Annual check-up",
-      notes: "Bring previous test results"
+      location: "Main Clinic",
+      notes: "Skin examination"
     },
     { 
       id: 3, 
       doctor: "Dr. Emily White", 
-      specialty: "Dermatology", 
-      time: "11:15 AM", 
-      date: "2024-01-18",
+      specialty: "General Medicine", 
+      time: "9:00 AM", 
+      date: "2024-01-25",
       type: "Video Call", 
-      status: "completed",
+      status: "confirmed",
       location: "Teleconsultation",
-      duration: "20 min",
-      reason: "Skin consultation",
-      notes: "Prescription provided"
+      notes: "Annual checkup"
     }
   ]);
 
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
 
-  const handleJoinCall = (appointmentId: number) => {
-    // Handle joining video call
-    console.log('Joining call for appointment:', appointmentId);
-  };
-
-  const handleCancelAppointment = (appointmentId: number) => {
-    setAppointments(prev => prev.map(apt => 
-      apt.id === appointmentId ? { ...apt, status: 'cancelled' } : apt
-    ));
-  };
-
-  const handleRescheduleAppointment = (appointmentId: number) => {
-    // Handle rescheduling
-    console.log('Rescheduling appointment:', appointmentId);
-  };
-
-  const filteredAppointments = appointments.filter(apt => {
-    const matchesSearch = apt.doctor.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         apt.specialty.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || apt.status === statusFilter;
+  const filteredAppointments = appointments.filter(appointment => {
+    const matchesSearch = appointment.doctor.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         appointment.specialty.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = statusFilter === "all" || appointment.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'confirmed': return 'default';
-      case 'pending': return 'destructive'; // Orange color using destructive variant
-      case 'completed': return 'default'; // Green color using default variant
-      case 'cancelled': return 'destructive'; // Red color using destructive variant
-      default: return 'secondary';
+      case 'pending': return 'secondary';
+      case 'completed': return 'outline';
+      case 'cancelled': return 'destructive';
+      default: return 'outline';
     }
   };
 
@@ -257,76 +235,31 @@ const PatientAppointments = () => {
                             <h3 className="font-semibold">{appointment.doctor}</h3>
                             <Badge 
                               variant={getStatusColor(appointment.status)}
-                              className={
-                                appointment.status === 'pending' ? 'bg-orange-500 hover:bg-orange-600 text-white' :
-                                appointment.status === 'completed' ? 'bg-green-500 hover:bg-green-600 text-white' :
-                                appointment.status === 'cancelled' ? 'bg-red-500 hover:bg-red-600 text-white' :
-                                ''
-                              }
+                                  className="ml-2"
                             >
                               {appointment.status}
                             </Badge>
                           </div>
-                          <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
-                            <div>
-                              <p><strong>Specialty:</strong> {appointment.specialty}</p>
-                              <p><strong>Type:</strong> {appointment.type}</p>
+                              <p className="text-sm text-muted-foreground mb-1">{appointment.specialty}</p>
+                              <div className="flex items-center text-sm text-muted-foreground">
+                                <Clock className="w-4 h-4 mr-1" />
+                                {appointment.time} • {appointment.date}
+                              </div>
+                              <div className="flex items-center text-sm text-muted-foreground mt-1">
+                                <TypeIcon className="w-4 h-4 mr-1" />
+                                {appointment.type} • {appointment.location}
+                              </div>
                             </div>
-                            <div>
-                              <p><strong>Date:</strong> {appointment.date}</p>
-                              <p><strong>Time:</strong> {appointment.time}</p>
-                            </div>
-                          </div>
-                          <div className="flex items-center space-x-4 mt-2 text-sm">
-                            <span className="flex items-center">
-                              <TypeIcon className="w-3 h-3 mr-1" />
-                              {appointment.location}
-                            </span>
-                            <span className="flex items-center">
-                              <Clock className="w-3 h-3 mr-1" />
-                              {appointment.duration}
-                            </span>
-                          </div>
-                          <p className="text-sm text-muted-foreground mt-2">
-                            <strong>Reason:</strong> {appointment.reason}
-                          </p>
-                          {appointment.notes && (
-                            <p className="text-sm text-muted-foreground mt-1">
-                              <strong>Notes:</strong> {appointment.notes}
-                            </p>
-                          )}
-                        </div>
-                        <div className="flex flex-col space-y-2 ml-4">
-                          {appointment.status === 'confirmed' && appointment.type === 'Video Call' && (
-                            <Button size="sm" onClick={() => handleJoinCall(appointment.id)}>
-                              <Video className="w-3 h-3 mr-1" />
-                              Join Call
-                            </Button>
-                          )}
-                          <div className="flex space-x-2">
-                            <Button size="sm" variant="outline">
-                              <Eye className="w-3 h-3 mr-1" />
-                              View
-                            </Button>
-                            {appointment.status !== 'completed' && appointment.status !== 'cancelled' && (
-                              <>
-                                <Button size="sm" variant="outline" onClick={() => handleRescheduleAppointment(appointment.id)}>
-                                  <Edit className="w-3 h-3 mr-1" />
-                                  Reschedule
-                                </Button>
-                                <Button size="sm" variant="destructive" onClick={() => handleCancelAppointment(appointment.id)}>
-                                  <XCircle className="w-3 h-3 mr-1" />
-                                  Cancel
-                                </Button>
-                              </>
-                            )}
-                          </div>
-                          {appointment.status === 'completed' && (
-                            <Button size="sm" variant="outline">
-                              <Star className="w-3 h-3 mr-1" />
-                              Rate
-                            </Button>
-                          )}
+                            <div className="flex items-center space-x-2">
+                              <Button variant="outline" size="sm">
+                                <Eye className="w-4 h-4" />
+                              </Button>
+                              <Button variant="outline" size="sm">
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                              <Button variant="outline" size="sm">
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
                         </div>
                       </div>
                     );
@@ -336,312 +269,76 @@ const PatientAppointments = () => {
             </Card>
           </div>
 
-          {/* Quick Stats and Actions */}
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Upcoming Appointments</CardTitle>
+                    <CardTitle className="flex items-center">
+                      <Stethoscope className="w-5 h-5 mr-2" />
+                      Quick Actions
+                    </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Total Scheduled</span>
-                    <span className="font-semibold">{appointments.filter(apt => apt.status !== 'completed' && apt.status !== 'cancelled').length}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">This Week</span>
-                    <span className="font-semibold text-blue-600">2</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Video Calls</span>
-                    <span className="font-semibold text-green-600">
-                      {appointments.filter(apt => apt.type === 'Video Call').length}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">In-Person</span>
-                    <span className="font-semibold text-orange-600">
-                      {appointments.filter(apt => apt.type === 'In-Person').length}
-                    </span>
-                  </div>
-                </div>
+                  <CardContent className="space-y-3">
+                    <Button variant="outline" size="sm" className="w-full justify-start">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      Schedule New
+                  </Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start">
+                      <History className="w-4 h-4 mr-2" />
+                      View History
+                  </Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start">
+                      <FileText className="w-4 h-4 mr-2" />
+                      Download Records
+                  </Button>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <Button variant="outline" className="w-full justify-start">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Book New Appointment
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start">
-                    <Stethoscope className="w-4 h-4 mr-2" />
-                    Find Doctors
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    View Calendar
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start">
-                    <Phone className="w-4 h-4 mr-2" />
-                    Emergency Contact
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Recent Activity</CardTitle>
+                    <CardTitle className="flex items-center">
+                      <Clock3 className="w-5 h-5 mr-2" />
+                      Recent Activity
+                    </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <div className="flex items-center space-x-3 text-sm">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span>Appointment with Dr. Johnson completed</span>
-                    <span className="text-muted-foreground ml-auto">2 days ago</span>
+                      <div className="flex items-center justify-between text-sm">
+                        <span>Appointment confirmed</span>
+                        <span className="text-muted-foreground ml-auto">2 hours ago</span>
                   </div>
-                  <div className="flex items-center space-x-3 text-sm">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                    <span>New appointment scheduled</span>
-                    <span className="text-muted-foreground ml-auto">1 week ago</span>
-                  </div>
-                  <div className="flex items-center space-x-3 text-sm">
-                    <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                      <div className="flex items-center justify-between text-sm">
                     <span>Prescription refilled</span>
                     <span className="text-muted-foreground ml-auto">1 week ago</span>
                   </div>
                 </div>
               </CardContent>
             </Card>
+              </div>
           </div>
         </TabsContent>
 
         <TabsContent value="today" className="space-y-6">
-          {/* Today's Appointments */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search today's appointments..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
+            <div className="text-center py-8">
+              <Calendar className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-semibold mb-2">No appointments today</h3>
+              <p className="text-muted-foreground">You don't have any appointments scheduled for today.</p>
             </div>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Book Appointment
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Book New Appointment</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <div>
-                    <Label>Select Doctor</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Choose a doctor" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="dr-smith">Dr. Sarah Smith</SelectItem>
-                        <SelectItem value="dr-johnson">Dr. Michael Johnson</SelectItem>
-                        <SelectItem value="dr-brown">Dr. Emily Brown</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label>Appointment Type</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Choose type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="video">Video Call</SelectItem>
-                        <SelectItem value="in-person">In-Person Visit</SelectItem>
-                        <SelectItem value="phone">Phone Call</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <Button className="w-full">Book Appointment</Button>
-                </div>
-              </DialogContent>
-            </Dialog>
-          </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Clock3 className="w-5 h-5 mr-2" />
-                Today's Appointments
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {filteredAppointments.filter(apt => apt.status === 'confirmed' || apt.status === 'scheduled').map((appointment) => (
-                  <div key={appointment.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-semibold">{appointment.doctor}</h3>
-                        <div className="flex items-center space-x-2">
-                          <Badge variant={getStatusColor(appointment.status)}>
-                            {appointment.status}
-                          </Badge>
-                          <Badge variant="outline">{appointment.type}</Badge>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
-                        <div>
-                          <p><strong>Specialty:</strong> {appointment.specialty}</p>
-                          <p><strong>Time:</strong> {appointment.time}</p>
-                        </div>
-                        <div>
-                          <p><strong>Duration:</strong> {appointment.duration}</p>
-                          <p><strong>Location:</strong> {appointment.location}</p>
-                        </div>
-                      </div>
-                      <p className="text-sm text-muted-foreground mt-2">
-                        <strong>Reason:</strong> {appointment.reason}
-                      </p>
-                    </div>
-                    <div className="flex flex-col space-y-2 ml-4">
-                      <div className="flex space-x-2">
-                        <Button size="sm" variant="outline">
-                          <Eye className="w-3 h-3 mr-1" />
-                          Details
-                        </Button>
-                        <Button size="sm" variant="outline" onClick={() => handleRescheduleAppointment(appointment.id)}>
-                          <Edit className="w-3 h-3 mr-1" />
-                          Reschedule
-                        </Button>
-                        <Button size="sm" variant="outline" onClick={() => handleCancelAppointment(appointment.id)}>
-                          <X className="w-3 h-3 mr-1" />
-                          Cancel
-                        </Button>
-                      </div>
-                      {appointment.type === 'Video Call' && (
-                        <Button size="sm" onClick={() => handleJoinCall(appointment.id)}>
-                          <Video className="w-3 h-3 mr-1" />
-                          Join Call
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
         </TabsContent>
 
         <TabsContent value="completed" className="space-y-6">
-          {/* Completed Appointments */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <CheckCircle2 className="w-5 h-5 mr-2" />
-                Completed Appointments
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {filteredAppointments.filter(apt => apt.status === 'completed').map((appointment) => (
-                  <div key={appointment.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-semibold">{appointment.doctor}</h3>
-                        <div className="flex items-center space-x-2">
-                          <Badge variant="default">Completed</Badge>
-                          <Badge variant="outline">{appointment.type}</Badge>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
-                        <div>
-                          <p><strong>Specialty:</strong> {appointment.specialty}</p>
-                          <p><strong>Date:</strong> {appointment.date}</p>
-                        </div>
-                        <div>
-                          <p><strong>Time:</strong> {appointment.time}</p>
-                          <p><strong>Duration:</strong> {appointment.duration}</p>
-                        </div>
-                      </div>
-                      <p className="text-sm text-muted-foreground mt-2">
-                        <strong>Notes:</strong> {appointment.notes}
-                      </p>
-                    </div>
-                    <div className="flex space-x-2 ml-4">
-                      <Button size="sm" variant="outline">
-                        <Eye className="w-3 h-3 mr-1" />
-                        View Details
-                      </Button>
-                      <Button size="sm" variant="outline">
-                        <FileText className="w-3 h-3 mr-1" />
-                        Prescription
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+            <div className="text-center py-8">
+              <CheckCircle2 className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-semibold mb-2">No completed appointments</h3>
+              <p className="text-muted-foreground">Your completed appointments will appear here.</p>
               </div>
-            </CardContent>
-          </Card>
         </TabsContent>
 
         <TabsContent value="cancelled" className="space-y-6">
-          {/* Cancelled Appointments */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <X className="w-5 h-5 mr-2" />
-                Cancelled Appointments
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {filteredAppointments.filter(apt => apt.status === 'cancelled').map((appointment) => (
-                  <div key={appointment.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-semibold">{appointment.doctor}</h3>
-                        <div className="flex items-center space-x-2">
-                          <Badge variant="destructive">Cancelled</Badge>
-                          <Badge variant="outline">{appointment.type}</Badge>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
-                        <div>
-                          <p><strong>Specialty:</strong> {appointment.specialty}</p>
-                          <p><strong>Date:</strong> {appointment.date}</p>
-                        </div>
-                        <div>
-                          <p><strong>Time:</strong> {appointment.time}</p>
-                          <p><strong>Duration:</strong> {appointment.duration}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex space-x-2 ml-4">
-                      <Button size="sm" variant="outline">
-                        <Eye className="w-3 h-3 mr-1" />
-                        View Details
-                      </Button>
-                      <Button size="sm" variant="outline">
-                        <Plus className="w-3 h-3 mr-1" />
-                        Reschedule
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+            <div className="text-center py-8">
+              <X className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+              <h3 className="text-lg font-semibold mb-2">No cancelled appointments</h3>
+              <p className="text-muted-foreground">Your cancelled appointments will appear here.</p>
               </div>
-            </CardContent>
-          </Card>
         </TabsContent>
         </Tabs>
       </div>

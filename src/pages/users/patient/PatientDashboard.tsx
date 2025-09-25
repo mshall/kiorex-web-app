@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import RoleBasedNavigation from "@/components/RoleBasedNavigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Calendar, 
@@ -37,7 +38,8 @@ import {
   MessageCircle,
   Camera,
   Download,
-  Upload
+  Upload,
+  Eye
 } from "lucide-react";
 
 const PatientDashboard = () => {
@@ -472,6 +474,7 @@ const PatientDashboard = () => {
               </CardContent>
             </Card>
           </div>
+        </div>
         </TabsContent>
 
         <TabsContent value="appointments" className="space-y-6">
