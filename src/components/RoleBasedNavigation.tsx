@@ -248,9 +248,6 @@ const RoleBasedNavigation = ({
 
           {/* User Menu */}
           <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
-            {/* Language Switcher */}
-            <LanguageSwitcher />
-            
             {/* Language Indicator Badge */}
             <div className="hidden sm:flex items-center">
               <Badge variant="outline" className="text-xs font-medium">
@@ -471,6 +468,9 @@ const RoleBasedNavigation = ({
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+
+            {/* Language Switcher - Rightmost Position */}
+            <LanguageSwitcher />
 
             {/* Mobile Menu Button */}
             <div className="md:hidden">
