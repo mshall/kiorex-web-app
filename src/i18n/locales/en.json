@@ -55,7 +55,10 @@
     "help": "Help",
     "support": "Support",
     "features": "Features",
-    "services": "Services"
+    "services": "Services",
+    "health": "Health",
+    "records": "Records",
+    "marketplace": "Marketplace"
   },
   "auth": {
     "welcome": "Welcome to Kiorex Healthcare",

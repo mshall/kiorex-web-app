@@ -55,7 +55,10 @@
     "help": "Aide",
     "support": "Support",
     "features": "Fonctionnalités",
-    "services": "Services"
+    "services": "Services",
+    "health": "Santé",
+    "records": "Dossiers",
+    "marketplace": "Marché"
   },
   "auth": {
     "welcome": "Bienvenue chez Kiorex Healthcare",

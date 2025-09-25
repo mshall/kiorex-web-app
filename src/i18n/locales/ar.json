@@ -55,7 +55,10 @@
     "help": "المساعدة",
     "support": "الدعم",
     "features": "المميزات",
-    "services": "الخدمات"
+    "services": "الخدمات",
+    "health": "الصحة",
+    "records": "السجلات",
+    "marketplace": "السوق"
   },
   "auth": {
     "welcome": "مرحباً بك في كيوركس للرعاية الصحية",
