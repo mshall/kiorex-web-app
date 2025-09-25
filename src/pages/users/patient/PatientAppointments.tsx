@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import RoleBasedNavigation from "@/components/RoleBasedNavigation";
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useRTL } from "@/hooks/useRTL";
 import { 
   Calendar, 
   Clock, 
@@ -37,6 +39,8 @@ const PatientAppointments = () => {
   const location = useLocation();
   const userType = location.state?.userType || 'patient';
   const providerType = location.state?.providerType || 'Patient';
+  const { t } = useTranslation();
+  const { isRTL, direction } = useRTL();
 
   const [appointments, setAppointments] = useState([
     { 
@@ -99,116 +103,116 @@ const PatientAppointments = () => {
   };
 
   return (
-    <div className="min-h-screen bg-muted/50">
+    <div className="min-h-screen bg-muted/50" dir={direction}>
       <RoleBasedNavigation userType={userType} userName={providerType} />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">My Appointments</h1>
-          <p className="text-muted-foreground">Manage your medical appointments and consultations</p>
+          <h1 className="text-3xl font-bold mb-2">{t('navigation.appointments')}</h1>
+          <p className="text-muted-foreground">{t('dashboard.manageAppointments')}</p>
         </div>
 
         {/* Enhanced Tabs System */}
         <Tabs defaultValue="upcoming" className="space-y-6">
           <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-            <TabsTrigger value="today">Today</TabsTrigger>
-            <TabsTrigger value="completed">Completed</TabsTrigger>
-            <TabsTrigger value="cancelled">Cancelled</TabsTrigger>
+            <TabsTrigger value="upcoming">{t('appointments.upcoming')}</TabsTrigger>
+            <TabsTrigger value="today">{t('appointments.today')}</TabsTrigger>
+            <TabsTrigger value="completed">{t('appointments.completed')}</TabsTrigger>
+            <TabsTrigger value="cancelled">{t('appointments.cancelled')}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="upcoming" className="space-y-6">
             {/* Filters and Actions */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search doctors or specialties..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder={t('appointments.searchDoctors')}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
             </div>
-          </div>
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-full sm:w-48">
-              <SelectValue placeholder="Filter by status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="confirmed">Confirmed</SelectItem>
-              <SelectItem value="pending">Pending</SelectItem>
-              <SelectItem value="completed">Completed</SelectItem>
-              <SelectItem value="cancelled">Cancelled</SelectItem>
-            </SelectContent>
-          </Select>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="w-4 h-4 mr-2" />
-                Book Appointment
-              </Button>
-            </DialogTrigger>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-full sm:w-48">
+                <SelectValue placeholder={t('appointments.filterByStatus')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t('appointments.allStatus')}</SelectItem>
+                <SelectItem value="confirmed">{t('appointments.confirmed')}</SelectItem>
+                <SelectItem value="pending">{t('appointments.pending')}</SelectItem>
+                <SelectItem value="completed">{t('appointments.completed')}</SelectItem>
+                <SelectItem value="cancelled">{t('appointments.cancelled')}</SelectItem>
+              </SelectContent>
+            </Select>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="w-4 h-4 mr-2" />
+                  {t('appointments.bookAppointment')}
+                </Button>
+              </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Book New Appointment</DialogTitle>
+                <DialogTitle>{t('appointments.bookAppointment')}</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
                 <div>
-                  <Label>Specialty</Label>
+                  <Label>{t('health.specialty')}</Label>
                   <Select>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select specialty" />
+                      <SelectValue placeholder={t('appointments.selectSpecialty')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="cardiology">Cardiology</SelectItem>
-                      <SelectItem value="dermatology">Dermatology</SelectItem>
-                      <SelectItem value="general">General Medicine</SelectItem>
-                      <SelectItem value="neurology">Neurology</SelectItem>
+                      <SelectItem value="cardiology">{t('health.cardiology')}</SelectItem>
+                      <SelectItem value="dermatology">{t('health.dermatology')}</SelectItem>
+                      <SelectItem value="general">{t('health.generalMedicine')}</SelectItem>
+                      <SelectItem value="neurology">{t('health.neurology')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <Label>Doctor</Label>
+                  <Label>{t('auth.doctor')}</Label>
                   <Select>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select doctor" />
+                      <SelectValue placeholder={t('appointments.selectDoctor')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="doctor1">Dr. Sarah Johnson</SelectItem>
-                      <SelectItem value="doctor2">Dr. Michael Brown</SelectItem>
-                      <SelectItem value="doctor3">Dr. Emily White</SelectItem>
+                      <SelectItem value="doctor1">{t('common.dr')} Sarah Johnson</SelectItem>
+                      <SelectItem value="doctor2">{t('common.dr')} Michael Brown</SelectItem>
+                      <SelectItem value="doctor3">{t('common.dr')} Emily White</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label>Date</Label>
+                    <Label>{t('common.date')}</Label>
                     <Input type="date" />
                   </div>
                   <div>
-                    <Label>Time</Label>
+                    <Label>{t('common.time')}</Label>
                     <Input type="time" />
                   </div>
                 </div>
                 <div>
-                  <Label>Type</Label>
+                  <Label>{t('common.type')}</Label>
                   <Select>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select type" />
+                      <SelectValue placeholder={t('appointments.selectType')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="inperson">In-Person</SelectItem>
-                      <SelectItem value="video">Video Call</SelectItem>
+                      <SelectItem value="inperson">{t('appointments.inPerson')}</SelectItem>
+                      <SelectItem value="video">{t('appointments.videoCall')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <Label>Reason</Label>
-                  <Input placeholder="Appointment reason" />
+                  <Label>{t('appointments.appointmentReason')}</Label>
+                  <Input placeholder={t('appointments.appointmentReason')} />
                 </div>
-                <Button className="w-full">Book Appointment</Button>
+                <Button className="w-full">{t('appointments.bookAppointment')}</Button>
               </div>
             </DialogContent>
           </Dialog>
