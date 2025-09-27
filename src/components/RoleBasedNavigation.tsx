@@ -33,7 +33,7 @@ const RoleBasedNavigation = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, ready } = useTranslation();
   const { isRTL, direction } = useRTL();
 
   // Navigation items based on user role
@@ -178,6 +178,27 @@ const RoleBasedNavigation = ({
   const navItems = getNavigationItems();
   const isActive = (path: string) => location.pathname === path;
   const breadcrumb = getBreadcrumb();
+
+  // Don't render until translations are ready
+  if (!ready) {
+    return (
+      <nav className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-4">
+              <div className="w-8 h-8 bg-muted animate-pulse rounded"></div>
+              <div className="w-32 h-4 bg-muted animate-pulse rounded"></div>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="w-8 h-8 bg-muted animate-pulse rounded"></div>
+              <div className="w-8 h-8 bg-muted animate-pulse rounded"></div>
+              <div className="w-8 h-8 bg-muted animate-pulse rounded"></div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    );
+  }
 
   const handleLogout = () => {
     // Handle logout logic
