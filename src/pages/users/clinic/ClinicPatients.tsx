@@ -139,14 +139,6 @@ const ClinicPatients = () => {
     setPatients(prev => prev.filter(p => p.id !== patientId));
   };
 
-  const filteredPatients = patients.filter(patient => {
-    const matchesSearch = patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         patient.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         patient.phone.includes(searchQuery);
-    const matchesStatus = statusFilter === 'all' || patient.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active': return 'default';
