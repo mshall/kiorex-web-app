@@ -1,6 +1,8 @@
 import { useState, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import RoleBasedNavigation from "@/components/RoleBasedNavigation";
+import { useRTL } from "@/hooks/useRTL";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -30,12 +32,15 @@ import {
   Shield,
   Award,
   Eye,
-  X
+  X,
+  ArrowRight
 } from "lucide-react";
 
 const ServiceDetail = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { isRTL, direction } = useRTL();
   const userType = location.state?.userType || 'patient';
   const providerType = location.state?.providerType || 'Patient';
   const serviceType = location.state?.serviceType || 'doctors';
@@ -1043,108 +1048,67 @@ const ServiceDetail = () => {
   const ProviderDetailsCard = ({ provider }: { provider: any }) => {
     if (!provider) return null;
 
+    // Create features array from services/specializations
+    const features = provider.services || provider.specializations || [];
+    
     return (
-      <Card className="w-full max-w-2xl">
-        <CardContent className="p-0">
-          {/* Header with gradient background */}
-          <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-t-lg p-6 text-white">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center">
-                  <span className="text-2xl font-bold text-white">
-                    {provider.image}
-                  </span>
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold">{provider.name}</h3>
-                  <p className="text-blue-100">{provider.specialty}</p>
-                  <div className="flex items-center space-x-4 mt-2 text-sm">
-                    <div className="flex items-center space-x-1">
-                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                      <span className="font-medium">{provider.rating}</span>
-                      <span className="text-blue-200">({provider.reviews} reviews)</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <Clock className="w-4 h-4" />
-                      <span>{provider.experience}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-3xl font-bold">
-                  ${provider.price}
-                  <span className="text-lg text-blue-200">/session</span>
-                </div>
-                <p className="text-sm text-blue-200">
-                  <MapPin className="w-3 h-3 inline mr-1" />
-                  {provider.location}
-                </p>
+      <Card className="w-full max-w-md cursor-pointer hover:shadow-lg transition-all duration-300 group">
+        <div className="aspect-video bg-gradient-to-br from-blue-500 to-purple-600 rounded-t-lg flex items-center justify-center">
+          <div className="text-center text-white">
+            <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-2">
+              <span className="text-xl font-bold text-white">
+                {provider.image}
+              </span>
+            </div>
+            <span className="text-lg font-semibold">{provider.name}</span>
+          </div>
+        </div>
+        <CardContent className="p-6">
+          <div className="flex items-start justify-between mb-3">
+            <div className="flex-1">
+              <h3 className="font-semibold text-lg mb-1">{provider.name}</h3>
+              <p className="text-sm text-muted-foreground mb-2">{provider.specialty}</p>
+              <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                <MapPin className="w-3 h-3" />
+                <span>{provider.location}</span>
               </div>
             </div>
           </div>
 
-          {/* Content */}
-          <div className="p-6">
-            <div className="space-y-4">
-              {/* Availability */}
-              <div className="flex items-center space-x-2">
-                <Calendar className="w-5 h-5 text-green-600" />
-                <span className="text-sm font-medium text-green-600">
-                  Next available: {provider.nextAvailable}
-                </span>
-              </div>
-
-              {/* Services/Specializations */}
-              {(provider.services || provider.specializations) && (
-                <div>
-                  <p className="text-sm font-medium mb-2">
-                    {provider.services ? 'Services:' : 'Specializations:'}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {(provider.services || provider.specializations).map((item: string, index: number) => (
-                      <Badge key={index} variant="outline" className="text-xs">
-                        {item}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Languages */}
-              {provider.languages && (
-                <div>
-                  <p className="text-sm font-medium mb-1">Languages:</p>
-                  <p className="text-sm text-muted-foreground">{provider.languages.join(", ")}</p>
-                </div>
-              )}
-
-              {/* Clinic */}
-              {provider.clinic && (
-                <div>
-                  <p className="text-sm font-medium mb-1">Clinic:</p>
-                  <p className="text-sm text-muted-foreground">{provider.clinic}</p>
-                </div>
-              )}
-
-              {/* Action Buttons */}
-              <div className="flex space-x-3 pt-4">
-                <Button variant="medical" className="flex-1">
-                  <Video className="w-4 h-4 mr-2" />
-                  Book Video Call
-                </Button>
-                <Button variant="outline" className="flex-1">
-                  <Phone className="w-4 h-4 mr-2" />
-                  Phone Call
-                </Button>
-                {serviceType === 'nurses' && (
-                  <Button variant="outline" className="flex-1">
-                    <Home className="w-4 h-4 mr-2" />
-                    Home Visit
-                  </Button>
-                )}
-              </div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-1">
+              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+              <span className="font-medium">{provider.rating}</span>
+              <span className="text-sm text-muted-foreground">({provider.reviews})</span>
             </div>
+            <div className="text-right">
+              <p className="font-semibold text-primary">${provider.price}</p>
+              <p className="text-xs text-muted-foreground">per session</p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-1 mb-4">
+            {features.slice(0, 2).map((feature: string, index: number) => (
+              <Badge key={index} variant="secondary" className="text-xs">
+                {feature}
+              </Badge>
+            ))}
+            {features.length > 2 && (
+              <Badge variant="outline" className="text-xs">
+                +{features.length - 2} more
+              </Badge>
+            )}
+          </div>
+
+          <div className="flex items-center justify-between">
+            <Badge variant="secondary" className="text-xs">
+              <Clock className="w-3 h-3 mr-1" />
+              {provider.nextAvailable}
+            </Badge>
+            <Button size="sm" className="group-hover:bg-primary">
+              Book Now
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -1152,7 +1116,7 @@ const ServiceDetail = () => {
   };
 
   return (
-    <div className="min-h-screen bg-muted/50">
+    <div className="min-h-screen bg-muted/50" dir={direction}>
       <RoleBasedNavigation userType={userType} userName={providerType} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
