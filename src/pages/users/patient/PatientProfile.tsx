@@ -41,7 +41,7 @@ const PatientProfile = () => {
   
   const [profileData, setProfileData] = useState({
     // Personal Information
-    firstName: 'John',
+    firstName: 'Don',
     lastName: 'Doe',
     email: 'john.doe@email.com',
     phone: '+1 (555) 123-4567',
