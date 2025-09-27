@@ -276,48 +276,19 @@ const PatientAppointments = () => {
                 </div>
                 <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
                   <XCircle className="w-6 h-6 text-red-600" />
-                </div>
-              </div>
+            </div>
+          </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Enhanced Tabs System */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="upcoming">{t('appointments.upcoming')}</TabsTrigger>
-            <TabsTrigger value="completed">{t('appointments.completed')}</TabsTrigger>
-            <TabsTrigger value="cancelled">{t('appointments.cancelled')}</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="upcoming" className="space-y-6">
-            {/* Filters and Actions */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                  placeholder={t('appointments.searchDoctors')}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-          </div>
-          <Select value={sortOrder} onValueChange={(value: "asc" | "desc") => setSortOrder(value)}>
-            <SelectTrigger className="w-full sm:w-48">
-              <SelectValue placeholder="Sort by date" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="asc">Date: Oldest First</SelectItem>
-              <SelectItem value="desc">Date: Newest First</SelectItem>
-            </SelectContent>
-          </Select>
+        {/* Book Appointment Button */}
+        <div className="flex justify-end mb-6">
           <Dialog>
             <DialogTrigger asChild>
               <Button>
                 <Plus className="w-4 h-4 mr-2" />
-                  {t('appointments.bookAppointment')}
+                {t('appointments.bookAppointment')}
               </Button>
             </DialogTrigger>
             <DialogContent>
@@ -382,6 +353,39 @@ const PatientAppointments = () => {
               </div>
             </DialogContent>
           </Dialog>
+        </div>
+
+        {/* Enhanced Tabs System */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="upcoming">{t('appointments.upcoming')}</TabsTrigger>
+            <TabsTrigger value="completed">{t('appointments.completed')}</TabsTrigger>
+            <TabsTrigger value="cancelled">{t('appointments.cancelled')}</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="upcoming" className="space-y-6">
+            {/* Filters and Actions */}
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          <div className="flex-1">
+            <div className="relative">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                  placeholder={t('appointments.searchDoctors')}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+          </div>
+          <Select value={sortOrder} onValueChange={(value: "asc" | "desc") => setSortOrder(value)}>
+            <SelectTrigger className="w-full sm:w-48">
+              <SelectValue placeholder="Sort by date" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="asc">Date: Oldest First</SelectItem>
+              <SelectItem value="desc">Date: Newest First</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Appointments List */}
