@@ -43,55 +43,96 @@ const PatientAppointments = () => {
   const { isRTL, direction } = useRTL();
 
   const [appointments, setAppointments] = useState([
-    { 
-      id: 1, 
-      doctor: "Dr. Sarah Johnson", 
-      specialty: "Cardiology", 
-      time: "10:00 AM", 
-      date: "2024-01-20",
-      type: "Video Call", 
-      status: "confirmed",
-      location: "Teleconsultation",
-      notes: "Follow-up consultation"
-    },
-    { 
-      id: 2, 
-      doctor: "Dr. Michael Brown", 
-      specialty: "Dermatology", 
-      time: "2:30 PM", 
-      date: "2024-01-22",
-      type: "In-Person", 
-      status: "pending",
-      location: "Main Clinic",
-      notes: "Skin examination"
-    },
-    { 
-      id: 3, 
-      doctor: "Dr. Emily White", 
-      specialty: "General Medicine", 
-      time: "9:00 AM", 
-      date: "2024-01-25",
-      type: "Video Call", 
-      status: "confirmed",
-      location: "Teleconsultation",
-      notes: "Annual checkup"
-    }
+    // Confirmed appointments (15)
+    { id: 1, doctor: "Dr. Sarah Johnson", specialty: "Cardiology", time: "10:00 AM", date: "2024-01-20", type: "Video Call", status: "confirmed", location: "Teleconsultation", notes: "Follow-up consultation" },
+    { id: 2, doctor: "Dr. Michael Brown", specialty: "Dermatology", time: "2:30 PM", date: "2024-01-22", type: "In-Person", status: "confirmed", location: "Main Clinic", notes: "Skin examination" },
+    { id: 3, doctor: "Dr. Emily White", specialty: "General Medicine", time: "9:00 AM", date: "2024-01-25", type: "Video Call", status: "confirmed", location: "Teleconsultation", notes: "Annual checkup" },
+    { id: 4, doctor: "Dr. James Wilson", specialty: "Orthopedics", time: "11:30 AM", date: "2024-01-28", type: "In-Person", status: "confirmed", location: "Main Clinic", notes: "Knee examination" },
+    { id: 5, doctor: "Dr. Lisa Garcia", specialty: "Neurology", time: "3:00 PM", date: "2024-01-30", type: "Video Call", status: "confirmed", location: "Teleconsultation", notes: "Headache consultation" },
+    { id: 6, doctor: "Dr. Robert Lee", specialty: "Cardiology", time: "8:30 AM", date: "2024-02-02", type: "In-Person", status: "confirmed", location: "Main Clinic", notes: "Heart checkup" },
+    { id: 7, doctor: "Dr. Maria Rodriguez", specialty: "Dermatology", time: "1:00 PM", date: "2024-02-05", type: "Video Call", status: "confirmed", location: "Teleconsultation", notes: "Mole examination" },
+    { id: 8, doctor: "Dr. David Kim", specialty: "General Medicine", time: "10:15 AM", date: "2024-02-08", type: "In-Person", status: "confirmed", location: "Main Clinic", notes: "General checkup" },
+    { id: 9, doctor: "Dr. Jennifer Taylor", specialty: "Pediatrics", time: "2:45 PM", date: "2024-02-10", type: "Video Call", status: "confirmed", location: "Teleconsultation", notes: "Child wellness visit" },
+    { id: 10, doctor: "Dr. Christopher Moore", specialty: "Orthopedics", time: "9:45 AM", date: "2024-02-12", type: "In-Person", status: "confirmed", location: "Main Clinic", notes: "Back pain consultation" },
+    { id: 11, doctor: "Dr. Amanda Clark", specialty: "Neurology", time: "4:00 PM", date: "2024-02-15", type: "Video Call", status: "confirmed", location: "Teleconsultation", notes: "Sleep disorder consultation" },
+    { id: 12, doctor: "Dr. Kevin Anderson", specialty: "Cardiology", time: "11:00 AM", date: "2024-02-18", type: "In-Person", status: "confirmed", location: "Main Clinic", notes: "Stress test follow-up" },
+    { id: 13, doctor: "Dr. Rachel Green", specialty: "Dermatology", time: "3:30 PM", date: "2024-02-20", type: "Video Call", status: "confirmed", location: "Teleconsultation", notes: "Acne treatment" },
+    { id: 14, doctor: "Dr. Mark Thompson", specialty: "General Medicine", time: "8:00 AM", date: "2024-02-22", type: "In-Person", status: "confirmed", location: "Main Clinic", notes: "Diabetes management" },
+    { id: 15, doctor: "Dr. Sarah Johnson", specialty: "Cardiology", time: "1:30 PM", date: "2024-02-25", type: "Video Call", status: "confirmed", location: "Teleconsultation", notes: "Medication review" },
+    
+    // Upcoming appointments (15) - changed from pending
+    { id: 16, doctor: "Dr. Michael Brown", specialty: "Dermatology", time: "10:30 AM", date: "2024-02-28", type: "In-Person", status: "upcoming", location: "Main Clinic", notes: "Follow-up examination" },
+    { id: 17, doctor: "Dr. Emily White", specialty: "General Medicine", time: "2:00 PM", date: "2024-03-02", type: "Video Call", status: "upcoming", location: "Teleconsultation", notes: "Blood pressure check" },
+    { id: 18, doctor: "Dr. James Wilson", specialty: "Orthopedics", time: "9:15 AM", date: "2024-03-05", type: "In-Person", status: "upcoming", location: "Main Clinic", notes: "Physical therapy consultation" },
+    { id: 19, doctor: "Dr. Lisa Garcia", specialty: "Neurology", time: "3:45 PM", date: "2024-03-08", type: "Video Call", status: "upcoming", location: "Teleconsultation", notes: "Memory assessment" },
+    { id: 20, doctor: "Dr. Robert Lee", specialty: "Cardiology", time: "11:45 AM", date: "2024-03-10", type: "In-Person", status: "upcoming", location: "Main Clinic", notes: "Echocardiogram" },
+    { id: 21, doctor: "Dr. Maria Rodriguez", specialty: "Dermatology", time: "1:15 PM", date: "2024-03-12", type: "Video Call", status: "upcoming", location: "Teleconsultation", notes: "Skin cancer screening" },
+    { id: 22, doctor: "Dr. David Kim", specialty: "General Medicine", time: "8:45 AM", date: "2024-03-15", type: "In-Person", status: "upcoming", location: "Main Clinic", notes: "Vaccination appointment" },
+    { id: 23, doctor: "Dr. Jennifer Taylor", specialty: "Pediatrics", time: "4:30 PM", date: "2024-03-18", type: "Video Call", status: "upcoming", location: "Teleconsultation", notes: "Growth monitoring" },
+    { id: 24, doctor: "Dr. Christopher Moore", specialty: "Orthopedics", time: "10:00 AM", date: "2024-03-20", type: "In-Person", status: "upcoming", location: "Main Clinic", notes: "Joint injection" },
+    { id: 25, doctor: "Dr. Amanda Clark", specialty: "Neurology", time: "2:30 PM", date: "2024-03-22", type: "Video Call", status: "upcoming", location: "Teleconsultation", notes: "Seizure management" },
+    { id: 26, doctor: "Dr. Kevin Anderson", specialty: "Cardiology", time: "9:30 AM", date: "2024-03-25", type: "In-Person", status: "upcoming", location: "Main Clinic", notes: "Holter monitor review" },
+    { id: 27, doctor: "Dr. Rachel Green", specialty: "Dermatology", time: "3:00 PM", date: "2024-03-28", type: "Video Call", status: "upcoming", location: "Teleconsultation", notes: "Psoriasis treatment" },
+    { id: 28, doctor: "Dr. Mark Thompson", specialty: "General Medicine", time: "7:30 AM", date: "2024-03-30", type: "In-Person", status: "upcoming", location: "Main Clinic", notes: "Annual physical" },
+    { id: 29, doctor: "Dr. Sarah Johnson", specialty: "Cardiology", time: "12:00 PM", date: "2024-04-02", type: "Video Call", status: "upcoming", location: "Teleconsultation", notes: "Medication adjustment" },
+    { id: 30, doctor: "Dr. Michael Brown", specialty: "Dermatology", time: "1:45 PM", date: "2024-04-05", type: "In-Person", status: "upcoming", location: "Main Clinic", notes: "Biopsy results" },
+    
+    // Completed appointments (15)
+    { id: 31, doctor: "Dr. Emily White", specialty: "General Medicine", time: "9:00 AM", date: "2024-01-15", type: "Video Call", status: "completed", location: "Teleconsultation", notes: "Cold symptoms consultation" },
+    { id: 32, doctor: "Dr. James Wilson", specialty: "Orthopedics", time: "2:15 PM", date: "2024-01-18", type: "In-Person", status: "completed", location: "Main Clinic", notes: "X-ray review" },
+    { id: 33, doctor: "Dr. Lisa Garcia", specialty: "Neurology", time: "10:30 AM", date: "2024-01-12", type: "Video Call", status: "completed", location: "Teleconsultation", notes: "Migraine consultation" },
+    { id: 34, doctor: "Dr. Robert Lee", specialty: "Cardiology", time: "11:00 AM", date: "2024-01-10", type: "In-Person", status: "completed", location: "Main Clinic", notes: "EKG interpretation" },
+    { id: 35, doctor: "Dr. Maria Rodriguez", specialty: "Dermatology", time: "3:30 PM", date: "2024-01-08", type: "Video Call", status: "completed", location: "Teleconsultation", notes: "Rash treatment" },
+    { id: 36, doctor: "Dr. David Kim", specialty: "General Medicine", time: "8:30 AM", date: "2024-01-05", type: "In-Person", status: "completed", location: "Main Clinic", notes: "Lab results review" },
+    { id: 37, doctor: "Dr. Jennifer Taylor", specialty: "Pediatrics", time: "1:00 PM", date: "2024-01-03", type: "Video Call", status: "completed", location: "Teleconsultation", notes: "Immunization update" },
+    { id: 38, doctor: "Dr. Christopher Moore", specialty: "Orthopedics", time: "4:00 PM", date: "2024-01-01", type: "In-Person", status: "completed", location: "Main Clinic", notes: "Fracture follow-up" },
+    { id: 39, doctor: "Dr. Amanda Clark", specialty: "Neurology", time: "9:45 AM", date: "2023-12-28", type: "Video Call", status: "completed", location: "Teleconsultation", notes: "Tremor evaluation" },
+    { id: 40, doctor: "Dr. Kevin Anderson", specialty: "Cardiology", time: "2:00 PM", date: "2023-12-25", type: "In-Person", status: "completed", location: "Main Clinic", notes: "Stress test" },
+    { id: 41, doctor: "Dr. Rachel Green", specialty: "Dermatology", time: "10:15 AM", date: "2023-12-22", type: "Video Call", status: "completed", location: "Teleconsultation", notes: "Eczema management" },
+    { id: 42, doctor: "Dr. Mark Thompson", specialty: "General Medicine", time: "3:15 PM", date: "2023-12-20", type: "In-Person", status: "completed", location: "Main Clinic", notes: "Cholesterol check" },
+    { id: 43, doctor: "Dr. Sarah Johnson", specialty: "Cardiology", time: "11:30 AM", date: "2023-12-18", type: "Video Call", status: "completed", location: "Teleconsultation", notes: "Medication review" },
+    { id: 44, doctor: "Dr. Michael Brown", specialty: "Dermatology", time: "1:30 PM", date: "2023-12-15", type: "In-Person", status: "completed", location: "Main Clinic", notes: "Skin biopsy" },
+    { id: 45, doctor: "Dr. Emily White", specialty: "General Medicine", time: "8:00 AM", date: "2023-12-12", type: "Video Call", status: "completed", location: "Teleconsultation", notes: "Flu vaccination" },
+    
+    // Cancelled appointments (15)
+    { id: 46, doctor: "Dr. James Wilson", specialty: "Orthopedics", time: "2:00 PM", date: "2024-01-14", type: "In-Person", status: "cancelled", location: "Main Clinic", notes: "Patient cancelled" },
+    { id: 47, doctor: "Dr. Lisa Garcia", specialty: "Neurology", time: "10:00 AM", date: "2024-01-16", type: "Video Call", status: "cancelled", location: "Teleconsultation", notes: "Doctor unavailable" },
+    { id: 48, doctor: "Dr. Robert Lee", specialty: "Cardiology", time: "3:30 PM", date: "2024-01-19", type: "In-Person", status: "cancelled", location: "Main Clinic", notes: "Emergency reschedule" },
+    { id: 49, doctor: "Dr. Maria Rodriguez", specialty: "Dermatology", time: "11:15 AM", date: "2024-01-21", type: "Video Call", status: "cancelled", location: "Teleconsultation", notes: "Technical issues" },
+    { id: 50, doctor: "Dr. David Kim", specialty: "General Medicine", time: "9:30 AM", date: "2024-01-24", type: "In-Person", status: "cancelled", location: "Main Clinic", notes: "Patient no-show" },
+    { id: 51, doctor: "Dr. Jennifer Taylor", specialty: "Pediatrics", time: "1:45 PM", date: "2024-01-26", type: "Video Call", status: "cancelled", location: "Teleconsultation", notes: "Child sick" },
+    { id: 52, doctor: "Dr. Christopher Moore", specialty: "Orthopedics", time: "4:15 PM", date: "2024-01-29", type: "In-Person", status: "cancelled", location: "Main Clinic", notes: "Weather conditions" },
+    { id: 53, doctor: "Dr. Amanda Clark", specialty: "Neurology", time: "8:45 AM", date: "2024-01-31", type: "Video Call", status: "cancelled", location: "Teleconsultation", notes: "Equipment failure" },
+    { id: 54, doctor: "Dr. Kevin Anderson", specialty: "Cardiology", time: "2:30 PM", date: "2024-02-01", type: "In-Person", status: "cancelled", location: "Main Clinic", notes: "Patient emergency" },
+    { id: 55, doctor: "Dr. Rachel Green", specialty: "Dermatology", time: "10:45 AM", date: "2024-02-03", type: "Video Call", status: "cancelled", location: "Teleconsultation", notes: "Internet issues" },
+    { id: 56, doctor: "Dr. Mark Thompson", specialty: "General Medicine", time: "3:00 PM", date: "2024-02-06", type: "In-Person", status: "cancelled", location: "Main Clinic", notes: "Clinic closure" },
+    { id: 57, doctor: "Dr. Sarah Johnson", specialty: "Cardiology", time: "12:30 PM", date: "2024-02-09", type: "Video Call", status: "cancelled", location: "Teleconsultation", notes: "Doctor sick" },
+    { id: 58, doctor: "Dr. Michael Brown", specialty: "Dermatology", time: "1:15 PM", date: "2024-02-11", type: "In-Person", status: "cancelled", location: "Main Clinic", notes: "Double booking" },
+    { id: 59, doctor: "Dr. Emily White", specialty: "General Medicine", time: "9:15 AM", date: "2024-02-14", type: "Video Call", status: "cancelled", location: "Teleconsultation", notes: "Patient request" },
+    { id: 60, doctor: "Dr. James Wilson", specialty: "Orthopedics", time: "4:30 PM", date: "2024-02-17", type: "In-Person", status: "cancelled", location: "Main Clinic", notes: "Insurance issue" }
   ]);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
-  const filteredAppointments = appointments.filter(appointment => {
-    const matchesSearch = appointment.doctor.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         appointment.specialty.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = statusFilter === "all" || appointment.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
+  const filteredAppointments = appointments
+    .filter(appointment => {
+      const matchesSearch = appointment.doctor.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           appointment.specialty.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesStatus = statusFilter === "all" || appointment.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => {
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+    });
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'confirmed': return 'default';
-      case 'pending': return 'secondary';
+      case 'upcoming': return 'secondary';
       case 'completed': return 'outline';
       case 'cancelled': return 'destructive';
       default: return 'outline';
@@ -101,10 +142,9 @@ const PatientAppointments = () => {
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
       case 'confirmed': return 'bg-blue-500 text-white border-blue-500 hover:bg-blue-500 hover:shadow-lg hover:shadow-blue-500/50 hover:text-white/90 transition-all duration-200';
-      case 'pending': return 'bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-100 hover:shadow-lg hover:shadow-yellow-200/50 hover:text-yellow-800/90 transition-all duration-200';
+      case 'upcoming': return 'bg-yellow-500 text-white border-yellow-500 hover:bg-yellow-500 hover:shadow-lg hover:shadow-yellow-500/50 hover:text-white/90 transition-all duration-200';
       case 'completed': return 'bg-secondary text-secondary-foreground border-transparent hover:bg-secondary hover:shadow-lg hover:shadow-secondary/50 hover:text-secondary-foreground/90 transition-all duration-200';
       case 'cancelled': return 'bg-red-500 text-white border-red-500 hover:bg-red-500 hover:shadow-lg hover:shadow-red-500/50 hover:text-white/90 transition-all duration-200';
-      case 'upcoming': return 'bg-yellow-500 text-white border-yellow-500 hover:bg-yellow-500 hover:shadow-lg hover:shadow-yellow-500/50 hover:text-white/90 transition-all duration-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-100 hover:shadow-lg hover:shadow-gray-200/50 hover:text-gray-800/90 transition-all duration-200';
     }
   };
@@ -112,10 +152,9 @@ const PatientAppointments = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'confirmed': return CheckCircle;
-      case 'pending': return Clock;
+      case 'upcoming': return Clock;
       case 'completed': return CheckCircle2;
       case 'cancelled': return XCircle;
-      case 'upcoming': return Clock;
       default: return Clock;
     }
   };
@@ -164,9 +203,18 @@ const PatientAppointments = () => {
               <SelectContent>
                 <SelectItem value="all">{t('appointments.allStatus')}</SelectItem>
                 <SelectItem value="confirmed">{t('appointments.confirmed')}</SelectItem>
-                <SelectItem value="pending">{t('appointments.pending')}</SelectItem>
+                <SelectItem value="upcoming">{t('appointments.upcoming')}</SelectItem>
                 <SelectItem value="completed">{t('appointments.completed')}</SelectItem>
                 <SelectItem value="cancelled">{t('appointments.cancelled')}</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={sortOrder} onValueChange={(value: "asc" | "desc") => setSortOrder(value)}>
+              <SelectTrigger className="w-full sm:w-48">
+                <SelectValue placeholder="Sort by date" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="asc">Date: Oldest First</SelectItem>
+                <SelectItem value="desc">Date: Newest First</SelectItem>
               </SelectContent>
             </Select>
             <Dialog>
@@ -298,51 +346,6 @@ const PatientAppointments = () => {
             </Card>
           </div>
 
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Stethoscope className="w-5 h-5 mr-2" />
-                      Quick Actions
-                    </CardTitle>
-              </CardHeader>
-                  <CardContent className="space-y-3">
-                    <Button variant="outline" size="sm" className="w-full justify-start">
-                      <Calendar className="w-4 h-4 mr-2" />
-                      Schedule New
-                  </Button>
-                    <Button variant="outline" size="sm" className="w-full justify-start">
-                      <History className="w-4 h-4 mr-2" />
-                      View History
-                  </Button>
-                    <Button variant="outline" size="sm" className="w-full justify-start">
-                      <FileText className="w-4 h-4 mr-2" />
-                      Download Records
-                  </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                    <CardTitle className="flex items-center">
-                      <Clock3 className="w-5 h-5 mr-2" />
-                      Recent Activity
-                    </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                      <div className="flex items-center justify-between text-sm">
-                        <span>Appointment confirmed</span>
-                        <span className="text-muted-foreground ml-auto">2 hours ago</span>
-                  </div>
-                      <div className="flex items-center justify-between text-sm">
-                    <span>Prescription refilled</span>
-                    <span className="text-muted-foreground ml-auto">1 week ago</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-              </div>
           </div>
         </TabsContent>
 
