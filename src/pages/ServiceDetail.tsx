@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import Pagination from "@/components/ui/pagination";
 import { usePagination } from "@/hooks/usePagination";
 import { 
@@ -27,7 +28,9 @@ import {
   Calendar,
   Activity,
   Shield,
-  Award
+  Award,
+  Eye,
+  X
 } from "lucide-react";
 
 const ServiceDetail = () => {
@@ -43,6 +46,8 @@ const ServiceDetail = () => {
   const [serviceTypeFilter, setServiceTypeFilter] = useState("all");
   const [sortBy, setSortBy] = useState("rating");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [selectedProvider, setSelectedProvider] = useState<any>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Get service-specific data based on service category
   const getServiceSpecificData = () => {
@@ -1030,6 +1035,122 @@ const ServiceDetail = () => {
     return sortOrder === "asc" ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />;
   };
 
+  const handleViewDetails = (provider: any) => {
+    setSelectedProvider(provider);
+    setIsDialogOpen(true);
+  };
+
+  const ProviderDetailsCard = ({ provider }: { provider: any }) => {
+    if (!provider) return null;
+
+    return (
+      <Card className="w-full max-w-2xl">
+        <CardContent className="p-0">
+          {/* Header with gradient background */}
+          <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-t-lg p-6 text-white">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center">
+                  <span className="text-2xl font-bold text-white">
+                    {provider.image}
+                  </span>
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold">{provider.name}</h3>
+                  <p className="text-blue-100">{provider.specialty}</p>
+                  <div className="flex items-center space-x-4 mt-2 text-sm">
+                    <div className="flex items-center space-x-1">
+                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      <span className="font-medium">{provider.rating}</span>
+                      <span className="text-blue-200">({provider.reviews} reviews)</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Clock className="w-4 h-4" />
+                      <span>{provider.experience}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-3xl font-bold">
+                  ${provider.price}
+                  <span className="text-lg text-blue-200">/session</span>
+                </div>
+                <p className="text-sm text-blue-200">
+                  <MapPin className="w-3 h-3 inline mr-1" />
+                  {provider.location}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="p-6">
+            <div className="space-y-4">
+              {/* Availability */}
+              <div className="flex items-center space-x-2">
+                <Calendar className="w-5 h-5 text-green-600" />
+                <span className="text-sm font-medium text-green-600">
+                  Next available: {provider.nextAvailable}
+                </span>
+              </div>
+
+              {/* Services/Specializations */}
+              {(provider.services || provider.specializations) && (
+                <div>
+                  <p className="text-sm font-medium mb-2">
+                    {provider.services ? 'Services:' : 'Specializations:'}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {(provider.services || provider.specializations).map((item: string, index: number) => (
+                      <Badge key={index} variant="outline" className="text-xs">
+                        {item}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Languages */}
+              {provider.languages && (
+                <div>
+                  <p className="text-sm font-medium mb-1">Languages:</p>
+                  <p className="text-sm text-muted-foreground">{provider.languages.join(", ")}</p>
+                </div>
+              )}
+
+              {/* Clinic */}
+              {provider.clinic && (
+                <div>
+                  <p className="text-sm font-medium mb-1">Clinic:</p>
+                  <p className="text-sm text-muted-foreground">{provider.clinic}</p>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex space-x-3 pt-4">
+                <Button variant="medical" className="flex-1">
+                  <Video className="w-4 h-4 mr-2" />
+                  Book Video Call
+                </Button>
+                <Button variant="outline" className="flex-1">
+                  <Phone className="w-4 h-4 mr-2" />
+                  Phone Call
+                </Button>
+                {serviceType === 'nurses' && (
+                  <Button variant="outline" className="flex-1">
+                    <Home className="w-4 h-4 mr-2" />
+                    Home Visit
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-muted/50">
       <RoleBasedNavigation userType={userType} userName={providerType} />
@@ -1271,6 +1392,14 @@ const ServiceDetail = () => {
                             <Phone className="w-4 h-4 mr-1" />
                             Call
                           </Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => handleViewDetails(provider)}
+                          >
+                            <Eye className="w-4 h-4 mr-1" />
+                            View Details
+                          </Button>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -1293,6 +1422,27 @@ const ServiceDetail = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Provider Details Dialog */}
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="flex items-center justify-between">
+                <span>Provider Details</span>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => setIsDialogOpen(false)}
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </DialogTitle>
+            </DialogHeader>
+            <div className="flex justify-center">
+              <ProviderDetailsCard provider={selectedProvider} />
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
