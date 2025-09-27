@@ -82,6 +82,28 @@ const DoctorRevenue = () => {
       invoiceNumber: "INV-004",
       paymentMethod: "Insurance",
       clinic: "City Heart Center"
+    },
+    { 
+      id: 5, 
+      patient: "Robert Wilson", 
+      service: "Consultation", 
+      amount: 200, 
+      date: "2024-01-05", 
+      status: "outstanding",
+      invoiceNumber: "INV-005",
+      paymentMethod: "Pending",
+      clinic: "City Heart Center"
+    },
+    { 
+      id: 6, 
+      patient: "Maria Garcia", 
+      service: "Teleconsultation", 
+      amount: 120, 
+      date: "2024-01-03", 
+      status: "outstanding",
+      invoiceNumber: "INV-006",
+      paymentMethod: "Pending",
+      clinic: "City Heart Center"
     }
   ]);
 
@@ -100,6 +122,7 @@ const DoctorRevenue = () => {
     switch (status) {
       case 'paid': return 'default';
       case 'pending': return 'secondary';
+      case 'outstanding': return 'destructive';
       case 'overdue': return 'destructive';
       default: return 'secondary';
     }
@@ -108,6 +131,11 @@ const DoctorRevenue = () => {
   const totalRevenue = transactions.reduce((sum, transaction) => sum + transaction.amount, 0);
   const paidAmount = transactions.filter(t => t.status === 'paid').reduce((sum, t) => sum + t.amount, 0);
   const pendingAmount = transactions.filter(t => t.status === 'pending').reduce((sum, t) => sum + t.amount, 0);
+  const outstandingAmount = transactions.filter(t => t.status === 'outstanding').reduce((sum, t) => sum + t.amount, 0);
+
+  const handleStatusFilter = (status: string) => {
+    setStatusFilter(status);
+  };
 
   const revenueByService = {
     'Consultation': transactions.filter(t => t.service === 'Consultation').reduce((sum, t) => sum + t.amount, 0),
@@ -152,8 +180,8 @@ const DoctorRevenue = () => {
         </div>
 
         {/* Revenue Overview Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card>
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleStatusFilter('all')}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -171,7 +199,7 @@ const DoctorRevenue = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleStatusFilter('paid')}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -189,7 +217,7 @@ const DoctorRevenue = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleStatusFilter('pending')}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -207,7 +235,7 @@ const DoctorRevenue = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleStatusFilter('all')}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -220,6 +248,24 @@ const DoctorRevenue = () => {
                 </div>
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                   <Users className="w-6 h-6 text-blue-600" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleStatusFilter('outstanding')}>
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Outstanding</p>
+                  <p className="text-2xl font-bold text-orange-600">${outstandingAmount.toLocaleString()}</p>
+                  <div className="flex items-center mt-1">
+                    <AlertCircle className="w-3 h-3 text-orange-600 mr-1" />
+                    <span className="text-sm text-orange-600">Overdue</span>
+                  </div>
+                </div>
+                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                  <AlertCircle className="w-6 h-6 text-orange-600" />
                 </div>
               </div>
             </CardContent>

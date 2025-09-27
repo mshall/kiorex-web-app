@@ -154,7 +154,7 @@
     "yourCancelledAppointments": "Your cancelled appointments will appear here."
   },
   "patients": {
-    "title": "Patients",
+    "title": "Patient Management",
     "patientList": "Patient List",
     "addPatient": "Add Patient",
     "patientProfile": "Patient Profile",

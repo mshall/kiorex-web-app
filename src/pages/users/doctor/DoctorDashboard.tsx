@@ -29,7 +29,8 @@ import {
   Eye, // For view details
   Stethoscope, // For medical tools
   Star, // For ratings
-  ArrowRight // For navigation
+  ArrowRight, // For navigation
+  UserPlus // For adding patients
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
@@ -388,6 +389,14 @@ const DoctorDashboard = () => {
                   <Button variant="outline" className="justify-start">
                     <Video className="w-4 h-4 mr-2" />
                     Start Video Call
+                  </Button>
+                  <Button variant="outline" className="justify-start">
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Add New Patient
+                  </Button>
+                  <Button variant="outline" className="justify-start">
+                    <FileText className="w-4 h-4 mr-2" />
+                    Generate Report
                   </Button>
                 </div>
               </CardContent>

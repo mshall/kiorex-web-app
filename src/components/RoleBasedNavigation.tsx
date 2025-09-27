@@ -242,15 +242,9 @@ const RoleBasedNavigation = ({
             </div>
           )}
 
-          {/* User Menu */}
-          <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
-            {/* Language Indicator Badge */}
-            <div className="hidden sm:flex items-center">
-              <Badge variant="outline" className="text-xs font-medium">
-                {i18n.language.toUpperCase()}
-              </Badge>
-            </div>
-            {/* Notifications Dropdown */}
+              {/* User Menu */}
+              <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-4 flex-row-reverse' : 'space-x-4'}`}>
+                {/* Notifications Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="relative">

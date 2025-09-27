@@ -150,7 +150,7 @@ const DoctorPatients = () => {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">{t('navigation.patients')} {t('common.management')}</h1>
+          <h1 className="text-3xl font-bold mb-2">{t('patients.title')}</h1>
           <p className="text-muted-foreground">{t('patients.managePatients')}</p>
         </div>
 
@@ -247,230 +247,195 @@ const DoctorPatients = () => {
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2">
-                <Card>
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="flex items-center">
-                        <Users className="w-5 h-5 mr-2" />
-                        {t('navigation.patients')} ({filteredPatients.length})
-                      </CardTitle>
-                      <div className="flex items-center space-x-2">
-                        <div className="relative">
-                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                          <Input
-                            placeholder="Search patients..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="pl-10 w-64"
-                          />
-                        </div>
-                        <Select value={statusFilter} onValueChange={setStatusFilter}>
-                          <SelectTrigger className="w-32">
-                            <SelectValue placeholder="Status" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">All</SelectItem>
-                            <SelectItem value="active">Active</SelectItem>
-                            <SelectItem value="inactive">Inactive</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
+            {/* Patient Overview Cards - Smaller and above table */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Total Patients</p>
+                      <p className="text-2xl font-bold">{patients.length}</p>
                     </div>
-                  </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Patient</TableHead>
-                          <TableHead>Contact</TableHead>
-                          <TableHead>Condition</TableHead>
-                          <TableHead>Last Visit</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead className="text-right">Actions</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {filteredPatients.map((patient) => (
-                          <TableRow key={patient.id} className="hover:bg-muted/50">
-                            <TableCell>
-                              <div className="flex items-center space-x-3">
-                                <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center">
-                                  <span className="text-white font-semibold text-sm">
-                                    {patient.name.split(' ').map(n => n[0]).join('')}
-                                  </span>
-                                </div>
-                                <div>
-                                  <p className="font-medium">{patient.name}</p>
-                                  <p className="text-sm text-muted-foreground">Age: {patient.age}</p>
-                                </div>
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              <div className="space-y-1">
-                                <div className="flex items-center text-sm">
-                                  <Mail className="w-3 h-3 mr-2 text-muted-foreground" />
-                                  <span className="truncate max-w-32">{patient.email}</span>
-                                </div>
-                                <div className="flex items-center text-sm">
-                                  <Phone className="w-3 h-3 mr-2 text-muted-foreground" />
-                                  <span>{patient.phone}</span>
-                                </div>
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              <div className="space-y-1">
-                                <p className="text-sm font-medium">{patient.condition}</p>
-                                <div className="flex items-center text-xs text-muted-foreground">
-                                  <Heart className="w-3 h-3 mr-1" />
-                                  <span>BP: {patient.bloodPressure}</span>
-                                </div>
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              <div className="space-y-1">
-                                <p className="text-sm">{patient.lastVisit}</p>
-                                {patient.nextAppointment && (
-                                  <p className="text-xs text-muted-foreground">
-                                    Next: {patient.nextAppointment}
-                                  </p>
-                                )}
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              <Badge variant={getStatusColor(patient.status)} className="capitalize">
-                                {patient.status}
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="text-right">
-                              <div className="flex items-center justify-end space-x-2">
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => handleViewPatientProfile(patient.id)}
-                                  className="h-8"
-                                >
-                                  <Eye className="w-3 h-3 mr-1" />
-                                  View
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => handleCallPatient(patient.phone)}
-                                  className="h-8"
-                                >
-                                  <Phone className="w-3 h-3" />
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => handleMessagePatient(patient.email)}
-                                  className="h-8"
-                                >
-                                  <MessageSquare className="w-3 h-3" />
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  className="h-8"
-                                >
-                                  <MoreHorizontal className="w-3 h-3" />
-                                </Button>
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Quick Stats and Actions */}
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Patient Overview</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm">Total Patients</span>
-                        <span className="font-semibold">{patients.length}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm">Active</span>
-                        <span className="font-semibold text-green-600">
-                          {patients.filter(p => p.status === 'active').length}
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm">Inactive</span>
-                        <span className="font-semibold text-gray-600">
-                          {patients.filter(p => p.status === 'inactive').length}
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm">New This Month</span>
-                        <span className="font-semibold text-blue-600">8</span>
-                      </div>
+                    <Users className="w-8 h-8 text-primary" />
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Active</p>
+                      <p className="text-2xl font-bold text-green-600">
+                        {patients.filter(p => p.status === 'active').length}
+                      </p>
                     </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Quick Actions</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <Button variant="outline" className="w-full justify-start">
-                        <UserPlus className="w-4 h-4 mr-2" />
-                        Add New Patient
-                      </Button>
-                      <Button variant="outline" className="w-full justify-start">
-                        <Calendar className="w-4 h-4 mr-2" />
-                        Schedule Appointment
-                      </Button>
-                      <Button variant="outline" className="w-full justify-start">
-                        <FileText className="w-4 h-4 mr-2" />
-                        Generate Report
-                      </Button>
-                      <Button variant="outline" className="w-full justify-start">
-                        <Activity className="w-4 h-4 mr-2" />
-                        View Analytics
-                      </Button>
+                    <CheckCircle className="w-8 h-8 text-green-600" />
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Inactive</p>
+                      <p className="text-2xl font-bold text-gray-600">
+                        {patients.filter(p => p.status === 'inactive').length}
+                      </p>
                     </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Recent Activity</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex items-center space-x-3 text-sm">
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span>Sarah Johnson checked in</span>
-                        <span className="text-muted-foreground ml-auto">2 min ago</span>
-                      </div>
-                      <div className="flex items-center space-x-3 text-sm">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        <span>New patient registered</span>
-                        <span className="text-muted-foreground ml-auto">15 min ago</span>
-                      </div>
-                      <div className="flex items-center space-x-3 text-sm">
-                        <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                        <span>Prescription updated</span>
-                        <span className="text-muted-foreground ml-auto">1 hour ago</span>
-                      </div>
+                    <AlertCircle className="w-8 h-8 text-gray-600" />
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">New This Month</p>
+                      <p className="text-2xl font-bold text-blue-600">8</p>
                     </div>
-                  </CardContent>
-                </Card>
-              </div>
+                    <UserPlus className="w-8 h-8 text-blue-600" />
+                  </div>
+                </CardContent>
+              </Card>
             </div>
+
+            {/* Full Width Table */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center">
+                    <Users className="w-5 h-5 mr-2" />
+                    {t('navigation.patients')} ({filteredPatients.length})
+                  </CardTitle>
+                  <div className="flex items-center space-x-2">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                      <Input
+                        placeholder="Search patients..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-10 w-64"
+                      />
+                    </div>
+                    <Select value={statusFilter} onValueChange={setStatusFilter}>
+                      <SelectTrigger className="w-32">
+                        <SelectValue placeholder="Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All</SelectItem>
+                        <SelectItem value="active">Active</SelectItem>
+                        <SelectItem value="inactive">Inactive</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Patient</TableHead>
+                      <TableHead>Contact</TableHead>
+                      <TableHead>Condition</TableHead>
+                      <TableHead>Last Visit</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredPatients.map((patient) => (
+                      <TableRow key={patient.id} className="hover:bg-muted/50">
+                        <TableCell>
+                          <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center">
+                              <span className="text-white font-semibold text-sm">
+                                {patient.name.split(' ').map(n => n[0]).join('')}
+                              </span>
+                            </div>
+                            <div>
+                              <p className="font-medium">{patient.name}</p>
+                              <p className="text-sm text-muted-foreground">Age: {patient.age}</p>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="space-y-1">
+                            <div className="flex items-center text-sm">
+                              <Mail className="w-3 h-3 mr-2 text-muted-foreground" />
+                              <span className="truncate max-w-32">{patient.email}</span>
+                            </div>
+                            <div className="flex items-center text-sm">
+                              <Phone className="w-3 h-3 mr-2 text-muted-foreground" />
+                              <span>{patient.phone}</span>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="space-y-1">
+                            <p className="text-sm font-medium">{patient.condition}</p>
+                            <div className="flex items-center text-xs text-muted-foreground">
+                              <Heart className="w-3 h-3 mr-1" />
+                              <span>BP: {patient.bloodPressure}</span>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="space-y-1">
+                            <p className="text-sm">{patient.lastVisit}</p>
+                            {patient.nextAppointment && (
+                              <p className="text-xs text-muted-foreground">
+                                Next: {patient.nextAppointment}
+                              </p>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant={getStatusColor(patient.status)} className="capitalize">
+                            {patient.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex items-center justify-end space-x-2">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleViewPatientProfile(patient.id)}
+                              className="h-8"
+                            >
+                              <Eye className="w-3 h-3 mr-1" />
+                              View
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleCallPatient(patient.phone)}
+                              className="h-8"
+                            >
+                              <Phone className="w-3 h-3" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleMessagePatient(patient.email)}
+                              className="h-8"
+                            >
+                              <MessageSquare className="w-3 h-3" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="h-8"
+                            >
+                              <MoreHorizontal className="w-3 h-3" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="medical" className="space-y-6">
