@@ -44,6 +44,9 @@ const ClinicAppointments = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
   const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [activeStatusTab, setActiveStatusTab] = useState("all");
+  const [customDateFrom, setCustomDateFrom] = useState("");
+  const [customDateTo, setCustomDateTo] = useState("");
 
   // Sample appointments data
   const appointments = [
@@ -290,8 +293,16 @@ const ClinicAppointments = () => {
   ];
 
   // Quick stats - merged from both appointments and calendar
+  const today = new Date().toISOString().split('T')[0];
   const stats = {
-    // Appointments stats
+    // Today's appointments stats
+    totalToday: appointments.filter(a => a.date === today).length,
+    confirmedToday: appointments.filter(a => a.date === today && a.status === 'confirmed').length,
+    pendingToday: appointments.filter(a => a.date === today && a.status === 'pending').length,
+    waitingToday: appointments.filter(a => a.date === today && a.status === 'waiting').length,
+    completedToday: appointments.filter(a => a.date === today && a.status === 'completed').length,
+    cancelledToday: appointments.filter(a => a.date === today && a.status === 'cancelled').length,
+    // All appointments stats
     total: appointments.length,
     confirmed: appointments.filter(a => a.status === 'confirmed').length,
     pending: appointments.filter(a => a.status === 'pending').length,
@@ -299,8 +310,7 @@ const ClinicAppointments = () => {
     completed: appointments.filter(a => a.status === 'completed').length,
     cancelled: appointments.filter(a => a.status === 'cancelled').length,
     // Calendar stats
-    todayAppointments: appointments.filter(a => a.date === new Date().toISOString().split('T')[0]).length,
-    completedToday: appointments.filter(a => a.date === new Date().toISOString().split('T')[0] && a.status === 'completed').length,
+    todayAppointments: appointments.filter(a => a.date === today).length,
     totalAppointments: appointments.length,
     videoCalls: appointments.filter(a => a.type === 'Video Call').length,
     inPersonVisits: appointments.filter(a => a.type === 'In-Person').length
@@ -353,8 +363,37 @@ const ClinicAppointments = () => {
                          appointment.specialty.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          appointment.clinic.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === 'all' || appointment.status === statusFilter;
-    const matchesDate = dateFilter === 'all' || appointment.date === dateFilter;
-    return matchesSearch && matchesStatus && matchesDate;
+    
+    // Enhanced date filtering
+    let matchesDate = true;
+    if (dateFilter !== 'all') {
+      if (dateFilter === 'this-month') {
+        const appointmentDate = new Date(appointment.date);
+        const currentMonth = new Date().getMonth();
+        const currentYear = new Date().getFullYear();
+        matchesDate = appointmentDate.getMonth() === currentMonth && appointmentDate.getFullYear() === currentYear;
+      } else if (dateFilter === 'custom') {
+        if (customDateFrom && customDateTo) {
+          matchesDate = appointment.date >= customDateFrom && appointment.date <= customDateTo;
+        } else {
+          matchesDate = true; // Show all if custom range not fully set
+        }
+      } else {
+        matchesDate = appointment.date === dateFilter;
+      }
+    }
+    
+    // Status tab filtering
+    let matchesStatusTab = true;
+    if (activeStatusTab !== "all") {
+      if (activeStatusTab === "upcoming") {
+        matchesStatusTab = appointment.status === "pending";
+      } else {
+        matchesStatusTab = appointment.status === activeStatusTab;
+      }
+    }
+    
+    return matchesSearch && matchesStatus && matchesDate && matchesStatusTab;
   });
 
   // Pagination logic
@@ -391,7 +430,7 @@ const ClinicAppointments = () => {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-8">
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
@@ -399,8 +438,8 @@ const ClinicAppointments = () => {
                   <Calendar className="h-6 w-6 text-blue-600" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Total Appointments</p>
-                  <p className="text-2xl font-bold">{stats.total}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Total Appointments Today</p>
+                  <p className="text-2xl font-bold">{stats.totalToday}</p>
                 </div>
               </div>
             </CardContent>
@@ -413,8 +452,8 @@ const ClinicAppointments = () => {
                   <CheckCircle className="h-6 w-6 text-green-600" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Confirmed</p>
-                  <p className="text-2xl font-bold">{stats.confirmed}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Confirmed Today</p>
+                  <p className="text-2xl font-bold">{stats.confirmedToday}</p>
                 </div>
               </div>
             </CardContent>
@@ -427,8 +466,8 @@ const ClinicAppointments = () => {
                   <AlertCircle className="h-6 w-6 text-yellow-600" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Pending</p>
-                  <p className="text-2xl font-bold">{stats.pending}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Upcoming Today</p>
+                  <p className="text-2xl font-bold">{stats.pendingToday}</p>
                 </div>
               </div>
             </CardContent>
@@ -441,8 +480,8 @@ const ClinicAppointments = () => {
                   <AlertCircle className="h-6 w-6 text-orange-600" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Waiting</p>
-                  <p className="text-2xl font-bold">{stats.waiting}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Waiting Today</p>
+                  <p className="text-2xl font-bold">{stats.waitingToday}</p>
                 </div>
               </div>
             </CardContent>
@@ -455,8 +494,22 @@ const ClinicAppointments = () => {
                   <TrendingUp className="h-6 w-6 text-purple-600" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-muted-foreground">Completed</p>
-                  <p className="text-2xl font-bold">{stats.completed}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Completed Today</p>
+                  <p className="text-2xl font-bold">{stats.completedToday}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center">
+                <div className="p-2 bg-red-100 rounded-lg">
+                  <XCircle className="h-6 w-6 text-red-600" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-muted-foreground">Cancelled Today</p>
+                  <p className="text-2xl font-bold">{stats.cancelledToday}</p>
                 </div>
               </div>
             </CardContent>
@@ -508,11 +561,69 @@ const ClinicAppointments = () => {
                       <SelectItem value="2024-01-15">Today</SelectItem>
                       <SelectItem value="2024-01-16">Tomorrow</SelectItem>
                       <SelectItem value="2024-01-17">This Week</SelectItem>
+                      <SelectItem value="this-month">This Month</SelectItem>
+                      <SelectItem value="custom">Custom Range</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
+                
+                {/* Custom Date Range */}
+                {dateFilter === "custom" && (
+                  <div className="mt-4 pt-4 border-t">
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <div className="flex-1">
+                        <label className="text-sm font-medium mb-2 block">From Date</label>
+                        <Input
+                          type="date"
+                          value={customDateFrom}
+                          onChange={(e) => setCustomDateFrom(e.target.value)}
+                          placeholder="Select start date"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <label className="text-sm font-medium mb-2 block">To Date</label>
+                        <Input
+                          type="date"
+                          value={customDateTo}
+                          onChange={(e) => setCustomDateTo(e.target.value)}
+                          placeholder="Select end date"
+                        />
+                </div>
+                  </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
+
+            {/* Status Tabs */}
+            <Tabs value={activeStatusTab} onValueChange={setActiveStatusTab} className="space-y-4">
+              <TabsList className="grid w-full grid-cols-6">
+                <TabsTrigger value="all" className="flex items-center space-x-2">
+                  <Calendar className="w-4 h-4" />
+                  <span>All</span>
+                </TabsTrigger>
+                <TabsTrigger value="upcoming" className="flex items-center space-x-2">
+                  <Clock className="w-4 h-4" />
+                  <span>Upcoming</span>
+                </TabsTrigger>
+                <TabsTrigger value="confirmed" className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4" />
+                  <span>Confirmed</span>
+                </TabsTrigger>
+                <TabsTrigger value="waiting" className="flex items-center space-x-2">
+                  <AlertCircle className="w-4 h-4" />
+                  <span>Waiting</span>
+                </TabsTrigger>
+                <TabsTrigger value="completed" className="flex items-center space-x-2">
+                  <TrendingUp className="w-4 h-4" />
+                  <span>Completed</span>
+                </TabsTrigger>
+                <TabsTrigger value="cancelled" className="flex items-center space-x-2">
+                  <XCircle className="w-4 h-4" />
+                  <span>Cancelled</span>
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
 
             {/* Appointments Table */}
             <Card>
