@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import RoleBasedNavigation from "@/components/RoleBasedNavigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import Pagination from "@/components/ui/pagination";
+import { usePagination } from "@/hooks/usePagination";
 import { 
   Search,
   ArrowRight,
@@ -29,7 +33,14 @@ import {
   Filter,
   Grid3X3,
   List,
-  ChevronDown
+  ChevronDown,
+  Eye,
+  Video,
+  ArrowLeft,
+  SortAsc,
+  SortDesc,
+  ChevronUp,
+  ChevronDown as ChevronDownIcon
 } from "lucide-react";
 import KiorexLogo from "@/components/KiorexLogo";
 
@@ -41,6 +52,15 @@ const MarketplaceHub = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [showServiceDetail, setShowServiceDetail] = useState(false);
+  const [serviceDetailSearch, setServiceDetailSearch] = useState("");
+  const [priceFilter, setPriceFilter] = useState("all");
+  const [countryFilter, setCountryFilter] = useState("all");
+  const [cityFilter, setCityFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("rating");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [selectedProvider, setSelectedProvider] = useState<any>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const categories = [
     { id: 'all', name: 'All Services', icon: Grid3X3, color: 'primary' },
@@ -161,25 +181,8 @@ const MarketplaceHub = () => {
   });
 
   const handleServiceClick = (service: any) => {
-    // Map service categories to service types for ServiceDetail page
-    const categoryToServiceType = {
-      'surgery': 'doctors',
-      'lab': 'doctors', 
-      'pharmacy': 'doctors',
-      'nurse': 'nurses',
-      'physio': 'physiotherapists'
-    };
-    
-    const serviceType = categoryToServiceType[service.category as keyof typeof categoryToServiceType] || 'doctors';
-    
-    navigate('/service-detail', { 
-      state: { 
-        userType, 
-        providerType, 
-        serviceType,
-        serviceCategory: service.category
-      } 
-    });
+    setSelectedCategory(service.category);
+    setShowServiceDetail(true);
   };
 
   const getCategoryStats = () => {
@@ -194,11 +197,297 @@ const MarketplaceHub = () => {
 
   const stats = getCategoryStats();
 
+  // Service-specific data based on category
+  const getServiceSpecificData = () => {
+    switch (selectedCategory) {
+      case 'surgery':
+        return [
+          { 
+            id: 1, 
+            name: "Dr. Michael Thompson", 
+            specialty: "Cardiac Surgeon", 
+            rating: 4.9, 
+            reviews: 89, 
+            price: 2500, 
+            location: "Heart Surgery Center",
+            experience: "18 years",
+            nextAvailable: "Tomorrow 8:00 AM",
+            profileImage: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&crop=face",
+            verified: true,
+            languages: ["English", "Spanish"],
+            serviceType: "Cardiac Surgery",
+            clinic: "Downtown Medical Center",
+            country: "United States",
+            city: "New York",
+            consultationTypes: ["Video Call", "In-Person"]
+          },
+          { 
+            id: 2, 
+            name: "Dr. Sarah Williams", 
+            specialty: "Orthopedic Surgeon", 
+            rating: 4.8, 
+            reviews: 76, 
+            price: 2200, 
+            location: "Sports Medicine Center",
+            experience: "15 years",
+            nextAvailable: "Today 3:00 PM",
+            profileImage: "https://images.unsplash.com/photo-1594824713406-9a9d4a2e8a6d?w=150&h=150&fit=crop&crop=face",
+            verified: true,
+            languages: ["English"],
+            serviceType: "Orthopedic Surgery",
+            clinic: "Sports Medicine Center",
+            country: "United States",
+            city: "Los Angeles",
+            consultationTypes: ["Video Call", "In-Person"]
+          }
+        ];
+      case 'physio':
+        return [
+          { 
+            id: 1, 
+            name: "Alex Johnson", 
+            specialty: "Physical Therapist", 
+            rating: 4.9, 
+            reviews: 124, 
+            price: 110, 
+            location: "Rehabilitation Center",
+            experience: "12 years",
+            nextAvailable: "Today 2:00 PM",
+            profileImage: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150&h=150&fit=crop&crop=face",
+            verified: true,
+            languages: ["English", "French"],
+            serviceType: "Physical Therapy",
+            clinic: "Elite Rehabilitation",
+            country: "United States",
+            city: "Chicago",
+            consultationTypes: ["Video Call", "In-Person"]
+          },
+          { 
+            id: 2, 
+            name: "Maria Rodriguez", 
+            specialty: "Sports Physiotherapist", 
+            rating: 4.8, 
+            reviews: 98, 
+            price: 125, 
+            location: "Sports Therapy Clinic",
+            experience: "10 years",
+            nextAvailable: "Tomorrow 9:00 AM",
+            profileImage: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=150&h=150&fit=crop&crop=face",
+            verified: true,
+            languages: ["English", "Spanish"],
+            serviceType: "Sports Therapy",
+            clinic: "Athletic Performance Center",
+            country: "United States",
+            city: "Miami",
+            consultationTypes: ["Video Call", "In-Person"]
+          }
+        ];
+      case 'nurse':
+        return [
+          { 
+            id: 1, 
+            name: "Jennifer Smith", 
+            specialty: "Registered Nurse", 
+            rating: 4.9, 
+            reviews: 156, 
+            price: 45, 
+            location: "Home Care Services",
+            experience: "8 years",
+            nextAvailable: "Today 1:00 PM",
+            profileImage: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&crop=face",
+            verified: true,
+            languages: ["English"],
+            serviceType: "Home Nursing",
+            clinic: "ComfortCare Nursing",
+            country: "United States",
+            city: "Seattle",
+            consultationTypes: ["In-Person"]
+          },
+          { 
+            id: 2, 
+            name: "Robert Chen", 
+            specialty: "Critical Care Nurse", 
+            rating: 4.8, 
+            reviews: 89, 
+            price: 50, 
+            location: "Medical Center",
+            experience: "6 years",
+            nextAvailable: "Tomorrow 10:00 AM",
+            profileImage: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=150&h=150&fit=crop&crop=face",
+            verified: true,
+            languages: ["English", "Mandarin"],
+            serviceType: "Critical Care",
+            clinic: "Metro Health Services",
+            country: "United States",
+            city: "San Francisco",
+            consultationTypes: ["In-Person"]
+          }
+        ];
+      case 'lab':
+        return [
+          { 
+            id: 1, 
+            name: "LabCorp Diagnostics", 
+            specialty: "Full Service Laboratory", 
+            rating: 4.7, 
+            reviews: 234, 
+            price: 89, 
+            location: "Multiple Locations",
+            experience: "25 years",
+            nextAvailable: "Available Today",
+            profileImage: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=150&h=150&fit=crop&crop=center",
+            verified: true,
+            languages: ["English", "Spanish"],
+            serviceType: "Blood Tests",
+            clinic: "LabCorp Network",
+            country: "United States",
+            city: "Nationwide",
+            consultationTypes: ["In-Person"]
+          },
+          { 
+            id: 2, 
+            name: "Quest Diagnostics", 
+            specialty: "Advanced Testing Lab", 
+            rating: 4.6, 
+            reviews: 189, 
+            price: 95, 
+            location: "Medical District",
+            experience: "30 years",
+            nextAvailable: "Available Today",
+            profileImage: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=150&h=150&fit=crop&crop=center",
+            verified: true,
+            languages: ["English"],
+            serviceType: "Diagnostic Tests",
+            clinic: "Quest Medical Center",
+            country: "United States",
+            city: "Boston",
+            consultationTypes: ["In-Person"]
+          }
+        ];
+      case 'pharmacy':
+        return [
+          { 
+            id: 1, 
+            name: "CVS Pharmacy", 
+            specialty: "Community Pharmacy", 
+            rating: 4.5, 
+            reviews: 567, 
+            price: 0, 
+            location: "24/7 Service",
+            experience: "40 years",
+            nextAvailable: "Available 24/7",
+            profileImage: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=150&h=150&fit=crop&crop=center",
+            verified: true,
+            languages: ["English", "Spanish"],
+            serviceType: "Prescription & OTC",
+            clinic: "CVS Health",
+            country: "United States",
+            city: "Nationwide",
+            consultationTypes: ["In-Person"]
+          },
+          { 
+            id: 2, 
+            name: "Walgreens Pharmacy", 
+            specialty: "Health & Wellness", 
+            rating: 4.4, 
+            reviews: 445, 
+            price: 0, 
+            location: "Health Centers",
+            experience: "35 years",
+            nextAvailable: "Available 24/7",
+            profileImage: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=150&h=150&fit=crop&crop=center",
+            verified: true,
+            languages: ["English"],
+            serviceType: "Pharmacy Services",
+            clinic: "Walgreens Health",
+            country: "United States",
+            city: "Nationwide",
+            consultationTypes: ["In-Person"]
+          }
+        ];
+      default:
+        return [];
+    }
+  };
+
+  // Get filtered and sorted data for service detail view
+  const filteredAndSortedData = useMemo(() => {
+    const data = getServiceSpecificData();
+    let filtered = data.filter(provider => {
+      const matchesSearch = serviceDetailSearch === '' || 
+        provider.name.toLowerCase().includes(serviceDetailSearch.toLowerCase()) ||
+        provider.specialty.toLowerCase().includes(serviceDetailSearch.toLowerCase()) ||
+        provider.location.toLowerCase().includes(serviceDetailSearch.toLowerCase());
+      
+      const matchesPrice = priceFilter === 'all' || 
+        (priceFilter === 'low' && provider.price < 100) ||
+        (priceFilter === 'medium' && provider.price >= 100 && provider.price < 500) ||
+        (priceFilter === 'high' && provider.price >= 500);
+      
+      const matchesCountry = countryFilter === 'all' || provider.country === countryFilter;
+      const matchesCity = cityFilter === 'all' || provider.city === cityFilter;
+      
+      return matchesSearch && matchesPrice && matchesCountry && matchesCity;
+    });
+
+    // Sort data
+    filtered.sort((a, b) => {
+      let comparison = 0;
+      switch (sortBy) {
+        case 'rating':
+          comparison = a.rating - b.rating;
+          break;
+        case 'price':
+          comparison = a.price - b.price;
+          break;
+        case 'experience':
+          comparison = parseInt(a.experience) - parseInt(b.experience);
+          break;
+        default:
+          comparison = a.rating - b.rating;
+      }
+      return sortOrder === 'asc' ? comparison : -comparison;
+    });
+
+    return filtered;
+  }, [selectedCategory, serviceDetailSearch, priceFilter, countryFilter, cityFilter, sortBy, sortOrder]);
+
+  // Pagination hook
+  const {
+    currentPage,
+    itemsPerPage,
+    totalPages,
+    totalItems,
+    paginatedData,
+    setCurrentPage,
+    setItemsPerPage
+  } = usePagination(filteredAndSortedData, { initialItemsPerPage: 6 });
+
+  // Handle booking appointment
+  const handleBookAppointment = (provider: any) => {
+    navigate('/booking', { 
+      state: { 
+        userType, 
+        providerType, 
+        doctor: provider,
+        serviceType: selectedCategory
+      } 
+    });
+  };
+
+  // Handle view details
+  const handleViewDetails = (provider: any) => {
+    setSelectedProvider(provider);
+    setIsDialogOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-muted/50">
       <RoleBasedNavigation userType={userType} userName={providerType} />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {!showServiceDetail ? (
+        // Marketplace View
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4">
@@ -283,10 +572,11 @@ const MarketplaceHub = () => {
         </div>
 
         {/* Services Grid */}
+        {selectedCategory !== 'all' && (
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold">
-              {selectedCategory === 'all' ? 'All Services' : categories.find(c => c.id === selectedCategory)?.name}
+              {categories.find(c => c.id === selectedCategory)?.name}
             </h2>
             <div className="flex items-center space-x-2">
               <Button variant="outline" size="sm">
@@ -413,6 +703,38 @@ const MarketplaceHub = () => {
             </div>
           )}
         </div>
+        )}
+
+        {/* All Services Message */}
+        {selectedCategory === 'all' && (
+          <div className="mb-8">
+            <Card className="text-center py-12">
+              <CardContent>
+                <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Grid3X3 className="w-12 h-12 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Browse Healthcare Services</h3>
+                <p className="text-muted-foreground mb-4 max-w-2xl mx-auto">
+                  Select a specific category above to view available providers and services. 
+                  Choose from surgery, lab tests, pharmacy, nursing care, or physiotherapy.
+                </p>
+                <div className="flex flex-wrap justify-center gap-3">
+                  {categories.filter(c => c.id !== 'all').map((category) => (
+                    <Button 
+                      key={category.id}
+                      variant="outline" 
+                      onClick={() => setSelectedCategory(category.id)}
+                      className="flex items-center space-x-2"
+                    >
+                      <category.icon className="w-4 h-4" />
+                      <span>{category.name}</span>
+                    </Button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         {/* No Results */}
         {filteredServices.length === 0 && (
@@ -486,7 +808,350 @@ const MarketplaceHub = () => {
             </Card>
           </div>
         </div>
-      </div>
+        </div>
+      ) : (
+        // Service Detail View
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center space-x-4">
+              <Button 
+                variant="outline" 
+                onClick={() => setShowServiceDetail(false)}
+                className="flex items-center space-x-2"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>Back to Marketplace</span>
+              </Button>
+              <div>
+                <h1 className="text-3xl font-bold">
+                  {selectedCategory === 'surgery' ? 'Available Surgeons' :
+                   selectedCategory === 'physio' ? 'Available Physiotherapists' :
+                   selectedCategory === 'nurse' ? 'Available Nurses' :
+                   selectedCategory === 'lab' ? 'Available Labs' :
+                   selectedCategory === 'pharmacy' ? 'Available Pharmacies' :
+                   'Available Providers'}
+                </h1>
+                <p className="text-muted-foreground mt-2">
+                  Choose from our verified {selectedCategory === 'surgery' ? 'surgeons' :
+                   selectedCategory === 'physio' ? 'physiotherapists' :
+                   selectedCategory === 'nurse' ? 'nurses' :
+                   selectedCategory === 'lab' ? 'laboratories' :
+                   selectedCategory === 'pharmacy' ? 'pharmacies' :
+                   'providers'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Filters */}
+          <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+              <div>
+                <Label htmlFor="search">Search</Label>
+                <Input
+                  id="search"
+                  placeholder="Search providers..."
+                  value={serviceDetailSearch}
+                  onChange={(e) => setServiceDetailSearch(e.target.value)}
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor="price-filter">Price Range</Label>
+                <Select value={priceFilter} onValueChange={setPriceFilter}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Price range" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Prices</SelectItem>
+                    <SelectItem value="low">Under $100</SelectItem>
+                    <SelectItem value="medium">$100 - $500</SelectItem>
+                    <SelectItem value="high">Over $500</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="country-filter">Country</Label>
+                <Select value={countryFilter} onValueChange={setCountryFilter}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Country" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Countries</SelectItem>
+                    <SelectItem value="United States">United States</SelectItem>
+                    <SelectItem value="Canada">Canada</SelectItem>
+                    <SelectItem value="United Kingdom">United Kingdom</SelectItem>
+                    <SelectItem value="Australia">Australia</SelectItem>
+                    <SelectItem value="Germany">Germany</SelectItem>
+                    <SelectItem value="France">France</SelectItem>
+                    <SelectItem value="Japan">Japan</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="city-filter">City</Label>
+                <Select value={cityFilter} onValueChange={setCityFilter}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="City" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Cities</SelectItem>
+                    <SelectItem value="New York">New York</SelectItem>
+                    <SelectItem value="Los Angeles">Los Angeles</SelectItem>
+                    <SelectItem value="Chicago">Chicago</SelectItem>
+                    <SelectItem value="Houston">Houston</SelectItem>
+                    <SelectItem value="Miami">Miami</SelectItem>
+                    <SelectItem value="Seattle">Seattle</SelectItem>
+                    <SelectItem value="San Francisco">San Francisco</SelectItem>
+                    <SelectItem value="Boston">Boston</SelectItem>
+                    <SelectItem value="Nationwide">Nationwide</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="sort-by">Sort By</Label>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sort by" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="rating">Rating</SelectItem>
+                    <SelectItem value="price">Price</SelectItem>
+                    <SelectItem value="experience">Experience</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="sort-order">Order</Label>
+                <Select value={sortOrder} onValueChange={(value: "asc" | "desc") => setSortOrder(value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Order" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="desc">High to Low</SelectItem>
+                    <SelectItem value="asc">Low to High</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+
+          {/* Results */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {paginatedData.map((provider) => (
+              <Card key={provider.id} className="hover:shadow-lg transition-all duration-200">
+                <CardContent className="p-6">
+                  <div className="flex items-start space-x-4">
+                    <div className="w-20 h-20 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+                      {provider.profileImage ? (
+                        <img 
+                          src={provider.profileImage} 
+                          alt={provider.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-white font-semibold text-xl">
+                          {provider.name.split(' ').map((n: string) => n[0]).join('')}
+                        </span>
+                      )}
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between mb-2">
+                        <div>
+                          <h3 className="text-lg font-semibold">{provider.name}</h3>
+                          <p className="text-muted-foreground">{provider.specialty}</p>
+                        </div>
+                        {provider.verified && (
+                          <Badge variant="secondary" className="flex items-center space-x-1">
+                            <Shield className="w-3 h-3" />
+                            <span>Verified</span>
+                          </Badge>
+                        )}
+                      </div>
+                      
+                      <div className="flex items-center space-x-4 mb-3">
+                        <div className="flex items-center space-x-1">
+                          <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                          <span className="font-medium">{provider.rating}</span>
+                          <span className="text-muted-foreground">({provider.reviews} reviews)</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <MapPin className="w-4 h-4 text-muted-foreground" />
+                          <span className="text-sm text-muted-foreground">{provider.location}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center space-x-4 mb-3">
+                        <div className="flex items-center space-x-1">
+                          <Award className="w-4 h-4 text-muted-foreground" />
+                          <span className="text-sm text-muted-foreground">{provider.experience}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <Clock className="w-4 h-4 text-muted-foreground" />
+                          <span className="text-sm text-muted-foreground">{provider.nextAvailable}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <span className="text-lg font-bold text-primary">
+                            {provider.price === 0 ? 'Free' : `$${provider.price}${selectedCategory === 'nurse' ? '/hour' : selectedCategory === 'lab' || selectedCategory === 'pharmacy' ? '' : ''}`}
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-center space-x-2">
+                          {provider.consultationTypes.map((type: string, index: number) => (
+                            <Badge key={index} variant="outline" className="text-xs">
+                              {type === 'Video Call' ? (
+                                <><Video className="w-3 h-3 mr-1" /> Video Call</>
+                              ) : (
+                                <><Stethoscope className="w-3 h-3 mr-1" /> In-Person</>
+                              )}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2 mt-4">
+                        <Button 
+                          onClick={() => handleBookAppointment(provider)}
+                          className="flex-1"
+                        >
+                          {selectedCategory === 'surgery' ? 'Book Surgery' :
+                           selectedCategory === 'physio' ? 'Book Session' :
+                           selectedCategory === 'nurse' ? 'Book Nurse' :
+                           selectedCategory === 'lab' ? 'Book Test' :
+                           selectedCategory === 'pharmacy' ? 'Visit Pharmacy' :
+                           'Book Appointment'}
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          onClick={() => handleViewDetails(provider)}
+                        >
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                        <Button variant="outline">
+                          <MessageCircle className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={setItemsPerPage}
+            itemsPerPageOptions={[6, 9, 12, 15, 20]}
+          />
+
+          {/* Provider Details Dialog */}
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle className="flex items-center justify-between">
+                  <span>Provider Details</span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsDialogOpen(false)}
+                    className="h-8 w-8 p-0 rounded-full"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </DialogTitle>
+              </DialogHeader>
+              
+              {selectedProvider && (
+                <div className="space-y-6">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-24 h-24 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+                      {selectedProvider.profileImage ? (
+                        <img 
+                          src={selectedProvider.profileImage} 
+                          alt={selectedProvider.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-white font-semibold text-2xl">
+                          {selectedProvider.name.split(' ').map((n: string) => n[0]).join('')}
+                        </span>
+                      )}
+                    </div>
+                    
+                    <div className="flex-1">
+                      <h3 className="text-xl font-semibold">{selectedProvider.name}</h3>
+                      <p className="text-muted-foreground">{selectedProvider.specialty}</p>
+                      <div className="flex items-center space-x-4 mt-2">
+                        <div className="flex items-center space-x-1">
+                          <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                          <span className="font-medium">{selectedProvider.rating}</span>
+                          <span className="text-muted-foreground">({selectedProvider.reviews} reviews)</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <MapPin className="w-4 h-4 text-muted-foreground" />
+                          <span className="text-sm text-muted-foreground">{selectedProvider.location}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label>Experience</Label>
+                      <p className="font-medium">{selectedProvider.experience}</p>
+                    </div>
+                    <div>
+                      <Label>Next Available</Label>
+                      <p className="font-medium">{selectedProvider.nextAvailable}</p>
+                    </div>
+                    <div>
+                      <Label>Price</Label>
+                      <p className="font-medium text-primary">
+                        {selectedProvider.price === 0 ? 'Free' : `$${selectedProvider.price}${selectedCategory === 'nurse' ? '/hour' : ''}`}
+                      </p>
+                    </div>
+                    <div>
+                      <Label>Languages</Label>
+                      <p className="font-medium">{selectedProvider.languages?.join(', ')}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Button 
+                      onClick={() => {
+                        handleBookAppointment(selectedProvider);
+                        setIsDialogOpen(false);
+                      }}
+                      className="flex-1"
+                    >
+                      {selectedCategory === 'surgery' ? 'Book Surgery' :
+                       selectedCategory === 'physio' ? 'Book Session' :
+                       selectedCategory === 'nurse' ? 'Book Nurse' :
+                       selectedCategory === 'lab' ? 'Book Test' :
+                       selectedCategory === 'pharmacy' ? 'Visit Pharmacy' :
+                       'Book Now'}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </DialogContent>
+          </Dialog>
+        </div>
+      )}
     </div>
   );
 };
