@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Pagination from "@/components/ui/pagination";
+import { usePagination } from "@/hooks/usePagination";
 import { 
   DollarSign, 
   CreditCard, 
@@ -96,6 +98,7 @@ const ClinicBilling = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
+  // Filter invoices
   const filteredInvoices = invoices.filter(invoice => {
     const matchesSearch = invoice.patient.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          invoice.invoiceNumber.toLowerCase().includes(searchQuery.toLowerCase());
@@ -103,10 +106,30 @@ const ClinicBilling = () => {
     return matchesSearch && matchesStatus;
   });
 
+  // Pagination logic
+  const {
+    currentPage,
+    itemsPerPage,
+    totalPages,
+    totalItems,
+    paginatedData: paginatedInvoices,
+    setCurrentPage,
+    setItemsPerPage
+  } = usePagination({
+    data: filteredInvoices,
+    initialPage: 1,
+    initialItemsPerPage: 5
+  });
+
+  // Handle status filter from insights cards
+  const handleStatusFilter = (status: string) => {
+    setStatusFilter(status);
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'paid': return 'default';
-      case 'pending': return 'secondary';
+      case 'pending': return 'secondary'; // This will use the yellowish color from the pending card
       case 'overdue': return 'destructive';
       default: return 'secondary';
     }
@@ -129,7 +152,7 @@ const ClinicBilling = () => {
 
         {/* Revenue Overview Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card>
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleStatusFilter('all')}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -143,7 +166,7 @@ const ClinicBilling = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleStatusFilter('paid')}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -157,7 +180,7 @@ const ClinicBilling = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleStatusFilter('pending')}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -171,7 +194,7 @@ const ClinicBilling = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleStatusFilter('overdue')}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -282,12 +305,12 @@ const ClinicBilling = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Receipt className="w-5 h-5 mr-2" />
-                  Invoices ({filteredInvoices.length})
+                  Invoices ({totalItems})
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {filteredInvoices.map((invoice) => (
+                  {paginatedInvoices.map((invoice) => (
                     <div key={invoice.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-2">
@@ -330,6 +353,15 @@ const ClinicBilling = () => {
                     </div>
                   ))}
                 </div>
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalItems={totalItems}
+                  itemsPerPage={itemsPerPage}
+                  onPageChange={setCurrentPage}
+                  onItemsPerPageChange={setItemsPerPage}
+                  itemsPerPageOptions={[5, 10, 15, 20, 25]}
+                />
               </CardContent>
             </Card>
           </TabsContent>

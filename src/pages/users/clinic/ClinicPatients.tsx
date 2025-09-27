@@ -25,8 +25,14 @@ import {
   Clock,
   Mail,
   UserPlus,
-  Activity
+  Activity,
+  UserCheck,
+  UserX,
+  UserPlus as NewUser
 } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import Pagination from "@/components/ui/pagination";
+import { usePagination } from "@/hooks/usePagination";
 
 const ClinicPatients = () => {
   const location = useLocation();
@@ -90,6 +96,30 @@ const ClinicPatients = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+
+  // Filter patients
+  const filteredPatients = patients.filter(patient => {
+    const matchesSearch = patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         patient.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         patient.phone.includes(searchQuery);
+    const matchesStatus = statusFilter === 'all' || patient.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
+
+  // Pagination logic
+  const {
+    currentPage,
+    itemsPerPage,
+    totalPages,
+    totalItems,
+    paginatedData: paginatedPatients,
+    setCurrentPage,
+    setItemsPerPage
+  } = usePagination({
+    data: filteredPatients,
+    initialPage: 1,
+    initialItemsPerPage: 5
+  });
   const [selectedPatient, setSelectedPatient] = useState(null);
 
   const handleCallPatient = (phone: string) => {
@@ -98,6 +128,11 @@ const ClinicPatients = () => {
 
   const handleMessagePatient = (email: string) => {
     window.open(`mailto:${email}`, '_self');
+  };
+
+  const handleViewPatientProfile = (patientId: number) => {
+    // Navigate to patient profile with clinic context
+    window.location.href = `/patient-profile/${patientId}?userType=clinic&providerType=Clinic`;
   };
 
   const handleDeletePatient = (patientId: number) => {
@@ -233,149 +268,227 @@ const ClinicPatients = () => {
           </Dialog>
         </div>
 
-        {/* Patients List */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Users className="w-5 h-5 mr-2" />
-                  Patients ({filteredPatients.length})
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {filteredPatients.map((patient) => (
-                    <div key={patient.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-2">
-                          <h3 className="font-semibold">{patient.name}</h3>
-                          <Badge variant={getStatusColor(patient.status)}>
-                            {patient.status}
-                          </Badge>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
-                          <div>
-                            <p><strong>Age:</strong> {patient.age}</p>
-                            <p><strong>Doctor:</strong> {patient.doctor}</p>
-                            <p><strong>Condition:</strong> {patient.condition}</p>
-                          </div>
-                          <div>
-                            <p><strong>Last Visit:</strong> {patient.lastVisit}</p>
-                            <p><strong>Next Appointment:</strong> {patient.nextAppointment || 'Not scheduled'}</p>
-                            <p className="flex items-center">
-                              <MapPin className="w-3 h-3 mr-1" />
-                              {patient.address}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-4 mt-2 text-sm">
-                          <span className="flex items-center">
-                            <Mail className="w-3 h-3 mr-1" />
-                            {patient.email}
+        {/* Patient Overview Cards - Smaller and above table */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Total Patients</p>
+                  <p className="text-2xl font-bold">{patients.length}</p>
+                </div>
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <Users className="w-6 h-6 text-blue-600" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Active</p>
+                  <p className="text-2xl font-bold text-green-600">
+                    {patients.filter(p => p.status === 'active').length}
+                  </p>
+                </div>
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                  <UserCheck className="w-6 h-6 text-green-600" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">Inactive</p>
+                  <p className="text-2xl font-bold text-gray-600">
+                    {patients.filter(p => p.status === 'inactive').length}
+                  </p>
+                </div>
+                <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                  <UserX className="w-6 h-6 text-gray-600" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground">New This Month</p>
+                  <p className="text-2xl font-bold text-blue-600">12</p>
+                </div>
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <NewUser className="w-6 h-6 text-blue-600" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Full Width Patients Table */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center">
+                <Users className="w-5 h-5 mr-2" />
+                Patients ({totalItems})
+              </CardTitle>
+              <div className="flex items-center space-x-2">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                  <Input
+                    placeholder="Search patients..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 w-64"
+                  />
+                </div>
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                  <SelectTrigger className="w-32">
+                    <SelectValue placeholder="Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All</SelectItem>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="inactive">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Patient</TableHead>
+                  <TableHead>Contact</TableHead>
+                  <TableHead>Condition</TableHead>
+                  <TableHead>Doctor</TableHead>
+                  <TableHead>Last Visit</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {paginatedPatients.map((patient) => (
+                  <TableRow key={patient.id} className="hover:bg-muted/50">
+                    <TableCell>
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center">
+                          <span className="text-white font-semibold text-sm">
+                            {patient.name.split(' ').map(n => n[0]).join('')}
                           </span>
-                          <span className="flex items-center">
-                            <Phone className="w-3 h-3 mr-1" />
-                            {patient.phone}
-                          </span>
+                        </div>
+                        <div>
+                          <p className="font-medium">{patient.name}</p>
+                          <p className="text-sm text-muted-foreground">Age: {patient.age}</p>
                         </div>
                       </div>
-                      <div className="flex flex-col space-y-2 ml-4">
-                        <div className="flex space-x-2">
-                          <Button size="sm" variant="outline" onClick={() => handleCallPatient(patient.phone)}>
-                            <Phone className="w-3 h-3 mr-1" />
-                            Call
-                          </Button>
-                          <Button size="sm" variant="outline" onClick={() => handleMessagePatient(patient.email)}>
-                            <MessageSquare className="w-3 h-3 mr-1" />
-                            Email
-                          </Button>
+                    </TableCell>
+                    <TableCell>
+                      <div className="space-y-1">
+                        <div className="flex items-center text-sm">
+                          <Mail className="w-3 h-3 mr-2 text-muted-foreground" />
+                          <span className="truncate max-w-32">{patient.email}</span>
                         </div>
-                        <div className="flex space-x-2">
-                          <Button size="sm" variant="outline">
-                            <Eye className="w-3 h-3 mr-1" />
-                            View
-                          </Button>
-                          <Button size="sm" variant="outline">
-                            <Edit className="w-3 h-3 mr-1" />
-                            Edit
-                          </Button>
-                        </div>
-                        <div className="flex space-x-2">
-                          <Button size="sm" variant="outline">
-                            <Calendar className="w-3 h-3 mr-1" />
-                            Book
-                          </Button>
-                          <Button size="sm" variant="destructive" onClick={() => handleDeletePatient(patient.id)}>
-                            <Trash2 className="w-3 h-3 mr-1" />
-                            Delete
-                          </Button>
+                        <div className="flex items-center text-sm">
+                          <Phone className="w-3 h-3 mr-2 text-muted-foreground" />
+                          <span>{patient.phone}</span>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="space-y-1">
+                        <p className="text-sm font-medium">{patient.condition}</p>
+                        <div className="flex items-center text-xs text-muted-foreground">
+                          <Heart className="w-3 h-3 mr-1" />
+                          <span>Last: {patient.lastVisit}</span>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="space-y-1">
+                        <p className="text-sm font-medium">{patient.doctor}</p>
+                        <div className="flex items-center text-xs text-muted-foreground">
+                          <MapPin className="w-3 h-3 mr-1" />
+                          <span className="truncate max-w-24">{patient.address}</span>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="space-y-1">
+                        <p className="text-sm">{patient.lastVisit}</p>
+                        {patient.nextAppointment && (
+                          <p className="text-xs text-muted-foreground">
+                            Next: {patient.nextAppointment}
+                          </p>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={getStatusColor(patient.status)} className="capitalize">
+                        {patient.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end space-x-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleViewPatientProfile(patient.id)}
+                          className="h-8"
+                        >
+                          <Eye className="w-3 h-3 mr-1" />
+                          View
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleCallPatient(patient.phone)}
+                          className="h-8"
+                        >
+                          <Phone className="w-3 h-3" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleMessagePatient(patient.email)}
+                          className="h-8"
+                        >
+                          <MessageSquare className="w-3 h-3" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8"
+                        >
+                          <Calendar className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={totalItems}
+              itemsPerPage={itemsPerPage}
+              onPageChange={setCurrentPage}
+              onItemsPerPageChange={setItemsPerPage}
+              itemsPerPageOptions={[5, 10, 15, 20, 25]}
+            />
+          </CardContent>
+        </Card>
 
-          {/* Quick Stats and Actions */}
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Patient Overview</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Total Patients</span>
-                    <span className="font-semibold">{patients.length}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Active</span>
-                    <span className="font-semibold text-green-600">
-                      {patients.filter(p => p.status === 'active').length}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Inactive</span>
-                    <span className="font-semibold text-gray-600">
-                      {patients.filter(p => p.status === 'inactive').length}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">New This Month</span>
-                    <span className="font-semibold text-blue-600">12</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <Button variant="outline" className="w-full justify-start">
-                    <UserPlus className="w-4 h-4 mr-2" />
-                    Add New Patient
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    Schedule Appointment
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start">
-                    <FileText className="w-4 h-4 mr-2" />
-                    Generate Report
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start">
-                    <Activity className="w-4 h-4 mr-2" />
-                    View Analytics
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
 
             <Card>
               <CardHeader>

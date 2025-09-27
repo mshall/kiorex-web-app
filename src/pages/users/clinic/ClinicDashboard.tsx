@@ -28,7 +28,8 @@ import {
   Clock3,
   Shield,
   MapPin,
-  Star
+  Star,
+  UserPlus
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
@@ -137,6 +138,33 @@ const ClinicDashboard = () => {
                 ))}
               </div>
               <Button variant="link" className="mt-4 px-0">Manage Staff</Button>
+            </CardContent>
+          </Card>
+
+          {/* Quick Actions */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Quick Actions</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <Button variant="outline" className="w-full justify-start">
+                  <UserPlus className="w-4 h-4 mr-2" />
+                  Add New Patient
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Schedule Appointment
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <FileText className="w-4 h-4 mr-2" />
+                  Generate Report
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <Activity className="w-4 h-4 mr-2" />
+                  View Analytics
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>

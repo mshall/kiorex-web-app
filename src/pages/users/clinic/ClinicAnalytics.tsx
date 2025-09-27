@@ -62,6 +62,12 @@ const ClinicAnalytics = () => {
       { name: "Dr. Johnson", patients: 189, rating: 4.7, revenue: 32100 },
       { name: "Dr. Brown", patients: 156, rating: 4.8, revenue: 28900 },
       { name: "Dr. Wilson", patients: 134, rating: 4.6, revenue: 19200 }
+    ],
+    expenseMetrics: [
+      { metric: "Staff Salaries", value: "$45,200", change: "+5%", trend: "up" },
+      { metric: "Clinic Bills", value: "$8,500", change: "+12%", trend: "up" },
+      { metric: "Inventory Materials", value: "$3,200", change: "-8%", trend: "down" },
+      { metric: "Total Expenses", value: "$56,900", change: "+6%", trend: "up" }
     ]
   };
 
@@ -179,6 +185,7 @@ const ClinicAnalytics = () => {
             <TabsTrigger value="patients">Patient Metrics</TabsTrigger>
             <TabsTrigger value="appointments">Appointments</TabsTrigger>
             <TabsTrigger value="revenue">Revenue</TabsTrigger>
+            <TabsTrigger value="expenses">Expenses</TabsTrigger>
             <TabsTrigger value="staff">Staff Performance</TabsTrigger>
           </TabsList>
 
@@ -431,6 +438,118 @@ const ClinicAnalytics = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="expenses" className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {analyticsData.expenseMetrics.map((metric, index) => (
+                <Card key={index}>
+                  <CardHeader>
+                    <CardTitle className="text-lg">{metric.metric}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      <p className="text-2xl font-bold">{metric.value}</p>
+                      <div className="flex items-center">
+                        {metric.trend === 'up' ? (
+                          <TrendingUp className="w-4 h-4 text-red-600 mr-1" />
+                        ) : (
+                          <TrendingDown className="w-4 h-4 text-green-600 mr-1" />
+                        )}
+                        <span className={`text-sm ${metric.trend === 'up' ? 'text-red-600' : 'text-green-600'}`}>
+                          {metric.change}
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <DollarSign className="w-5 h-5 mr-2" />
+                    Staff Salaries
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Total Monthly</span>
+                      <span className="font-semibold">$45,200</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Average per Staff</span>
+                      <span className="font-semibold">$9,040</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Growth</span>
+                      <span className="text-red-600 font-semibold">+5%</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Activity className="w-5 h-5 mr-2" />
+                    Clinic Bills
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Utilities</span>
+                      <span className="font-semibold">$2,500</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Rent</span>
+                      <span className="font-semibold">$4,000</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Insurance</span>
+                      <span className="font-semibold">$2,000</span>
+                    </div>
+                    <div className="flex justify-between items-center border-t pt-2">
+                      <span className="text-sm font-medium">Total</span>
+                      <span className="font-semibold">$8,500</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <BarChart3 className="w-5 h-5 mr-2" />
+                    Inventory Materials
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Medical Supplies</span>
+                      <span className="font-semibold">$1,800</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Equipment</span>
+                      <span className="font-semibold">$900</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Medications</span>
+                      <span className="font-semibold">$500</span>
+                    </div>
+                    <div className="flex justify-between items-center border-t pt-2">
+                      <span className="text-sm font-medium">Total</span>
+                      <span className="font-semibold">$3,200</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           <TabsContent value="staff" className="space-y-6">

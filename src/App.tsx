@@ -12,7 +12,7 @@ import DoctorAppointments from "./pages/users/doctor/DoctorAppointments";
 import Teleconsult from "./pages/Teleconsult";
 import { NurseDashboard, NurseSchedule, NursePatients, NurseCarePlans, NurseDocuments, NurseEarnings } from "./pages/users/nurse";
 import { PatientDashboard, PatientProfile, PatientAppointments, PatientRecords } from "./pages/users/patient";
-import { ClinicDashboard, ClinicManagement, ClinicAppointments, ClinicPatients, ClinicBilling, ClinicAnalytics } from "./pages/users/clinic";
+import { ClinicDashboard, ClinicManagement, ClinicAppointments, ClinicPatients, ClinicBilling, ClinicAnalytics, ClinicInventory, ClinicStaff } from "./pages/users/clinic";
 import { PharmacyDashboard, PharmacyOrders, PharmacyRevenues, PharmacyPending } from "./pages/users/pharmacy";
 import { AdminDashboard, AdminUsers } from "./pages/users/admin";
 import ProfessionalCalendarPage from "./pages/ProfessionalCalendarPage";
@@ -97,6 +97,8 @@ const App = () => (
               <Route path="/clinic-patients" element={<ClinicPatients />} />
               <Route path="/clinic-billing" element={<ClinicBilling />} />
               <Route path="/clinic-analytics" element={<ClinicAnalytics />} />
+              <Route path="/clinic-inventory" element={<ClinicInventory />} />
+              <Route path="/clinic-staff" element={<ClinicStaff />} />
               
               {/* Patient-specific Routes */}
               <Route path="/patient-appointments" element={<PatientAppointments />} />
