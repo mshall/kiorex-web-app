@@ -1051,8 +1051,26 @@ const ServiceDetail = () => {
     // Create features array from services/specializations
     const features = provider.services || provider.specializations || [];
     
+    // Extract years from experience string
+    const experienceYears = provider.experience ? parseInt(provider.experience) : 0;
+    
+    // Generate profession description based on specialty
+    const getProfessionDescription = (specialty: string) => {
+      const descriptions: { [key: string]: string } = {
+        'Cardiologist': 'Specializes in heart and cardiovascular system conditions, providing comprehensive cardiac care and treatment.',
+        'General Physician': 'Provides primary healthcare services, diagnosing and treating a wide range of medical conditions.',
+        'Dermatologist': 'Expert in skin, hair, and nail conditions, offering advanced dermatological treatments and cosmetic procedures.',
+        'Home Care Nurse': 'Delivers compassionate nursing care in the comfort of your home, ensuring personalized patient care.',
+        'Critical Care Nurse': 'Specialized in intensive care nursing, providing expert care for critically ill patients.',
+        'Pediatric Nurse': 'Dedicated to caring for children and adolescents, with expertise in pediatric healthcare needs.',
+        'Sports Physiotherapist': 'Specializes in sports injury rehabilitation and performance optimization for athletes.',
+        'Orthopedic Physiotherapist': 'Expert in musculoskeletal rehabilitation and post-surgical recovery treatments.'
+      };
+      return descriptions[specialty] || `Experienced ${specialty.toLowerCase()} providing specialized healthcare services.`;
+    };
+    
     return (
-      <Card className="w-full max-w-md cursor-pointer hover:shadow-lg transition-all duration-300 group">
+      <Card className="w-full max-w-md cursor-pointer hover:shadow-lg transition-all duration-300 group border-l-4 border-l-primary">
         <div className="aspect-video bg-gradient-to-br from-blue-500 to-purple-600 rounded-t-lg flex items-center justify-center">
           <div className="text-center text-white">
             <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-2">
@@ -1073,6 +1091,17 @@ const ServiceDetail = () => {
                 <span>{provider.location}</span>
               </div>
             </div>
+          </div>
+
+          {/* Experience and Description */}
+          <div className="mb-4 space-y-2">
+            <div className="flex items-center space-x-1 text-sm text-muted-foreground">
+              <Award className="w-4 h-4" />
+              <span>{experienceYears}+ years of experience</span>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {getProfessionDescription(provider.specialty)}
+            </p>
           </div>
 
           <div className="flex items-center justify-between mb-4">
@@ -1129,7 +1158,7 @@ const ServiceDetail = () => {
               className="flex items-center space-x-2"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Back to Marketplace</span>
+              <span>{t('common.back')}</span>
             </Button>
             <div>
               <h1 className="text-3xl font-bold flex items-center space-x-3">
@@ -1389,20 +1418,16 @@ const ServiceDetail = () => {
 
         {/* Provider Details Dialog */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle className="flex items-center justify-between">
-                <span>Provider Details</span>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={() => setIsDialogOpen(false)}
-                >
-                  <X className="w-4 h-4" />
-                </Button>
-              </DialogTitle>
-            </DialogHeader>
-            <div className="flex justify-center">
+          <DialogContent className="max-w-md p-0 border-0 shadow-none bg-transparent">
+            <div className="relative">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setIsDialogOpen(false)}
+                className="absolute -top-2 -right-2 z-10 bg-white rounded-full shadow-lg hover:bg-gray-100 transition-all duration-200"
+              >
+                <X className="w-4 h-4" />
+              </Button>
               <ProviderDetailsCard provider={selectedProvider} />
             </div>
           </DialogContent>
