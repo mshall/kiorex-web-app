@@ -242,9 +242,9 @@ const RoleBasedNavigation = ({
             </div>
           )}
 
-              {/* User Menu */}
-              <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-4 flex-row-reverse' : 'space-x-4'}`}>
-                {/* Notifications Dropdown */}
+          {/* User Menu */}
+          <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-4 flex-row-reverse' : 'space-x-4'}`}>
+            {/* Notifications Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="relative">
