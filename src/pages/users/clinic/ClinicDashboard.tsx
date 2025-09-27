@@ -76,23 +76,10 @@ const ClinicDashboard = () => {
           <p className="text-muted-foreground">Your clinic management overview for today.</p>
         </div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {quickActions.map((action, index) => (
-            <Card key={index} className="hover:shadow-lg transition-all duration-300 cursor-pointer" onClick={action.action}>
-              <CardContent className="flex items-center space-x-4 p-4">
-                <div className="w-10 h-10 bg-primary/10 text-primary rounded-full flex items-center justify-center">
-                  <action.icon className="w-5 h-5" />
-                </div>
-                <CardTitle className="text-lg font-semibold">{action.title}</CardTitle>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Today's Appointments */}
-          <Card className="lg:col-span-2">
+          <Card className="lg:col-span-3">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Calendar className="w-5 h-5 mr-2" /> Today's Appointments
@@ -100,49 +87,41 @@ const ClinicDashboard = () => {
               <CardDescription>Overview of scheduled appointments and status.</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {appointments.map((appointment) => (
-                  <div key={appointment.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-md">
-                    <div>
-                      <p className="font-medium">{appointment.patient} - {appointment.doctor}</p>
-                      <p className="text-sm text-muted-foreground">{appointment.time} • {appointment.type}</p>
-                    </div>
-                    <Badge variant={appointment.status === 'pending' ? 'destructive' : appointment.status === 'confirmed' ? 'default' : 'secondary'}>
-                      {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
-                    </Badge>
-                  </div>
-                ))}
+              <div className="rounded-md border">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="text-left p-3 font-medium">Patient</th>
+                      <th className="text-left p-3 font-medium">Doctor</th>
+                      <th className="text-left p-3 font-medium">Time</th>
+                      <th className="text-left p-3 font-medium">Type</th>
+                      <th className="text-left p-3 font-medium">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {appointments.map((appointment) => (
+                      <tr key={appointment.id} className="border-b hover:bg-muted/25">
+                        <td className="p-3 font-medium">{appointment.patient}</td>
+                        <td className="p-3">{appointment.doctor}</td>
+                        <td className="p-3">{appointment.time}</td>
+                        <td className="p-3">{appointment.type}</td>
+                        <td className="p-3">
+                          <Badge variant={appointment.status === 'pending' ? 'destructive' : appointment.status === 'confirmed' ? 'default' : 'secondary'}>
+                            {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
+                          </Badge>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-              <Button variant="link" className="mt-4 px-0">View All Appointments</Button>
+              <Button variant="link" className="mt-4 px-0" onClick={() => navigate('/patient-appointments', { state: { userType: 'clinic', providerType: 'Clinic' } })}>View All Appointments</Button>
             </CardContent>
           </Card>
 
-          {/* Staff Overview */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Users className="w-5 h-5 mr-2" /> Staff Overview
-              </CardTitle>
-              <CardDescription>Current staff status and patient load.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {staff.map((member) => (
-                  <div key={member.id} className="flex items-center space-x-3 p-3 bg-muted/50 rounded-md">
-                    <div className={`w-3 h-3 rounded-full ${member.status === 'active' ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
-                    <div>
-                      <p className="font-medium">{member.name}</p>
-                      <p className="text-sm text-muted-foreground">{member.role} • {member.patients} patients</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <Button variant="link" className="mt-4 px-0">Manage Staff</Button>
-            </CardContent>
-          </Card>
 
           {/* Quick Actions */}
-          <Card>
+          <Card className="lg:col-span-1">
             <CardHeader>
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>

@@ -228,7 +228,7 @@ const ClinicAppointments = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'confirmed': return 'default';
-      case 'pending': return 'secondary';
+      case 'upcoming': return 'secondary';
       case 'waiting': return 'secondary';
       case 'completed': return 'outline';
       case 'cancelled': return 'destructive';
@@ -239,11 +239,11 @@ const ClinicAppointments = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'confirmed': return CheckCircle;
-      case 'pending': return AlertCircle;
+      case 'upcoming': return Clock;
       case 'waiting': return Clock;
       case 'completed': return CheckCircle;
       case 'cancelled': return XCircle;
-      default: return AlertCircle;
+      default: return Clock;
     }
   };
 
@@ -252,6 +252,17 @@ const ClinicAppointments = () => {
       case 'Video Call': return Video;
       case 'In-Person': return MapPin;
       default: return Calendar;
+    }
+  };
+
+  const getStatusBadgeColor = (status: string) => {
+    switch (status) {
+      case 'confirmed': return 'bg-blue-500 text-white border-blue-500 hover:bg-blue-500 hover:shadow-lg hover:shadow-blue-500/50 hover:text-white/90 transition-all duration-200';
+      case 'upcoming': return 'bg-yellow-500 text-white border-yellow-500 hover:bg-yellow-500 hover:shadow-lg hover:shadow-yellow-500/50 hover:text-white/90 transition-all duration-200';
+      case 'waiting': return 'bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-100 hover:shadow-lg hover:shadow-yellow-200/50 hover:text-yellow-800/90 transition-all duration-200';
+      case 'completed': return 'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80';
+      case 'cancelled': return 'bg-red-500 text-white border-red-500 hover:bg-red-500 hover:shadow-lg hover:shadow-red-500/50 hover:text-white/90 transition-all duration-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-100 hover:shadow-lg hover:shadow-gray-200/50 hover:text-gray-800/90 transition-all duration-200';
     }
   };
 
@@ -436,7 +447,7 @@ const ClinicAppointments = () => {
                         const TypeIcon = getTypeIcon(appointment.type);
                         
                         return (
-                          <TableRow key={appointment.id}>
+                          <TableRow key={appointment.id} className="hover:bg-muted/50 hover:shadow-md transition-all duration-200">
                             <TableCell>
                               <div className="flex items-center space-x-3">
                                 <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center">
@@ -476,12 +487,7 @@ const ClinicAppointments = () => {
                             </TableCell>
                             <TableCell>
                               <Badge 
-                                variant={getStatusColor(appointment.status)} 
-                                className={`flex items-center space-x-1 ${
-                                  appointment.status === 'pending' ? 'bg-orange-500 hover:bg-orange-600 text-white' :
-                                  appointment.status === 'waiting' ? 'bg-yellow-500 hover:bg-yellow-600 text-white' :
-                                  ''
-                                }`}
+                                className={`flex items-center space-x-1 ${getStatusBadgeColor(appointment.status)}`}
                               >
                                 <StatusIcon className="w-3 h-3" />
                                 <span className="capitalize">{appointment.status}</span>

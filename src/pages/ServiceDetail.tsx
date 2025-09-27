@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import Pagination from "@/components/ui/pagination";
@@ -34,7 +35,9 @@ import {
   Eye,
   X,
   ArrowRight,
-  MessageCircle
+  MessageCircle,
+  ChevronUp,
+  ChevronDown
 } from "lucide-react";
 
 const ServiceDetail = () => {
@@ -55,6 +58,8 @@ const ServiceDetail = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [selectedProvider, setSelectedProvider] = useState<any>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [locationSearch, setLocationSearch] = useState("");
 
   // Get service-specific data based on service category
   const getServiceSpecificData = () => {
@@ -574,9 +579,13 @@ const ServiceDetail = () => {
       experience: "15 years",
       nextAvailable: "Today 2:30 PM",
       image: "ER",
+      profileImage: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&crop=face",
       verified: true,
       languages: ["English", "Spanish"],
-      serviceType: "Cardiology"
+      serviceType: "Cardiology",
+      country: "United States",
+      city: "New York",
+      consultationTypes: ["Video Call", "In-Person"]
     },
     { 
       id: 2, 
@@ -589,9 +598,13 @@ const ServiceDetail = () => {
       experience: "12 years",
       nextAvailable: "Today 4:00 PM",
       image: "MC",
+      profileImage: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150&h=150&fit=crop&crop=face",
       verified: true,
       languages: ["English", "Mandarin"],
-      serviceType: "General Medicine"
+      serviceType: "General Medicine",
+      country: "United States",
+      city: "Los Angeles",
+      consultationTypes: ["Video Call", "In-Person"]
     },
     { 
       id: 3, 
@@ -604,9 +617,146 @@ const ServiceDetail = () => {
       experience: "10 years",
       nextAvailable: "Tomorrow 10:00 AM",
       image: "SJ",
+      profileImage: "https://images.unsplash.com/photo-1594824388852-95e0b0b0b0b0?w=150&h=150&fit=crop&crop=face",
       verified: true,
       languages: ["English"],
-      serviceType: "Dermatology"
+      serviceType: "Dermatology",
+      country: "United States",
+      city: "Chicago",
+      consultationTypes: ["Video Call", "In-Person"]
+    },
+    { 
+      id: 4, 
+      name: "Dr. David Rodriguez", 
+      specialty: "Orthopedic Surgeon", 
+      rating: 4.9, 
+      reviews: 189, 
+      price: 200, 
+      location: "Sports Medicine Center",
+      experience: "18 years",
+      nextAvailable: "Today 1:00 PM",
+      image: "DR",
+      profileImage: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=150&h=150&fit=crop&crop=face",
+      verified: true,
+      languages: ["English", "Spanish"],
+      serviceType: "Orthopedics",
+      country: "United States",
+      city: "Houston",
+      consultationTypes: ["Video Call", "In-Person"]
+    },
+    { 
+      id: 5, 
+      name: "Dr. Lisa Wang", 
+      specialty: "Pediatrician", 
+      rating: 4.8, 
+      reviews: 167, 
+      price: 110, 
+      location: "Children's Hospital",
+      experience: "14 years",
+      nextAvailable: "Tomorrow 9:00 AM",
+      image: "LW",
+      profileImage: "https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=150&h=150&fit=crop&crop=face",
+      verified: true,
+      languages: ["English", "Mandarin"],
+      serviceType: "Pediatrics",
+      country: "United States",
+      city: "Phoenix",
+      consultationTypes: ["Video Call", "In-Person"]
+    },
+    { 
+      id: 6, 
+      name: "Dr. James Thompson", 
+      specialty: "Neurologist", 
+      rating: 4.6, 
+      reviews: 98, 
+      price: 180, 
+      location: "Neurological Institute",
+      experience: "16 years",
+      nextAvailable: "Today 3:30 PM",
+      image: "JT",
+      profileImage: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150&h=150&fit=crop&crop=face",
+      verified: true,
+      languages: ["English"],
+      serviceType: "Neurology",
+      country: "United States",
+      city: "Philadelphia",
+      consultationTypes: ["Video Call", "In-Person"]
+    },
+    { 
+      id: 7, 
+      name: "Dr. Maria Garcia", 
+      specialty: "Gynecologist", 
+      rating: 4.9, 
+      reviews: 145, 
+      price: 130, 
+      location: "Women's Health Center",
+      experience: "13 years",
+      nextAvailable: "Today 5:00 PM",
+      image: "MG",
+      profileImage: "https://images.unsplash.com/photo-1594824388852-95e0b0b0b0b0?w=150&h=150&fit=crop&crop=face",
+      verified: true,
+      languages: ["English", "Spanish"],
+      serviceType: "Gynecology",
+      country: "United States",
+      city: "San Antonio",
+      consultationTypes: ["Video Call", "In-Person"]
+    },
+    { 
+      id: 8, 
+      name: "Dr. Robert Kim", 
+      specialty: "Psychiatrist", 
+      rating: 4.7, 
+      reviews: 112, 
+      price: 160, 
+      location: "Mental Health Clinic",
+      experience: "11 years",
+      nextAvailable: "Tomorrow 2:00 PM",
+      image: "RK",
+      profileImage: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=150&h=150&fit=crop&crop=face",
+      verified: true,
+      languages: ["English", "Korean"],
+      serviceType: "Psychiatry",
+      country: "United States",
+      city: "San Diego",
+      consultationTypes: ["Video Call", "In-Person"]
+    },
+    { 
+      id: 9, 
+      name: "Dr. Jennifer Lee", 
+      specialty: "Ophthalmologist", 
+      rating: 4.8, 
+      reviews: 123, 
+      price: 140, 
+      location: "Eye Care Center",
+      experience: "9 years",
+      nextAvailable: "Today 4:30 PM",
+      image: "JL",
+      profileImage: "https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=150&h=150&fit=crop&crop=face",
+      verified: true,
+      languages: ["English"],
+      serviceType: "Ophthalmology",
+      country: "United States",
+      city: "Dallas",
+      consultationTypes: ["Video Call", "In-Person"]
+    },
+    { 
+      id: 10, 
+      name: "Dr. Thomas Anderson", 
+      specialty: "Urologist", 
+      rating: 4.5, 
+      reviews: 87, 
+      price: 170, 
+      location: "Urology Specialists",
+      experience: "12 years",
+      nextAvailable: "Tomorrow 11:00 AM",
+      image: "TA",
+      profileImage: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150&h=150&fit=crop&crop=face",
+      verified: true,
+      languages: ["English"],
+      serviceType: "Urology",
+      country: "United States",
+      city: "San Jose",
+      consultationTypes: ["Video Call", "In-Person"]
     }
   ];
 
@@ -958,9 +1108,17 @@ const ServiceDetail = () => {
   // Filter and sort data
   const filteredAndSortedData = useMemo(() => {
     const filtered = serviceData.filter(provider => {
-      const matchesSearch = provider.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           provider.specialty.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           provider.location.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = !searchQuery || (
+        provider.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        provider.specialty.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        provider.location.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      
+      const matchesLocation = !locationSearch || (
+        provider.location.toLowerCase().includes(locationSearch.toLowerCase()) ||
+        provider.city?.toLowerCase().includes(locationSearch.toLowerCase()) ||
+        provider.country?.toLowerCase().includes(locationSearch.toLowerCase())
+      );
       
       const matchesPrice = priceFilter === "all" || 
         (priceFilter === "under-50" && provider.price < 50) ||
@@ -979,7 +1137,7 @@ const ServiceDetail = () => {
       const matchesServiceType = serviceTypeFilter === "all" || 
         provider.serviceType.toLowerCase().includes(serviceTypeFilter.toLowerCase());
       
-      return matchesSearch && matchesPrice && matchesCountry && matchesCity && matchesServiceType;
+      return matchesSearch && matchesLocation && matchesPrice && matchesCountry && matchesCity && matchesServiceType;
     });
 
     // Sort data
@@ -1052,6 +1210,10 @@ const ServiceDetail = () => {
     setIsDialogOpen(true);
   };
 
+  const handleBookAppointment = (provider: any) => {
+    navigate('/booking', { state: { doctor: provider } });
+  };
+
   const ProviderDetailsCard = ({ provider }: { provider: any }) => {
     if (!provider) return null;
 
@@ -1077,23 +1239,33 @@ const ServiceDetail = () => {
     };
     
     return (
-      <Card className="w-full max-w-md cursor-pointer hover:shadow-lg transition-all duration-300 group border border-primary/20">
-        <CardContent className="p-6">
-          {/* Professional Picture */}
-          <div className="flex justify-center mb-4">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
-              <span className="text-2xl font-bold text-white">
-                {provider.image}
-              </span>
+      <Card className="w-full max-w-xl cursor-pointer hover:shadow-lg transition-all duration-300 group border border-primary/20">
+        <CardContent className="p-8">
+          {/* Header: Picture on left, Name on right */}
+          <div className="flex items-center space-x-6 mb-6">
+            {/* Professional Picture */}
+            <div className="w-24 h-24 rounded-full flex items-center justify-center shadow-xl overflow-hidden border-4 border-white flex-shrink-0">
+              {provider.profileImage ? (
+                <img 
+                  src={provider.profileImage} 
+                  alt={provider.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                  <span className="text-3xl font-bold text-white">
+                    {provider.image}
+                  </span>
+                </div>
+              )}
             </div>
-          </div>
-          
-          <div className="flex items-start justify-between mb-3">
-            <div className="flex-1 text-center">
-              <h3 className="font-semibold text-lg mb-1">{provider.name}</h3>
-              <p className="text-sm text-muted-foreground mb-2">{provider.specialty}</p>
-              <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground">
-                <MapPin className="w-3 h-3" />
+            
+            {/* Name and Basic Info */}
+            <div className="flex-1">
+              <h3 className="font-semibold text-xl mb-2">{provider.name}</h3>
+              <p className="text-primary font-medium mb-2">{provider.specialty}</p>
+              <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                <MapPin className="w-4 h-4" />
                 <span>{provider.location}</span>
               </div>
             </div>
@@ -1122,6 +1294,17 @@ const ServiceDetail = () => {
             </div>
           </div>
 
+          {/* Consultation Types */}
+          <div className="flex flex-wrap gap-1 mb-4">
+            {provider.consultationTypes?.map((type: string, index: number) => (
+              <Badge key={index} variant="outline" className="text-xs">
+                {type === "Video Call" ? <Video className="w-3 h-3 mr-1" /> : <Stethoscope className="w-3 h-3 mr-1" />}
+                {type}
+              </Badge>
+            ))}
+          </div>
+
+          {/* Services/Specializations */}
           <div className="flex flex-wrap gap-1 mb-4">
             {features.slice(0, 2).map((feature: string, index: number) => (
               <Badge key={index} variant="secondary" className="text-xs">
@@ -1143,7 +1326,12 @@ const ServiceDetail = () => {
                 {provider.nextAvailable}
               </Badge>
             </div>
-            <Button size="sm" className="group-hover:bg-primary">
+            <Button 
+              size="sm" 
+              variant="medical" 
+              className="group-hover:bg-primary"
+              onClick={() => handleBookAppointment(provider)}
+            >
               Book Now
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
@@ -1179,110 +1367,143 @@ const ServiceDetail = () => {
           </Button>
         </div>
 
-        {/* Filters and Search */}
-        <Card className="mb-6">
-          <CardContent className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-              <div className="lg:col-span-2">
-                <div className="relative">
-                  <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search by name, specialty, or location..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10"
-                  />
+        {/* Search Bar */}
+        <div className="flex flex-col md:flex-row gap-4 mb-6">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search by name, specialty, or location..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+          <div className="relative">
+            <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Location"
+              value={locationSearch}
+              onChange={(e) => setLocationSearch(e.target.value)}
+              className="pl-10 w-full md:w-64"
+            />
+          </div>
+          <Button 
+            variant="outline" 
+            onClick={() => setShowFilters(!showFilters)}
+            className="flex items-center space-x-2"
+          >
+            <Filter className="w-4 h-4" />
+            <span>Filters</span>
+            {showFilters ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </Button>
+        </div>
+
+        {/* Advanced Filters */}
+        {showFilters && (
+          <Card className="mb-6">
+            <CardContent className="pt-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div>
+                  <Label>Price Range</Label>
+                  <Select value={priceFilter} onValueChange={setPriceFilter}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select price range" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Prices</SelectItem>
+                      <SelectItem value="under-50">Under $50</SelectItem>
+                      <SelectItem value="50-100">$50 - $100</SelectItem>
+                      <SelectItem value="100-150">$100 - $150</SelectItem>
+                      <SelectItem value="over-150">Over $150</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label>Country</Label>
+                  <Select value={countryFilter} onValueChange={setCountryFilter}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Countries</SelectItem>
+                      <SelectItem value="united states">United States</SelectItem>
+                      <SelectItem value="canada">Canada</SelectItem>
+                      <SelectItem value="united kingdom">United Kingdom</SelectItem>
+                      <SelectItem value="australia">Australia</SelectItem>
+                      <SelectItem value="germany">Germany</SelectItem>
+                      <SelectItem value="france">France</SelectItem>
+                      <SelectItem value="spain">Spain</SelectItem>
+                      <SelectItem value="italy">Italy</SelectItem>
+                      <SelectItem value="japan">Japan</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label>City</Label>
+                  <Select value={cityFilter} onValueChange={setCityFilter}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select city" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Cities</SelectItem>
+                      <SelectItem value="new york">New York</SelectItem>
+                      <SelectItem value="los angeles">Los Angeles</SelectItem>
+                      <SelectItem value="chicago">Chicago</SelectItem>
+                      <SelectItem value="houston">Houston</SelectItem>
+                      <SelectItem value="toronto">Toronto</SelectItem>
+                      <SelectItem value="vancouver">Vancouver</SelectItem>
+                      <SelectItem value="london">London</SelectItem>
+                      <SelectItem value="sydney">Sydney</SelectItem>
+                      <SelectItem value="berlin">Berlin</SelectItem>
+                      <SelectItem value="paris">Paris</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label>Service Type</Label>
+                  <Select value={serviceTypeFilter} onValueChange={setServiceTypeFilter}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Types</SelectItem>
+                      {serviceType === 'doctors' && (
+                        <>
+                          <SelectItem value="cardiology">Cardiology</SelectItem>
+                          <SelectItem value="general medicine">General Medicine</SelectItem>
+                          <SelectItem value="dermatology">Dermatology</SelectItem>
+                          <SelectItem value="orthopedics">Orthopedics</SelectItem>
+                          <SelectItem value="pediatrics">Pediatrics</SelectItem>
+                        </>
+                      )}
+                      {serviceType === 'nurses' && (
+                        <>
+                          <SelectItem value="home care">Home Care</SelectItem>
+                          <SelectItem value="critical care">Critical Care</SelectItem>
+                          <SelectItem value="pediatrics">Pediatrics</SelectItem>
+                          <SelectItem value="geriatrics">Geriatrics</SelectItem>
+                          <SelectItem value="mental health">Mental Health</SelectItem>
+                        </>
+                      )}
+                      {serviceType === 'physiotherapists' && (
+                        <>
+                          <SelectItem value="sports medicine">Sports Medicine</SelectItem>
+                          <SelectItem value="pediatrics">Pediatrics</SelectItem>
+                          <SelectItem value="orthopedics">Orthopedics</SelectItem>
+                          <SelectItem value="neurology">Neurology</SelectItem>
+                          <SelectItem value="cardiopulmonary">Cardiopulmonary</SelectItem>
+                        </>
+                      )}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
-              
-              <Select value={priceFilter} onValueChange={setPriceFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Price Range" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Prices</SelectItem>
-                  <SelectItem value="under-50">Under $50</SelectItem>
-                  <SelectItem value="50-100">$50 - $100</SelectItem>
-                  <SelectItem value="100-150">$100 - $150</SelectItem>
-                  <SelectItem value="over-150">Over $150</SelectItem>
-                </SelectContent>
-              </Select>
-              
-              <Select value={countryFilter} onValueChange={setCountryFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Country" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Countries</SelectItem>
-                  <SelectItem value="united states">United States</SelectItem>
-                  <SelectItem value="canada">Canada</SelectItem>
-                  <SelectItem value="united kingdom">United Kingdom</SelectItem>
-                  <SelectItem value="australia">Australia</SelectItem>
-                  <SelectItem value="germany">Germany</SelectItem>
-                  <SelectItem value="france">France</SelectItem>
-                  <SelectItem value="spain">Spain</SelectItem>
-                  <SelectItem value="italy">Italy</SelectItem>
-                  <SelectItem value="japan">Japan</SelectItem>
-                </SelectContent>
-              </Select>
-              
-              <Select value={cityFilter} onValueChange={setCityFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="City" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Cities</SelectItem>
-                  <SelectItem value="new york">New York</SelectItem>
-                  <SelectItem value="los angeles">Los Angeles</SelectItem>
-                  <SelectItem value="chicago">Chicago</SelectItem>
-                  <SelectItem value="houston">Houston</SelectItem>
-                  <SelectItem value="toronto">Toronto</SelectItem>
-                  <SelectItem value="vancouver">Vancouver</SelectItem>
-                  <SelectItem value="london">London</SelectItem>
-                  <SelectItem value="sydney">Sydney</SelectItem>
-                  <SelectItem value="berlin">Berlin</SelectItem>
-                  <SelectItem value="paris">Paris</SelectItem>
-                </SelectContent>
-              </Select>
-              
-              <Select value={serviceTypeFilter} onValueChange={setServiceTypeFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Service Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Types</SelectItem>
-                  {serviceType === 'doctors' && (
-                    <>
-                      <SelectItem value="cardiology">Cardiology</SelectItem>
-                      <SelectItem value="general medicine">General Medicine</SelectItem>
-                      <SelectItem value="dermatology">Dermatology</SelectItem>
-                      <SelectItem value="orthopedics">Orthopedics</SelectItem>
-                      <SelectItem value="pediatrics">Pediatrics</SelectItem>
-                    </>
-                  )}
-                  {serviceType === 'nurses' && (
-                    <>
-                      <SelectItem value="home care">Home Care</SelectItem>
-                      <SelectItem value="critical care">Critical Care</SelectItem>
-                      <SelectItem value="pediatrics">Pediatrics</SelectItem>
-                      <SelectItem value="geriatrics">Geriatrics</SelectItem>
-                      <SelectItem value="mental health">Mental Health</SelectItem>
-                    </>
-                  )}
-                  {serviceType === 'physiotherapists' && (
-                    <>
-                      <SelectItem value="sports medicine">Sports Medicine</SelectItem>
-                      <SelectItem value="pediatrics">Pediatrics</SelectItem>
-                      <SelectItem value="orthopedics">Orthopedics</SelectItem>
-                      <SelectItem value="neurology">Neurology</SelectItem>
-                      <SelectItem value="cardiopulmonary">Cardiopulmonary</SelectItem>
-                    </>
-                  )}
-                </SelectContent>
-              </Select>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Results Header */}
         <div className="flex justify-between items-center mb-6">
@@ -1336,10 +1557,20 @@ const ServiceDetail = () => {
               <CardContent className="p-6">
                 <div className="flex items-start space-x-4">
                   {/* Provider Image */}
-                  <div className="w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-white font-bold text-xl">
-                      {provider.image}
-                    </span>
+                  <div className="w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    {provider.profileImage ? (
+                      <img 
+                        src={provider.profileImage} 
+                        alt={provider.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-primary rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold text-xl">
+                          {provider.image}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Provider Info */}
@@ -1398,16 +1629,12 @@ const ServiceDetail = () => {
                         <span className="text-sm text-muted-foreground">Next slot: {provider.nextAvailable}</span>
                       </div>
                       <div className="flex flex-wrap gap-1">
-                        {(provider.services || provider.specializations || []).slice(0, 2).map((item: string, index: number) => (
+                        {provider.consultationTypes?.map((type: string, index: number) => (
                           <Badge key={index} variant="outline" className="text-xs">
-                            {item}
+                            {type === "Video Call" ? <Video className="w-3 h-3 mr-1" /> : <Stethoscope className="w-3 h-3 mr-1" />}
+                            {type}
                           </Badge>
                         ))}
-                        {(provider.services || provider.specializations || []).length > 2 && (
-                          <Badge variant="outline" className="text-xs">
-                            +{(provider.services || provider.specializations || []).length - 2} more
-                          </Badge>
-                        )}
                       </div>
                     </div>
 
@@ -1417,6 +1644,7 @@ const ServiceDetail = () => {
                         variant="medical" 
                         size="sm" 
                         className="flex-1"
+                        onClick={() => handleBookAppointment(provider)}
                       >
                         <Calendar className="w-4 h-4 mr-2" />
                         Book Appointment

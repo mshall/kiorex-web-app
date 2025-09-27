@@ -171,6 +171,16 @@ const RoleBasedNavigation = ({
       return null;
     }
     
+    // Handle booking pages - don't show breadcrumb for these
+    if (path.startsWith('/booking')) {
+      return null;
+    }
+    
+    // Handle patient-appointments pages - don't show breadcrumb for these
+    if (path.startsWith('/patient-appointments')) {
+      return null;
+    }
+    
     // Fallback for pages not in navigation
     const pathSegments = path.split('/').filter(Boolean);
     const lastSegment = pathSegments[pathSegments.length - 1];
@@ -339,7 +349,7 @@ const RoleBasedNavigation = ({
             </DropdownMenu>
 
             {/* Calendar Dropdown - Only for professionals */}
-            {(userType === 'doctor' || userType === 'nurse' || userType === 'clinic' || userType === 'pharmacy' || userType === 'admin') && (
+            {(userType === 'doctor' || userType === 'nurse' || userType === 'pharmacy' || userType === 'admin') && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="relative">

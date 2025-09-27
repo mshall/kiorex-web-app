@@ -102,6 +102,7 @@
     "totalPatients": "Total Patients",
     "totalRevenue": "Total Revenue",
     "totalAppointments": "Total Appointments",
+    "manageAppointments": "Manage your appointments",
     "pendingApprovals": "Pending Approvals",
     "quickActions": "Quick Actions",
     "recentNotifications": "Recent Notifications"
@@ -300,7 +301,8 @@
     "followUpInWeeks": "Follow-up in 2 weeks",
     "xrayScheduled": "X-ray scheduled",
     "mainClinic": "Main Clinic",
-    "teleconsultation": "Teleconsultation"
+    "teleconsultation": "Teleconsultation",
+    "specialty": "Specialty"
   },
   "quickActions": {
     "bookAppointment": "Book Appointment",
@@ -347,8 +349,5 @@
     "date": "Date",
     "time": "Time",
     "type": "Type"
-  },
-  "health": {
-    "specialty": "Specialty"
   }
 }
