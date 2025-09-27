@@ -161,6 +161,11 @@ const RoleBasedNavigation = ({
       return null;
     }
     
+    // Handle patient-profile pages - don't show breadcrumb for these
+    if (path.startsWith('/patient-profile')) {
+      return null;
+    }
+    
     // Fallback for pages not in navigation
     const pathSegments = path.split('/').filter(Boolean);
     const lastSegment = pathSegments[pathSegments.length - 1];
