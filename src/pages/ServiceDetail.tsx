@@ -1071,16 +1071,6 @@ const ServiceDetail = () => {
     
     return (
       <Card className="w-full max-w-md cursor-pointer hover:shadow-lg transition-all duration-300 group border border-primary/20">
-        <div className="aspect-video bg-gradient-to-br from-blue-500 to-purple-600 rounded-t-lg flex items-center justify-center">
-          <div className="text-center text-white">
-            <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-2">
-              <span className="text-xl font-bold text-white">
-                {provider.image}
-              </span>
-            </div>
-            <span className="text-lg font-semibold">{provider.name}</span>
-          </div>
-        </div>
         <CardContent className="p-6">
           {/* Professional Picture */}
           <div className="flex justify-center mb-4">
@@ -1139,10 +1129,13 @@ const ServiceDetail = () => {
           </div>
 
           <div className="flex items-center justify-between">
-            <Badge variant="secondary" className="text-xs">
-              <Clock className="w-3 h-3 mr-1" />
-              {provider.nextAvailable}
-            </Badge>
+            <div className="flex flex-col">
+              <span className="text-xs text-muted-foreground mb-1">Next available time slot</span>
+              <Badge variant="secondary" className="text-xs">
+                <Clock className="w-3 h-3 mr-1" />
+                {provider.nextAvailable}
+              </Badge>
+            </div>
             <Button size="sm" className="group-hover:bg-primary">
               Book Now
               <ArrowRight className="w-4 h-4 ml-2" />
@@ -1167,7 +1160,7 @@ const ServiceDetail = () => {
               className="flex items-center space-x-2"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>{t('common.back')}</span>
+              <span>Back to Marketplace</span>
             </Button>
             <div>
               <h1 className="text-3xl font-bold flex items-center space-x-3">
