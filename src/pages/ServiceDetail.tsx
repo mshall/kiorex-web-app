@@ -547,8 +547,56 @@ const ServiceDetail = () => {
     }
     
     // Default to general doctors if no specific category
-    return doctors;
+    return getDefaultDoctors();
   };
+
+  const getDefaultDoctors = () => [
+    { 
+      id: 1, 
+      name: "Dr. Emily Richardson", 
+      specialty: "Cardiologist", 
+      rating: 4.9, 
+      reviews: 156, 
+      price: 150, 
+      location: "Downtown Medical Center",
+      experience: "15 years",
+      nextAvailable: "Today 2:30 PM",
+      image: "ER",
+      verified: true,
+      languages: ["English", "Spanish"],
+      serviceType: "Cardiology"
+    },
+    { 
+      id: 2, 
+      name: "Dr. Michael Chen", 
+      specialty: "General Physician", 
+      rating: 4.8, 
+      reviews: 203, 
+      price: 100, 
+      location: "City Health Clinic",
+      experience: "12 years",
+      nextAvailable: "Today 4:00 PM",
+      image: "MC",
+      verified: true,
+      languages: ["English", "Mandarin"],
+      serviceType: "General Medicine"
+    },
+    { 
+      id: 3, 
+      name: "Dr. Sarah Johnson", 
+      specialty: "Dermatologist", 
+      rating: 4.7, 
+      reviews: 134, 
+      price: 120, 
+      location: "Skin Care Specialists",
+      experience: "10 years",
+      nextAvailable: "Tomorrow 10:00 AM",
+      image: "SJ",
+      verified: true,
+      languages: ["English"],
+      serviceType: "Dermatology"
+    }
+  ];
 
   const nurses = [
     {
@@ -860,16 +908,17 @@ const ServiceDetail = () => {
   const getServiceData = () => {
     // First try to get service-specific data
     const serviceSpecificData = getServiceSpecificData();
-    if (serviceSpecificData !== doctors) {
+    const defaultDoctors = getDefaultDoctors();
+    if (serviceSpecificData !== defaultDoctors) {
       return serviceSpecificData;
     }
     
     // Fallback to general service type data
     switch (serviceType) {
-      case 'doctors': return doctors;
+      case 'doctors': return defaultDoctors;
       case 'nurses': return nurses;
       case 'physiotherapists': return physiotherapists;
-      default: return doctors;
+      default: return defaultDoctors;
     }
   };
 
