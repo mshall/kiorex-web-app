@@ -33,7 +33,8 @@ import {
   Award,
   Eye,
   X,
-  ArrowRight
+  ArrowRight,
+  MessageCircle
 } from "lucide-react";
 
 const ServiceDetail = () => {
@@ -1328,125 +1329,128 @@ const ServiceDetail = () => {
           </div>
         </div>
 
-        {/* Providers Table */}
-        <Card>
-          <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Provider</TableHead>
-                    <TableHead>Specialty</TableHead>
-                    <TableHead>Location</TableHead>
-                    <TableHead>Rating</TableHead>
-                    <TableHead>Price</TableHead>
-                    <TableHead>Experience</TableHead>
-                    <TableHead>Next Available</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {paginatedProviders.map((provider) => (
-                    <TableRow key={provider.id} className="hover:bg-muted/50">
-                      <TableCell>
-                        <div className="flex items-center space-x-3">
-                          <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center text-white font-semibold">
-                            {provider.image}
-                          </div>
-                          <div>
-                            <div className="flex items-center space-x-2">
-                              <p className="font-medium">{provider.name}</p>
-                              {provider.verified && (
-                                <Shield className="w-4 h-4 text-green-500" />
-                              )}
-                            </div>
-                            <p className="text-sm text-muted-foreground">{provider.serviceType}</p>
-                          </div>
+        {/* Providers Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {paginatedProviders.map((provider) => (
+            <Card key={provider.id} className="hover:shadow-lg transition-all duration-300">
+              <CardContent className="p-6">
+                <div className="flex items-start space-x-4">
+                  {/* Provider Image */}
+                  <div className="w-20 h-20 bg-gradient-primary rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-white font-bold text-xl">
+                      {provider.image}
+                    </span>
+                  </div>
+
+                  {/* Provider Info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between mb-2">
+                      <div>
+                        <div className="flex items-center space-x-2 mb-1">
+                          <h3 className="text-lg font-semibold">{provider.name}</h3>
+                          {provider.verified && (
+                            <Badge variant="secondary" className="text-xs">
+                              <Award className="w-3 h-3 mr-1" />
+                              Verified
+                            </Badge>
+                          )}
                         </div>
-                      </TableCell>
-                      
-                      <TableCell>
-                        <div className="flex justify-center">
-                          <Badge variant="outline" className="text-center">{provider.specialty}</Badge>
-                        </div>
-                      </TableCell>
-                      
-                      <TableCell>
-                        <div className="flex items-center space-x-2">
-                          <MapPin className="w-4 h-4 text-muted-foreground" />
-                          <span className="text-sm">{provider.location}</span>
-                        </div>
-                      </TableCell>
-                      
-                      <TableCell>
-                        <div className="flex items-center space-x-1">
-                          <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                          <span className="font-medium">{provider.rating}</span>
+                        <p className="text-primary font-medium">{provider.specialty}</p>
+                        <p className="text-sm text-muted-foreground">{provider.serviceType}</p>
+                      </div>
+                      <div className="text-right">
+                        <div className="flex items-center space-x-1 mb-1">
+                          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                          <span className="font-semibold">{provider.rating}</span>
                           <span className="text-sm text-muted-foreground">({provider.reviews})</span>
                         </div>
-                      </TableCell>
-                      
-                      <TableCell>
-                        <div className="flex items-center space-x-1">
-                          <DollarSign className="w-4 h-4 text-green-500" />
-                          <span className="font-medium">${provider.price}</span>
-                        </div>
-                      </TableCell>
-                      
-                      <TableCell>
-                        <div className="flex items-center space-x-1">
-                          <Award className="w-4 h-4 text-muted-foreground" />
-                          <span className="text-sm">{provider.experience}</span>
-                        </div>
-                      </TableCell>
-                      
-                      <TableCell>
-                        <div className="flex items-center space-x-1">
-                          <Clock className="w-4 h-4 text-muted-foreground" />
-                          <span className="text-sm">{provider.nextAvailable}</span>
-                        </div>
-                      </TableCell>
-                      
-                      <TableCell>
-                        <div className="flex space-x-2">
-                          <Button size="sm" variant="medical">
-                            <Video className="w-4 h-4 mr-1" />
-                            Book
-                          </Button>
-                          <Button size="sm" variant="outline">
-                            <Phone className="w-4 h-4 mr-1" />
-                            Call
-                          </Button>
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            onClick={() => handleViewDetails(provider)}
-                          >
-                            <Eye className="w-4 h-4 mr-1" />
-                            View Details
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-            
-            {/* Pagination */}
-            <div className="p-6">
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                totalItems={totalItems}
-                itemsPerPage={itemsPerPage}
-                onPageChange={setCurrentPage}
-                onItemsPerPageChange={setItemsPerPage}
-                itemsPerPageOptions={[6, 9, 12, 15, 20]}
-              />
-            </div>
-          </CardContent>
-        </Card>
+                        <p className="text-sm text-muted-foreground">{provider.experience} experience</p>
+                      </div>
+                    </div>
+
+                    {/* Additional Info */}
+                    <div className="grid grid-cols-2 gap-2 mb-4 text-sm text-muted-foreground">
+                      <div className="flex items-center space-x-1">
+                        <MapPin className="w-3 h-3" />
+                        <span>{provider.location}</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <Clock className="w-3 h-3" />
+                        <span>{provider.nextAvailable}</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <DollarSign className="w-3 h-3" />
+                        <span>${provider.price}/session</span>
+                      </div>
+                      <div className="flex items-center space-x-1">
+                        <Award className="w-3 h-3" />
+                        <span>{provider.experience}</span>
+                      </div>
+                    </div>
+
+                    {/* Availability */}
+                    <div className="mb-4">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <Badge variant="secondary" className="text-xs">
+                          <Calendar className="w-3 h-3 mr-1" />
+                          Available
+                        </Badge>
+                        <span className="text-sm text-muted-foreground">Next slot: {provider.nextAvailable}</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {(provider.services || provider.specializations || []).slice(0, 2).map((item: string, index: number) => (
+                          <Badge key={index} variant="outline" className="text-xs">
+                            {item}
+                          </Badge>
+                        ))}
+                        {(provider.services || provider.specializations || []).length > 2 && (
+                          <Badge variant="outline" className="text-xs">
+                            +{(provider.services || provider.specializations || []).length - 2} more
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex items-center space-x-2">
+                      <Button 
+                        variant="medical" 
+                        size="sm" 
+                        className="flex-1"
+                      >
+                        <Calendar className="w-4 h-4 mr-2" />
+                        Book Appointment
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => handleViewDetails(provider)}
+                      >
+                        <Eye className="w-4 h-4" />
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <MessageCircle className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        
+        {/* Pagination */}
+        <div className="mt-6">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={setItemsPerPage}
+            itemsPerPageOptions={[6, 9, 12, 15, 20]}
+          />
+        </div>
 
         {/* Provider Details Dialog */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
