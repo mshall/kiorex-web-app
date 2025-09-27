@@ -4,3 +4,6 @@ export { default as ClinicAppointments } from './ClinicAppointments';
 export { default as ClinicPatients } from './ClinicPatients';
 export { default as ClinicBilling } from './ClinicBilling';
 export { default as ClinicAnalytics } from './ClinicAnalytics';
+export { default as ClinicInventory } from './ClinicInventory';
+export { default as ClinicStaff } from './ClinicStaff';
+export { default as ClinicAttendance } from './ClinicAttendance';
