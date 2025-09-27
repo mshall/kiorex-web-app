@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Pagination from "@/components/ui/pagination";
 import { usePagination } from "@/hooks/usePagination";
@@ -118,6 +118,8 @@ const PatientAppointments = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc"); // Default to newest first
   const [activeTab, setActiveTab] = useState("upcoming");
+  const [selectedAppointment, setSelectedAppointment] = useState<any>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Filter appointments based on active tab
   const getFilteredAppointments = (tab: string) => {
@@ -214,6 +216,11 @@ const PatientAppointments = () => {
     return `https://maps.google.com/?q=${encodeURIComponent(address)}`;
   };
 
+  const handleViewAppointment = (appointment: any) => {
+    setSelectedAppointment(appointment);
+    setIsDialogOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-muted/50" dir={direction}>
       <RoleBasedNavigation userType={userType} userName={providerType} />
@@ -222,6 +229,57 @@ const PatientAppointments = () => {
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">{t('navigation.appointments')}</h1>
           <p className="text-muted-foreground">{t('dashboard.manageAppointments')}</p>
+        </div>
+
+        {/* Insight Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Upcoming Appointments</p>
+                  <p className="text-2xl font-bold text-yellow-600">
+                    {appointments.filter(a => a.status === 'confirmed' || a.status === 'upcoming').length}
+                  </p>
+                </div>
+                <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                  <Clock className="w-6 h-6 text-yellow-600" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Completed Appointments</p>
+                  <p className="text-2xl font-bold text-green-600">
+                    {appointments.filter(a => a.status === 'completed').length}
+                  </p>
+                </div>
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                  <CheckCircle2 className="w-6 h-6 text-green-600" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Cancelled Appointments</p>
+                  <p className="text-2xl font-bold text-red-600">
+                    {appointments.filter(a => a.status === 'cancelled').length}
+                  </p>
+                </div>
+                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                  <XCircle className="w-6 h-6 text-red-600" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Enhanced Tabs System */}
@@ -393,15 +451,15 @@ const PatientAppointments = () => {
                         </div>
                       </div>
                         <div className="flex items-center space-x-2">
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" onClick={() => handleViewAppointment(appointment)}>
                           <Eye className="w-4 h-4" />
-                        </Button>
+                            </Button>
                         <Button variant="outline" size="sm">
                           <Edit className="w-4 h-4" />
-                        </Button>
+                                </Button>
                         <Button variant="outline" size="sm">
                           <Trash2 className="w-4 h-4" />
-                        </Button>
+                            </Button>
                         </div>
                       </div>
                     );
@@ -517,7 +575,7 @@ const PatientAppointments = () => {
                   </div>
                 </div>
                         <div className="flex items-center space-x-2">
-                          <Button variant="outline" size="sm">
+                          <Button variant="outline" size="sm" onClick={() => handleViewAppointment(appointment)}>
                             <Eye className="w-4 h-4" />
                   </Button>
                           <Button variant="outline" size="sm">
@@ -640,7 +698,7 @@ const PatientAppointments = () => {
                     </div>
                   </div>
                         <div className="flex items-center space-x-2">
-                          <Button variant="outline" size="sm">
+                          <Button variant="outline" size="sm" onClick={() => handleViewAppointment(appointment)}>
                             <Eye className="w-4 h-4" />
                           </Button>
                           <Button variant="outline" size="sm">
@@ -672,6 +730,120 @@ const PatientAppointments = () => {
           </div>
         </TabsContent>
         </Tabs>
+
+        {/* Appointment Details Dialog */}
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Appointment Details</DialogTitle>
+              <DialogDescription>
+                View detailed information about your appointment
+              </DialogDescription>
+            </DialogHeader>
+            {selectedAppointment && (
+              <div className="space-y-6">
+                {/* Doctor Info */}
+                <div className="flex items-start space-x-4">
+                  <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center">
+                    <span className="text-white font-bold text-lg">
+                      {selectedAppointment.doctor.split(' ').map((n: string) => n[0]).join('')}
+                    </span>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold">{selectedAppointment.doctor}</h3>
+                    <p className="text-primary font-medium">{selectedAppointment.specialty}</p>
+                    <Badge className={`mt-2 flex items-center space-x-1 ${getStatusBadgeColor(selectedAppointment.status)}`}>
+                      {(() => {
+                        const StatusIcon = getStatusIcon(selectedAppointment.status);
+                        return <StatusIcon className="w-3 h-3" />;
+                      })()}
+                      <span>{selectedAppointment.status}</span>
+                    </Badge>
+                  </div>
+                </div>
+
+                {/* Appointment Details */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold text-sm text-muted-foreground mb-2">Date & Time</h4>
+                        <div className="flex items-center space-x-2">
+                        <Calendar className="w-4 h-4 text-muted-foreground" />
+                        <span>{selectedAppointment.date}</span>
+                        </div>
+                      <div className="flex items-center space-x-2 mt-1">
+                        <Clock className="w-4 h-4 text-muted-foreground" />
+                        <span>{selectedAppointment.time}</span>
+                      </div>
+                        </div>
+
+                        <div>
+                      <h4 className="font-semibold text-sm text-muted-foreground mb-2">Appointment Type</h4>
+                      <div className="flex items-center space-x-2">
+                        {(() => {
+                          const TypeIcon = getTypeIcon(selectedAppointment.type);
+                          return <TypeIcon className="w-4 h-4" />;
+                        })()}
+                        <span className="font-medium text-blue-600">{selectedAppointment.type}</span>
+                        <span className="text-muted-foreground">•</span>
+                        <span className="font-medium text-green-600">{selectedAppointment.location}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold text-sm text-muted-foreground mb-2">Appointment ID</h4>
+                      <p className="text-sm font-mono bg-muted px-2 py-1 rounded">#{selectedAppointment.id}</p>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold text-sm text-muted-foreground mb-2">Notes</h4>
+                      <p className="text-sm">{selectedAppointment.notes}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t">
+                  {selectedAppointment.type === "Video Call" ? (
+                    <a 
+                      href={getCallLink(selectedAppointment)} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                    >
+                      <Video className="w-4 h-4 mr-2" />
+                      Join Video Call
+                      <ExternalLink className="w-4 h-4 ml-2" />
+                    </a>
+                  ) : (
+                    <a 
+                      href={getMapsLink(selectedAppointment)} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                    >
+                      <MapPin className="w-4 h-4 mr-2" />
+                      View on Google Maps
+                      <ExternalLink className="w-4 h-4 ml-2" />
+                    </a>
+                  )}
+                  
+                  <Button variant="outline" className="flex-1 sm:flex-none">
+                    <Edit className="w-4 h-4 mr-2" />
+                    Edit Appointment
+                  </Button>
+                  
+                  <Button variant="outline" className="flex-1 sm:flex-none">
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Cancel Appointment
+                  </Button>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
