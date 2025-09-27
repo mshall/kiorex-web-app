@@ -206,6 +206,86 @@ const ClinicAppointments = () => {
       reason: "Eye exam",
       notes: "Patient rescheduled for next week",
       duration: "45 minutes"
+    },
+    {
+      id: 11,
+      patientName: "Amanda Foster",
+      patientId: "P011",
+      date: "2024-01-20",
+      time: "09:15 AM",
+      type: "Video Call",
+      status: "waiting",
+      specialty: "Dermatology",
+      clinic: "Skin Care Clinic",
+      phone: "+1 (555) 123-4567",
+      email: "amanda.foster@email.com",
+      reason: "Acne consultation",
+      notes: "Waiting for doctor to join call",
+      duration: "30 minutes"
+    },
+    {
+      id: 12,
+      patientName: "Kevin Martinez",
+      patientId: "P012",
+      date: "2024-01-20",
+      time: "11:45 AM",
+      type: "In-Person",
+      status: "waiting",
+      specialty: "Cardiology",
+      clinic: "Heart Center",
+      phone: "+1 (555) 234-5678",
+      email: "kevin.martinez@email.com",
+      reason: "EKG follow-up",
+      notes: "Patient arrived early, waiting in lobby",
+      duration: "25 minutes"
+    },
+    {
+      id: 13,
+      patientName: "Rachel Thompson",
+      patientId: "P013",
+      date: "2024-01-20",
+      time: "03:20 PM",
+      type: "Video Call",
+      status: "waiting",
+      specialty: "Psychiatry",
+      clinic: "Mental Health Center",
+      phone: "+1 (555) 345-6789",
+      email: "rachel.thompson@email.com",
+      reason: "Medication review",
+      notes: "Waiting for technical support",
+      duration: "40 minutes"
+    },
+    {
+      id: 14,
+      patientName: "Daniel Kim",
+      patientId: "P014",
+      date: "2024-01-21",
+      time: "10:30 AM",
+      type: "In-Person",
+      status: "waiting",
+      specialty: "Orthopedics",
+      clinic: "Sports Medicine Center",
+      phone: "+1 (555) 456-7890",
+      email: "daniel.kim@email.com",
+      reason: "Physical therapy consultation",
+      notes: "Patient waiting for room assignment",
+      duration: "35 minutes"
+    },
+    {
+      id: 15,
+      patientName: "Sophie Williams",
+      patientId: "P015",
+      date: "2024-01-21",
+      time: "01:00 PM",
+      type: "Video Call",
+      status: "waiting",
+      specialty: "Pediatrics",
+      clinic: "Children's Clinic",
+      phone: "+1 (555) 567-8901",
+      email: "sophie.williams@email.com",
+      reason: "Child development check",
+      notes: "Parent waiting with child",
+      duration: "30 minutes"
     }
   ];
 
@@ -215,6 +295,7 @@ const ClinicAppointments = () => {
     total: appointments.length,
     confirmed: appointments.filter(a => a.status === 'confirmed').length,
     pending: appointments.filter(a => a.status === 'pending').length,
+    waiting: appointments.filter(a => a.status === 'waiting').length,
     completed: appointments.filter(a => a.status === 'completed').length,
     cancelled: appointments.filter(a => a.status === 'cancelled').length,
     // Calendar stats
@@ -227,12 +308,12 @@ const ClinicAppointments = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'confirmed': return 'default';
-      case 'upcoming': return 'secondary';
-      case 'waiting': return 'secondary';
-      case 'completed': return 'outline';
-      case 'cancelled': return 'destructive';
-      default: return 'outline';
+      case 'confirmed': return 'bg-blue-500 text-white border-blue-500 hover:bg-blue-500 hover:shadow-lg hover:shadow-blue-500/50 hover:text-white/90 transition-all duration-200';
+      case 'upcoming': return 'bg-yellow-500 text-white border-yellow-500 hover:bg-yellow-500 hover:shadow-lg hover:shadow-yellow-500/50 hover:text-white/90 transition-all duration-200';
+      case 'waiting': return 'bg-orange-500 text-white border-orange-500 hover:bg-orange-500 hover:shadow-lg hover:shadow-orange-500/50 hover:text-white/90 transition-all duration-200';
+      case 'completed': return 'bg-green-500 text-white border-green-500 hover:bg-green-500 hover:shadow-lg hover:shadow-green-500/50 hover:text-white/90 transition-all duration-200';
+      case 'cancelled': return 'bg-red-500 text-white border-red-500 hover:bg-red-500 hover:shadow-lg hover:shadow-red-500/50 hover:text-white/90 transition-all duration-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-100 hover:shadow-lg hover:shadow-gray-200/50 hover:text-gray-800/90 transition-all duration-200';
     }
   };
 
@@ -240,7 +321,7 @@ const ClinicAppointments = () => {
     switch (status) {
       case 'confirmed': return CheckCircle;
       case 'upcoming': return Clock;
-      case 'waiting': return Clock;
+      case 'waiting': return AlertCircle;
       case 'completed': return CheckCircle;
       case 'cancelled': return XCircle;
       default: return Clock;
@@ -259,7 +340,7 @@ const ClinicAppointments = () => {
     switch (status) {
       case 'confirmed': return 'bg-blue-500 text-white border-blue-500 hover:bg-blue-500 hover:shadow-lg hover:shadow-blue-500/50 hover:text-white/90 transition-all duration-200';
       case 'upcoming': return 'bg-yellow-500 text-white border-yellow-500 hover:bg-yellow-500 hover:shadow-lg hover:shadow-yellow-500/50 hover:text-white/90 transition-all duration-200';
-      case 'waiting': return 'bg-yellow-100 text-yellow-800 border-yellow-200 hover:bg-yellow-100 hover:shadow-lg hover:shadow-yellow-200/50 hover:text-yellow-800/90 transition-all duration-200';
+      case 'waiting': return 'bg-orange-500 text-white border-orange-500 hover:bg-orange-500 hover:shadow-lg hover:shadow-orange-500/50 hover:text-white/90 transition-all duration-200';
       case 'completed': return 'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80';
       case 'cancelled': return 'bg-red-500 text-white border-red-500 hover:bg-red-500 hover:shadow-lg hover:shadow-red-500/50 hover:text-white/90 transition-all duration-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-100 hover:shadow-lg hover:shadow-gray-200/50 hover:text-gray-800/90 transition-all duration-200';
@@ -348,6 +429,20 @@ const ClinicAppointments = () => {
                 <div className="ml-4">
                   <p className="text-sm font-medium text-muted-foreground">Pending</p>
                   <p className="text-2xl font-bold">{stats.pending}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center">
+                <div className="p-2 bg-orange-100 rounded-lg">
+                  <AlertCircle className="h-6 w-6 text-orange-600" />
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-muted-foreground">Waiting</p>
+                  <p className="text-2xl font-bold">{stats.waiting}</p>
                 </div>
               </div>
             </CardContent>
