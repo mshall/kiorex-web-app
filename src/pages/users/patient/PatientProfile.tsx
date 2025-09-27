@@ -33,6 +33,8 @@ import {
 const PatientProfile = () => {
   const location = useLocation();
   const userType = location.state?.userType || 'patient';
+  const providerType = location.state?.providerType || 'Patient';
+  const patientId = location.state?.patientId || null;
   
   const [isEditing, setIsEditing] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -123,32 +125,41 @@ const PatientProfile = () => {
   return (
     <div className="min-h-screen bg-muted/50">
       {/* Role-based Navigation */}
-      <RoleBasedNavigation userType={userType} userName="Patient User" />
+      <RoleBasedNavigation userType={userType} userName={providerType} />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold mb-2">My Profile</h1>
-              <p className="text-muted-foreground">Manage your personal and medical information</p>
+              <h1 className="text-3xl font-bold mb-2">
+                {userType === 'doctor' ? 'Patient Profile' : 'My Profile'}
+              </h1>
+              <p className="text-muted-foreground">
+                {userType === 'doctor' 
+                  ? 'View patient information and medical history' 
+                  : 'Manage your personal and medical information'
+                }
+              </p>
             </div>
-            <Button 
-              onClick={() => setIsEditing(!isEditing)}
-              variant={isEditing ? "outline" : "default"}
-            >
-              {isEditing ? (
-                <>
-                  <Save className="w-4 h-4 mr-2" />
-                  Save Changes
-                </>
-              ) : (
-                <>
-                  <Edit className="w-4 h-4 mr-2" />
-                  Edit Profile
-                </>
-              )}
-            </Button>
+            {userType === 'patient' && (
+              <Button 
+                onClick={() => setIsEditing(!isEditing)}
+                variant={isEditing ? "outline" : "default"}
+              >
+                {isEditing ? (
+                  <>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Changes
+                  </>
+                ) : (
+                  <>
+                    <Edit className="w-4 h-4 mr-2" />
+                    Edit Profile
+                  </>
+                )}
+              </Button>
+            )}
           </div>
         </div>
 
@@ -195,7 +206,8 @@ const PatientProfile = () => {
                       id="firstName"
                       value={profileData.firstName}
                       onChange={(e) => handleInputChange('firstName', e.target.value)}
-                      disabled={!isEditing}
+                      disabled={!isEditing || userType === 'doctor'}
+                      readOnly={userType === 'doctor'}
                     />
                   </div>
                   <div>
@@ -204,7 +216,8 @@ const PatientProfile = () => {
                       id="lastName"
                       value={profileData.lastName}
                       onChange={(e) => handleInputChange('lastName', e.target.value)}
-                      disabled={!isEditing}
+                      disabled={!isEditing || userType === 'doctor'}
+                      readOnly={userType === 'doctor'}
                     />
                   </div>
                   <div>
@@ -216,7 +229,8 @@ const PatientProfile = () => {
                         type="email"
                         value={profileData.email}
                         onChange={(e) => handleInputChange('email', e.target.value)}
-                        disabled={!isEditing}
+                        disabled={!isEditing || userType === 'doctor'}
+                      readOnly={userType === 'doctor'}
                         className="pl-10"
                       />
                     </div>
@@ -229,7 +243,8 @@ const PatientProfile = () => {
                         id="phone"
                         value={profileData.phone}
                         onChange={(e) => handleInputChange('phone', e.target.value)}
-                        disabled={!isEditing}
+                        disabled={!isEditing || userType === 'doctor'}
+                      readOnly={userType === 'doctor'}
                         className="pl-10"
                       />
                     </div>
@@ -243,7 +258,8 @@ const PatientProfile = () => {
                         type="date"
                         value={profileData.dateOfBirth}
                         onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
-                        disabled={!isEditing}
+                        disabled={!isEditing || userType === 'doctor'}
+                      readOnly={userType === 'doctor'}
                         className="pl-10"
                       />
                     </div>
@@ -253,7 +269,8 @@ const PatientProfile = () => {
                     <Select 
                       value={profileData.gender} 
                       onValueChange={(value) => handleInputChange('gender', value)}
-                      disabled={!isEditing}
+                      disabled={!isEditing || userType === 'doctor'}
+                      readOnly={userType === 'doctor'}
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -276,7 +293,8 @@ const PatientProfile = () => {
                       id="address"
                       value={profileData.address}
                       onChange={(e) => handleInputChange('address', e.target.value)}
-                      disabled={!isEditing}
+                      disabled={!isEditing || userType === 'doctor'}
+                      readOnly={userType === 'doctor'}
                       className="pl-10"
                       rows={2}
                     />
@@ -306,7 +324,8 @@ const PatientProfile = () => {
                     <Select 
                       value={profileData.bloodType} 
                       onValueChange={(value) => handleInputChange('bloodType', value)}
-                      disabled={!isEditing}
+                      disabled={!isEditing || userType === 'doctor'}
+                      readOnly={userType === 'doctor'}
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -447,7 +466,8 @@ const PatientProfile = () => {
                       id="emergencyName"
                       value={profileData.emergencyContact.name}
                       onChange={(e) => handleNestedInputChange('emergencyContact', 'name', e.target.value)}
-                      disabled={!isEditing}
+                      disabled={!isEditing || userType === 'doctor'}
+                      readOnly={userType === 'doctor'}
                     />
                   </div>
                   <div>
@@ -456,7 +476,8 @@ const PatientProfile = () => {
                       id="emergencyRelationship"
                       value={profileData.emergencyContact.relationship}
                       onChange={(e) => handleNestedInputChange('emergencyContact', 'relationship', e.target.value)}
-                      disabled={!isEditing}
+                      disabled={!isEditing || userType === 'doctor'}
+                      readOnly={userType === 'doctor'}
                     />
                   </div>
                   <div className="md:col-span-2">
@@ -467,7 +488,8 @@ const PatientProfile = () => {
                         id="emergencyPhone"
                         value={profileData.emergencyContact.phone}
                         onChange={(e) => handleNestedInputChange('emergencyContact', 'phone', e.target.value)}
-                        disabled={!isEditing}
+                        disabled={!isEditing || userType === 'doctor'}
+                      readOnly={userType === 'doctor'}
                         className="pl-10"
                       />
                     </div>
@@ -499,7 +521,8 @@ const PatientProfile = () => {
                       id="password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter new password"
-                      disabled={!isEditing}
+                      disabled={!isEditing || userType === 'doctor'}
+                      readOnly={userType === 'doctor'}
                       className="pl-10"
                     />
                     <button
@@ -530,7 +553,8 @@ const PatientProfile = () => {
                           id={key}
                           checked={value}
                           onChange={(e) => handleNestedInputChange('notifications', key, e.target.checked)}
-                          disabled={!isEditing}
+                          disabled={!isEditing || userType === 'doctor'}
+                      readOnly={userType === 'doctor'}
                           className="rounded"
                         />
                       </div>
@@ -553,14 +577,16 @@ const PatientProfile = () => {
                             id={key}
                             checked={value}
                             onChange={(e) => handleNestedInputChange('privacy', key, e.target.checked)}
-                            disabled={!isEditing}
+                            disabled={!isEditing || userType === 'doctor'}
+                      readOnly={userType === 'doctor'}
                             className="rounded"
                           />
                         ) : (
                           <Select 
                             value={value} 
                             onValueChange={(newValue) => handleNestedInputChange('privacy', key, newValue)}
-                            disabled={!isEditing}
+                            disabled={!isEditing || userType === 'doctor'}
+                      readOnly={userType === 'doctor'}
                           >
                             <SelectTrigger className="w-32">
                               <SelectValue />

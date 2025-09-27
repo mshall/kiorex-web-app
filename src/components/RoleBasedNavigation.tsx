@@ -39,14 +39,14 @@ const RoleBasedNavigation = ({
   // Navigation items based on user role
   const getNavigationItems = () => {
     switch (userType) {
-      case 'patient':
-        return [
-          { href: "/dashboard", label: t('navigation.dashboard') },
-          { href: "/patient-appointments", label: t('navigation.appointments') },
-          { href: "/search/doctors", label: t('navigation.doctors') },
-          { href: "/marketplace", label: t('navigation.services') },
-          { href: "/notifications", label: t('navigation.notifications') }
-        ];
+          case 'patient':
+            return [
+              { href: "/patient-dashboard", label: t('navigation.dashboard') },
+              { href: "/patient-appointments", label: t('navigation.appointments') },
+              { href: "/search/doctors", label: t('navigation.doctors') },
+              { href: "/marketplace", label: t('navigation.services') },
+              { href: "/notifications", label: t('navigation.notifications') }
+            ];
       
       case 'doctor':
         return [
@@ -137,13 +137,13 @@ const RoleBasedNavigation = ({
 
   const getMainDashboardPath = () => {
     switch (userType) {
-      case 'patient': return '/dashboard';
+      case 'patient': return '/patient-dashboard';
       case 'doctor': return '/doctor-dashboard';
       case 'nurse': return '/nurse-dashboard';
       case 'pharmacy': return '/pharmacy-dashboard';
       case 'clinic': return '/clinic-dashboard';
       case 'admin': return '/admin-dashboard';
-      default: return '/dashboard';
+      default: return '/patient-dashboard';
     }
   };
 
@@ -436,15 +436,15 @@ const RoleBasedNavigation = ({
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link 
-                    to={userType === 'patient' ? '/profile' : '/provider-profile'} 
-                    className="cursor-pointer"
-                  >
-                    <User className={`${isRTL ? 'ml-2' : 'mr-2'} h-4 w-4`} />
-                    <span>{t('navigation.profile')}</span>
-                  </Link>
-                </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        to={userType === 'patient' ? '/patient-profile' : '/provider-profile'}
+                        className="cursor-pointer"
+                      >
+                        <User className={`${isRTL ? 'ml-2' : 'mr-2'} h-4 w-4`} />
+                        <span>{t('navigation.profile')}</span>
+                      </Link>
+                    </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/settings" className="cursor-pointer">
                     <Settings className={`${isRTL ? 'ml-2' : 'mr-2'} h-4 w-4`} />

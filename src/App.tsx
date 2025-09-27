@@ -76,8 +76,9 @@ const App = () => (
           <Route path="/auth/profile-setup" element={<ProfileSetup />} />
           
               {/* Patient Routes */}
-              <Route path="/dashboard" element={<PatientDashboard />} />
-              <Route path="/profile" element={<PatientProfile />} />
+              <Route path="/patient-dashboard" element={<PatientDashboard />} />
+              <Route path="/patient-profile" element={<PatientProfile />} />
+              <Route path="/patient-profile/:id" element={<PatientProfile />} />
               <Route path="/search/doctors" element={<DoctorSearch />} />
               <Route path="/booking" element={<Booking />} />
               <Route path="/consultation" element={<Teleconsultation />} />
