@@ -32,15 +32,43 @@ import {
   UserPlus,
   CheckCircle,
   CheckCircle2,
-  XCircle
+  XCircle,
+  Zap,
+  Receipt
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 const ClinicDashboard = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const userType = location.state?.userType || 'clinic';
   const providerType = location.state?.providerType || 'Clinic';
+
+  // Expense dialog state
+  const [isExpenseDialogOpen, setIsExpenseDialogOpen] = useState(false);
+  const [expenseType, setExpenseType] = useState("");
+  const [expenseDate, setExpenseDate] = useState("");
+  const [expenseDescription, setExpenseDescription] = useState("");
+
+  // Handle expense submission
+  const handleExpenseSubmit = () => {
+    // Here you would typically send the data to your backend
+    console.log('Expense submitted:', {
+      type: expenseType,
+      date: expenseDate,
+      description: expenseDescription
+    });
+    
+    // Reset form and close dialog
+    setExpenseType("");
+    setExpenseDate("");
+    setExpenseDescription("");
+    setIsExpenseDialogOpen(false);
+  };
 
   const [appointments] = useState([
     { id: 1, patient: "John Doe", doctor: "Dr. Smith", time: "9:00 AM", status: "confirmed", type: "consultation" },
@@ -111,7 +139,120 @@ const ClinicDashboard = () => {
         </div>
 
 
+        {/* Staff Overview Card */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Users className="w-5 h-5 mr-2" /> Staff Overview
+            </CardTitle>
+            <CardDescription>Current staff status and patient assignments</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {staff.map((member) => (
+                <div key={member.id} className="p-4 bg-muted/50 rounded-md">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-semibold">{member.name}</h4>
+                    <Badge variant={member.status === 'active' ? 'default' : 'secondary'}>
+                      {member.status}
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-2">{member.role}</p>
+                  <p className="text-sm font-medium">{member.patients} patients</p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Quick Actions */}
+          <Card className="lg:col-span-1">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Zap className="w-5 h-5 mr-2" />
+                Quick Actions
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <Button variant="outline" className="w-full justify-start">
+                  <UserPlus className="w-4 h-4 mr-2" />
+                  Add New Patient
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Schedule Appointment
+                </Button>
+                <Dialog open={isExpenseDialogOpen} onOpenChange={setIsExpenseDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" className="w-full justify-start">
+                      <Receipt className="w-4 h-4 mr-2" />
+                      Add Clinic Expense
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Add Clinic Expense</DialogTitle>
+                      <DialogDescription>
+                        Record a new expense for your clinic
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="expense-type">Expense Type</Label>
+                        <Select value={expenseType} onValueChange={setExpenseType}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select expense type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="rent">Clinic Monthly Rent</SelectItem>
+                            <SelectItem value="bills">Monthly Bills</SelectItem>
+                            <SelectItem value="other">Other Bill</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label htmlFor="expense-date">Date</Label>
+                        <Input
+                          id="expense-date"
+                          type="date"
+                          value={expenseDate}
+                          onChange={(e) => setExpenseDate(e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="expense-description">Description</Label>
+                        <Textarea
+                          id="expense-description"
+                          placeholder="Enter expense description..."
+                          value={expenseDescription}
+                          onChange={(e) => setExpenseDescription(e.target.value)}
+                        />
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <Button variant="outline" onClick={() => setIsExpenseDialogOpen(false)}>
+                          Cancel
+                        </Button>
+                        <Button onClick={handleExpenseSubmit}>
+                          Add Expense
+                        </Button>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+                <Button variant="outline" className="w-full justify-start">
+                  <FileText className="w-4 h-4 mr-2" />
+                  Generate Report
+                </Button>
+                <Button variant="outline" className="w-full justify-start">
+                  <Activity className="w-4 h-4 mr-2" />
+                  View Analytics
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Today's Appointments */}
           <Card className="lg:col-span-3">
             <CardHeader>
@@ -154,34 +295,6 @@ const ClinicDashboard = () => {
                 </table>
               </div>
               <Button variant="link" className="mt-4 px-0" onClick={() => navigate('/clinic-appointments', { state: { userType: 'clinic', providerType: 'Clinic' } })}>View All Appointments</Button>
-            </CardContent>
-          </Card>
-
-
-          {/* Quick Actions */}
-          <Card className="lg:col-span-1">
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <Button variant="outline" className="w-full justify-start">
-                  <UserPlus className="w-4 h-4 mr-2" />
-                  Add New Patient
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <Calendar className="w-4 h-4 mr-2" />
-                  Schedule Appointment
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <FileText className="w-4 h-4 mr-2" />
-                  Generate Report
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <Activity className="w-4 h-4 mr-2" />
-                  View Analytics
-                </Button>
-              </div>
             </CardContent>
           </Card>
         </div>
