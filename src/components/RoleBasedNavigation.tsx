@@ -438,7 +438,13 @@ const RoleBasedNavigation = ({
                 <Button variant="ghost" className="relative h-auto p-2 rounded-full">
                   <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
                     <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center overflow-hidden">
-                      {userProfilePicture ? (
+                      {userType === 'clinic' ? (
+                        <img 
+                          src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=100&h=100&fit=crop&crop=center" 
+                          alt="Clinic Profile" 
+                          className="w-full h-full object-cover rounded-full"
+                        />
+                      ) : userProfilePicture ? (
                         <img 
                           src={userProfilePicture} 
                           alt="Profile" 
@@ -451,7 +457,7 @@ const RoleBasedNavigation = ({
                       )}
                     </div>
                     <span className="hidden sm:block text-sm font-medium text-foreground">
-                      {userFirstName}
+                      {userType === 'clinic' ? 'CM' : userFirstName}
                     </span>
                   </div>
                 </Button>
@@ -459,7 +465,7 @@ const RoleBasedNavigation = ({
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">{userFirstName}</p>
+                    <p className="text-sm font-medium leading-none">{userType === 'clinic' ? 'CM' : userFirstName}</p>
                     <p className={`text-xs leading-none ${getRoleColor()}`}>
                       {getRoleDisplayName()}
                     </p>

@@ -29,7 +29,10 @@ import {
   Shield,
   MapPin,
   Star,
-  UserPlus
+  UserPlus,
+  CheckCircle,
+  CheckCircle2,
+  XCircle
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
@@ -41,7 +44,7 @@ const ClinicDashboard = () => {
 
   const [appointments] = useState([
     { id: 1, patient: "John Doe", doctor: "Dr. Smith", time: "9:00 AM", status: "confirmed", type: "consultation" },
-    { id: 2, patient: "Jane Smith", doctor: "Dr. Johnson", time: "10:30 AM", status: "pending", type: "follow-up" },
+    { id: 2, patient: "Jane Smith", doctor: "Dr. Johnson", time: "10:30 AM", status: "upcoming", type: "follow-up" },
     { id: 3, patient: "Emily White", doctor: "Dr. Brown", time: "2:00 PM", status: "completed", type: "check-up" },
   ]);
 
@@ -63,6 +66,37 @@ const ClinicDashboard = () => {
     { title: 'Patient Contact', icon: Phone, action: () => console.log('Patient Contact') },
     { title: 'View Analytics', icon: BarChart3, action: () => console.log('View Analytics') },
   ];
+
+  // Helper functions for status display
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'confirmed':
+        return CheckCircle;
+      case 'upcoming':
+        return Clock;
+      case 'completed':
+        return CheckCircle2;
+      case 'cancelled':
+        return XCircle;
+      default:
+        return Clock;
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'confirmed':
+        return 'bg-blue-500 text-white border-blue-500 hover:bg-blue-500 hover:shadow-lg hover:shadow-blue-500/50 hover:text-white/90 transition-all duration-200';
+      case 'upcoming':
+        return 'bg-yellow-500 text-white border-yellow-500 hover:bg-yellow-500 hover:shadow-lg hover:shadow-yellow-500/50 hover:text-white/90 transition-all duration-200';
+      case 'completed':
+        return 'bg-green-500 text-white border-green-500 hover:bg-green-500 hover:shadow-lg hover:shadow-green-500/50 hover:text-white/90 transition-all duration-200';
+      case 'cancelled':
+        return 'bg-red-500 text-white border-red-500 hover:bg-red-500 hover:shadow-lg hover:shadow-red-500/50 hover:text-white/90 transition-all duration-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-100 hover:shadow-lg hover:shadow-gray-200/50 hover:text-gray-800/90 transition-all duration-200';
+    }
+  };
 
   return (
     <div className="min-h-screen bg-muted/50">
@@ -106,8 +140,12 @@ const ClinicDashboard = () => {
                         <td className="p-3">{appointment.time}</td>
                         <td className="p-3">{appointment.type}</td>
                         <td className="p-3">
-                          <Badge variant={appointment.status === 'pending' ? 'destructive' : appointment.status === 'confirmed' ? 'default' : 'secondary'}>
-                            {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
+                          <Badge className={`flex items-center space-x-1 ${getStatusColor(appointment.status)}`}>
+                            {(() => {
+                              const StatusIcon = getStatusIcon(appointment.status);
+                              return <StatusIcon className="w-3 h-3" />;
+                            })()}
+                            <span className="capitalize">{appointment.status}</span>
                           </Badge>
                         </td>
                       </tr>
@@ -115,7 +153,7 @@ const ClinicDashboard = () => {
                   </tbody>
                 </table>
               </div>
-              <Button variant="link" className="mt-4 px-0" onClick={() => navigate('/patient-appointments', { state: { userType: 'clinic', providerType: 'Clinic' } })}>View All Appointments</Button>
+              <Button variant="link" className="mt-4 px-0" onClick={() => navigate('/clinic-appointments', { state: { userType: 'clinic', providerType: 'Clinic' } })}>View All Appointments</Button>
             </CardContent>
           </Card>
 
