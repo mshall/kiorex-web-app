@@ -58,7 +58,10 @@
     "services": "Servicios",
     "health": "Salud",
     "records": "Registros",
-    "marketplace": "Mercado"
+    "marketplace": "Mercado",
+    "revenue": "Ingresos",
+    "ehr": "HCE",
+    "teleconsult": "Teleconsulta"
   },
   "auth": {
     "welcome": "Bienvenido a Kiorex Healthcare",
@@ -174,7 +177,11 @@
     "addEvent": "Agregar Evento",
     "editEvent": "Editar Evento",
     "deleteEvent": "Eliminar Evento",
-    "eventDetails": "Detalles del Evento"
+    "eventDetails": "Detalles del Evento",
+    "viewCalendar": "Ver Calendario",
+    "todaySchedule": "Horario de Hoy",
+    "viewFullCalendar": "Ver Calendario Completo",
+    "schedule": "Horario"
   },
   "notifications": {
     "title": "Notificaciones",

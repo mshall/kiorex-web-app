@@ -58,7 +58,10 @@
     "services": "الخدمات",
     "health": "الصحة",
     "records": "السجلات",
-    "marketplace": "السوق"
+    "marketplace": "السوق",
+    "revenue": "الإيرادات",
+    "ehr": "السجل الطبي الإلكتروني",
+    "teleconsult": "الاستشارة الطبية عن بُعد"
   },
   "auth": {
     "welcome": "مرحباً بك في كيوركس للرعاية الصحية",
@@ -174,7 +177,11 @@
     "addEvent": "إضافة حدث",
     "editEvent": "تعديل الحدث",
     "deleteEvent": "حذف الحدث",
-    "eventDetails": "تفاصيل الحدث"
+    "eventDetails": "تفاصيل الحدث",
+    "viewCalendar": "عرض التقويم",
+    "todaySchedule": "جدول اليوم",
+    "viewFullCalendar": "عرض التقويم الكامل",
+    "schedule": "الجدول"
   },
   "notifications": {
     "title": "الإشعارات",

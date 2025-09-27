@@ -8,6 +8,8 @@ import Dashboard from "./pages/Dashboard";
 import Marketplace from "./pages/Marketplace";
 import PatientPortal from "./pages/PatientPortal";
 import { DoctorDashboard, ProviderProfile, DoctorPatients, DoctorRevenue } from "./pages/users/doctor";
+import DoctorAppointments from "./pages/users/doctor/DoctorAppointments";
+import Teleconsult from "./pages/Teleconsult";
 import { NurseDashboard, NurseSchedule, NursePatients, NurseCarePlans, NurseDocuments, NurseEarnings } from "./pages/users/nurse";
 import { PatientDashboard, PatientProfile, PatientAppointments, PatientRecords } from "./pages/users/patient";
 import { ClinicDashboard, ClinicManagement, ClinicAppointments, ClinicPatients, ClinicBilling, ClinicAnalytics } from "./pages/users/clinic";
@@ -102,6 +104,8 @@ const App = () => (
               {/* Doctor-specific Routes */}
               <Route path="/doctor-patients" element={<DoctorPatients />} />
               <Route path="/doctor-revenue" element={<DoctorRevenue />} />
+              <Route path="/provider-appointments" element={<DoctorAppointments />} />
+              <Route path="/provider-teleconsult" element={<Teleconsult />} />
               
                 {/* Nurse-specific Routes */}
                 <Route path="/nurse-patients" element={<NursePatients />} />
