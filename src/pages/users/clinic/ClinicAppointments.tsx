@@ -47,12 +47,12 @@ const ClinicAppointments = () => {
 
   // Sample appointments data
   const appointments = [
-    {
-      id: 1,
+    { 
+      id: 1, 
       patientName: "Sarah Johnson",
       patientId: "P001",
       date: "2024-01-15",
-      time: "09:00 AM",
+      time: "09:00 AM", 
       type: "Video Call",
       status: "confirmed",
       specialty: "Cardiology",
@@ -63,12 +63,12 @@ const ClinicAppointments = () => {
       notes: "Patient reports improvement in symptoms",
       duration: "30 minutes"
     },
-    {
-      id: 2,
+    { 
+      id: 2, 
       patientName: "Michael Brown",
       patientId: "P002",
       date: "2024-01-15",
-      time: "10:30 AM",
+      time: "10:30 AM", 
       type: "In-Person",
       status: "pending",
       specialty: "General Medicine",
@@ -79,12 +79,12 @@ const ClinicAppointments = () => {
       notes: "First time patient",
       duration: "45 minutes"
     },
-    {
-      id: 3,
+    { 
+      id: 3, 
       patientName: "Emily Davis",
       patientId: "P003",
       date: "2024-01-15",
-      time: "02:00 PM",
+      time: "02:00 PM", 
       type: "Video Call",
       status: "completed",
       specialty: "Dermatology",
@@ -149,7 +149,7 @@ const ClinicAppointments = () => {
       patientId: "P007",
       date: "2024-01-17",
       time: "01:15 PM",
-      type: "Video Call",
+      type: "Video Call", 
       status: "completed",
       specialty: "Gynecology",
       clinic: "Women's Health Center",
@@ -182,7 +182,7 @@ const ClinicAppointments = () => {
       date: "2024-01-18",
       time: "04:45 PM",
       type: "Video Call",
-      status: "pending",
+      status: "waiting",
       specialty: "Psychiatry",
       clinic: "Mental Health Center",
       phone: "+1 (555) 901-2345",
@@ -229,6 +229,7 @@ const ClinicAppointments = () => {
     switch (status) {
       case 'confirmed': return 'default';
       case 'pending': return 'secondary';
+      case 'waiting': return 'secondary';
       case 'completed': return 'outline';
       case 'cancelled': return 'destructive';
       default: return 'outline';
@@ -239,6 +240,7 @@ const ClinicAppointments = () => {
     switch (status) {
       case 'confirmed': return CheckCircle;
       case 'pending': return AlertCircle;
+      case 'waiting': return Clock;
       case 'completed': return CheckCircle;
       case 'cancelled': return XCircle;
       default: return AlertCircle;
@@ -367,29 +369,30 @@ const ClinicAppointments = () => {
             <Card>
               <CardContent className="p-6">
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="flex-1">
-                    <div className="relative">
-                      <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                      <Input
+          <div className="flex-1">
+            <div className="relative">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
                         placeholder="Search patients, specialties, or clinics..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
-                  </div>
-                  <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger className="w-full sm:w-48">
-                      <SelectValue placeholder="Filter by status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Status</SelectItem>
-                      <SelectItem value="confirmed">Confirmed</SelectItem>
-                      <SelectItem value="pending">Pending</SelectItem>
-                      <SelectItem value="completed">Completed</SelectItem>
-                      <SelectItem value="cancelled">Cancelled</SelectItem>
-                    </SelectContent>
-                  </Select>
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+          </div>
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-full sm:w-48">
+              <SelectValue placeholder="Filter by status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value="confirmed">Confirmed</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
+                      <SelectItem value="waiting">Waiting</SelectItem>
+              <SelectItem value="completed">Completed</SelectItem>
+              <SelectItem value="cancelled">Cancelled</SelectItem>
+            </SelectContent>
+          </Select>
                   <Select value={dateFilter} onValueChange={setDateFilter}>
                     <SelectTrigger className="w-full sm:w-48">
                       <SelectValue placeholder="Filter by date" />
@@ -440,24 +443,30 @@ const ClinicAppointments = () => {
                                   <span className="text-white font-semibold text-sm">
                                     {appointment.patientName.split(' ').map(n => n[0]).join('')}
                                   </span>
-                                </div>
-                                <div>
+                          </div>
+                          <div>
                                   <p className="font-medium">{appointment.patientName}</p>
                                   <p className="text-sm text-muted-foreground">ID: {appointment.patientId}</p>
-                                </div>
-                              </div>
+                          </div>
+                        </div>
                             </TableCell>
                             <TableCell>
-                              <div>
-                                <p className="font-medium">{appointment.date}</p>
-                                <p className="text-sm text-muted-foreground">{appointment.time}</p>
+                              <div className="flex flex-col space-y-1">
+                                <div className="flex items-center space-x-2">
+                                  <Calendar className="w-4 h-4 text-muted-foreground" />
+                                  <span className="font-medium text-sm">{appointment.date}</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  <Clock className="w-4 h-4 text-muted-foreground" />
+                                  <span className="text-sm text-muted-foreground">{appointment.time}</span>
+                                </div>
                               </div>
                             </TableCell>
                             <TableCell>
                               <div className="flex items-center space-x-2">
                                 <TypeIcon className="w-4 h-4" />
                                 <span>{appointment.type}</span>
-                              </div>
+                      </div>
                             </TableCell>
                             <TableCell>{appointment.specialty}</TableCell>
                             <TableCell>
@@ -466,21 +475,28 @@ const ClinicAppointments = () => {
                               </Badge>
                             </TableCell>
                             <TableCell>
-                              <Badge variant={getStatusColor(appointment.status)} className="flex items-center space-x-1">
+                              <Badge 
+                                variant={getStatusColor(appointment.status)} 
+                                className={`flex items-center space-x-1 ${
+                                  appointment.status === 'pending' ? 'bg-orange-500 hover:bg-orange-600 text-white' :
+                                  appointment.status === 'waiting' ? 'bg-yellow-500 hover:bg-yellow-600 text-white' :
+                                  ''
+                                }`}
+                              >
                                 <StatusIcon className="w-3 h-3" />
                                 <span className="capitalize">{appointment.status}</span>
                               </Badge>
                             </TableCell>
                             <TableCell>
-                              <div className="flex space-x-2">
+                        <div className="flex space-x-2">
                                 <Button 
                                   variant="outline" 
                                   size="sm"
                                   onClick={() => handleMessagePatient(appointment.email)}
                                 >
                                   <MessageSquare className="w-4 h-4 mr-1" />
-                                  Message
-                                </Button>
+                            Message
+                          </Button>
                                 <Dialog>
                                   <DialogTrigger asChild>
                                     <Button 
@@ -526,8 +542,8 @@ const ClinicAppointments = () => {
                                             <p><span className="text-muted-foreground">Reason:</span> {selectedAppointment.reason}</p>
                                             <p><span className="text-muted-foreground">Notes:</span> {selectedAppointment.notes}</p>
                                           </div>
-                                        </div>
-                                        <div className="flex space-x-2">
+                        </div>
+                        <div className="flex space-x-2">
                                           <Button 
                                             variant="outline" 
                                             onClick={() => handleCallPatient(selectedAppointment.phone)}
@@ -541,7 +557,7 @@ const ClinicAppointments = () => {
                                           >
                                             <MessageSquare className="w-4 h-4 mr-2" />
                                             Send Message
-                                          </Button>
+                          </Button>
                                         </div>
                                       </div>
                                     )}
@@ -549,8 +565,8 @@ const ClinicAppointments = () => {
                                 </Dialog>
                                 <Button variant="outline" size="sm">
                                   <Edit className="w-4 h-4 mr-1" />
-                                  Edit
-                                </Button>
+                            Edit
+                          </Button>
                                 <Select value={appointment.status} onValueChange={(value) => {
                                   // Handle status change
                                   const updatedAppointments = appointments.map(apt => 
@@ -558,25 +574,26 @@ const ClinicAppointments = () => {
                                   );
                                   // Update appointments state here
                                 }}>
-                                  <SelectTrigger className="w-32 h-8 text-xs">
-                                    <SelectValue />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="confirmed">Confirmed</SelectItem>
-                                    <SelectItem value="pending">Pending</SelectItem>
-                                    <SelectItem value="completed">Completed</SelectItem>
-                                    <SelectItem value="cancelled">Cancelled</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
+                            <SelectTrigger className="w-32 h-8 text-xs">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="confirmed">Confirmed</SelectItem>
+                              <SelectItem value="pending">Pending</SelectItem>
+                                    <SelectItem value="waiting">Waiting</SelectItem>
+                              <SelectItem value="completed">Completed</SelectItem>
+                              <SelectItem value="cancelled">Cancelled</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                             </TableCell>
                           </TableRow>
                         );
                       })}
                     </TableBody>
                   </Table>
-                </div>
-                
+          </div>
+
                 {/* Pagination */}
                 <div className="mt-6">
                   <Pagination

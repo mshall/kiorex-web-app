@@ -436,9 +436,15 @@ const DoctorAppointments = () => {
                             </div>
                           </TableCell>
                           <TableCell>
-                            <div>
-                              <p className="font-medium">{appointment.date}</p>
-                              <p className="text-sm text-muted-foreground">{appointment.time}</p>
+                            <div className="flex flex-col space-y-1">
+                              <div className="flex items-center space-x-2">
+                                <Calendar className="w-4 h-4 text-muted-foreground" />
+                                <span className="font-medium text-sm">{appointment.date}</span>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Clock className="w-4 h-4 text-muted-foreground" />
+                                <span className="text-sm text-muted-foreground">{appointment.time}</span>
+                              </div>
                             </div>
                           </TableCell>
                           <TableCell>

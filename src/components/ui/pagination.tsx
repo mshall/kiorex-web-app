@@ -83,7 +83,7 @@ const Pagination = ({
     return pages;
   };
 
-  if (totalPages <= 1) {
+  if (totalItems === 0) {
     return null;
   }
 
@@ -136,7 +136,7 @@ const Pagination = ({
           disabled={currentPage === 1}
           className="h-8 w-8 p-0"
         >
-          <ChevronLeft className="h-4 w-4" />
+    <ChevronLeft className="h-4 w-4" />
         </Button>
 
         <div className="flex items-center space-x-1">
@@ -161,7 +161,7 @@ const Pagination = ({
           disabled={currentPage === totalPages}
           className="h-8 w-8 p-0"
         >
-          <ChevronRight className="h-4 w-4" />
+    <ChevronRight className="h-4 w-4" />
         </Button>
         
         <Button
