@@ -10,6 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Pagination from "@/components/ui/pagination";
+import { usePagination } from "@/hooks/usePagination";
 import { useRTL } from "@/hooks/useRTL";
 import { 
   Calendar, 
@@ -32,7 +34,8 @@ import {
   Clock3,
   CheckCircle2,
   X,
-  FileText
+  FileText,
+  ExternalLink
 } from "lucide-react";
 
 const PatientAppointments = () => {
@@ -113,21 +116,56 @@ const PatientAppointments = () => {
   ]);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc"); // Default to newest first
+  const [activeTab, setActiveTab] = useState("upcoming");
 
-  const filteredAppointments = appointments
-    .filter(appointment => {
-      const matchesSearch = appointment.doctor.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                           appointment.specialty.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesStatus = statusFilter === "all" || appointment.status === statusFilter;
-      return matchesSearch && matchesStatus;
-    })
-    .sort((a, b) => {
-      const dateA = new Date(a.date).getTime();
-      const dateB = new Date(b.date).getTime();
-      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
-    });
+  // Filter appointments based on active tab
+  const getFilteredAppointments = (tab: string) => {
+    return appointments
+      .filter(appointment => {
+        const matchesSearch = appointment.doctor.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                             appointment.specialty.toLowerCase().includes(searchQuery.toLowerCase());
+        
+        // Filter by tab status
+        let matchesTab = false;
+        switch (tab) {
+          case "upcoming":
+            matchesTab = appointment.status === "confirmed" || appointment.status === "upcoming";
+            break;
+          case "completed":
+            matchesTab = appointment.status === "completed";
+            break;
+          case "cancelled":
+            matchesTab = appointment.status === "cancelled";
+            break;
+          default:
+            matchesTab = true;
+        }
+        
+        return matchesSearch && matchesTab;
+      })
+      .sort((a, b) => {
+        const dateA = new Date(a.date).getTime();
+        const dateB = new Date(b.date).getTime();
+        return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+      });
+  };
+
+  const filteredAppointments = getFilteredAppointments(activeTab);
+
+  // Pagination
+  const {
+    currentPage,
+    itemsPerPage,
+    totalPages,
+    totalItems,
+    paginatedData: paginatedAppointments,
+    setCurrentPage,
+    setItemsPerPage
+  } = usePagination({
+    data: filteredAppointments,
+    initialItemsPerPage: 5
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -163,6 +201,19 @@ const PatientAppointments = () => {
     return type === 'Video Call' ? Video : MapPin;
   };
 
+  const getCallLink = (appointment: any) => {
+    // Generate a mock call link - in real app, this would come from appointment data
+    return `https://meet.kiorex.com/call/${appointment.id}`;
+  };
+
+  const getMapsLink = (appointment: any) => {
+    // Generate Google Maps link for the clinic location
+    const address = appointment.location === "Main Clinic" 
+      ? "123 Healthcare St, Medical District, City" 
+      : appointment.location;
+    return `https://maps.google.com/?q=${encodeURIComponent(address)}`;
+  };
+
   return (
     <div className="min-h-screen bg-muted/50" dir={direction}>
       <RoleBasedNavigation userType={userType} userName={providerType} />
@@ -174,10 +225,9 @@ const PatientAppointments = () => {
         </div>
 
         {/* Enhanced Tabs System */}
-        <Tabs defaultValue="upcoming" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="upcoming">{t('appointments.upcoming')}</TabsTrigger>
-            <TabsTrigger value="today">{t('appointments.today')}</TabsTrigger>
             <TabsTrigger value="completed">{t('appointments.completed')}</TabsTrigger>
             <TabsTrigger value="cancelled">{t('appointments.cancelled')}</TabsTrigger>
           </TabsList>
@@ -185,45 +235,33 @@ const PatientAppointments = () => {
           <TabsContent value="upcoming" className="space-y-6">
             {/* Filters and Actions */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
+          <div className="flex-1">
+            <div className="relative">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
                   placeholder={t('appointments.searchDoctors')}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
             </div>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full sm:w-48">
-                <SelectValue placeholder={t('appointments.filterByStatus')} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">{t('appointments.allStatus')}</SelectItem>
-                <SelectItem value="confirmed">{t('appointments.confirmed')}</SelectItem>
-                <SelectItem value="upcoming">{t('appointments.upcoming')}</SelectItem>
-                <SelectItem value="completed">{t('appointments.completed')}</SelectItem>
-                <SelectItem value="cancelled">{t('appointments.cancelled')}</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={sortOrder} onValueChange={(value: "asc" | "desc") => setSortOrder(value)}>
-              <SelectTrigger className="w-full sm:w-48">
-                <SelectValue placeholder="Sort by date" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="asc">Date: Oldest First</SelectItem>
-                <SelectItem value="desc">Date: Newest First</SelectItem>
-              </SelectContent>
-            </Select>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button>
-                  <Plus className="w-4 h-4 mr-2" />
+          </div>
+          <Select value={sortOrder} onValueChange={(value: "asc" | "desc") => setSortOrder(value)}>
+            <SelectTrigger className="w-full sm:w-48">
+              <SelectValue placeholder="Sort by date" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="asc">Date: Oldest First</SelectItem>
+              <SelectItem value="desc">Date: Newest First</SelectItem>
+            </SelectContent>
+          </Select>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="w-4 h-4 mr-2" />
                   {t('appointments.bookAppointment')}
-                </Button>
-              </DialogTrigger>
+              </Button>
+            </DialogTrigger>
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>{t('appointments.bookAppointment')}</DialogTitle>
@@ -289,18 +327,141 @@ const PatientAppointments = () => {
         </div>
 
         {/* Appointments List */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
+        <div className="w-full">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Calendar className="w-5 h-5 mr-2" />
-                  Appointments ({filteredAppointments.length})
+                Appointments ({totalItems})
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {filteredAppointments.map((appointment) => {
+                {paginatedAppointments.map((appointment) => {
+                    const TypeIcon = getTypeIcon(appointment.type);
+                    return (
+                    <div key={appointment.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-muted/70 hover:shadow-lg transition-all duration-200">
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-2">
+                            <h3 className="font-semibold">{appointment.doctor}</h3>
+                            <Badge 
+                            className={`ml-2 flex items-center space-x-1 ${getStatusBadgeColor(appointment.status)}`}
+                          >
+                            {(() => {
+                              const StatusIcon = getStatusIcon(appointment.status);
+                              return <StatusIcon className="w-3 h-3" />;
+                            })()}
+                            <span>{appointment.status}</span>
+                            </Badge>
+                          </div>
+                        <p className="text-sm text-muted-foreground mb-1">{appointment.specialty}</p>
+                        <div className="flex items-center text-sm text-muted-foreground">
+                          <Clock className="w-4 h-4 mr-1" />
+                          {appointment.time} • {appointment.date}
+                            </div>
+                        <div className="flex items-center text-sm text-muted-foreground mt-1">
+                          <TypeIcon className="w-4 h-4 mr-1" />
+                          <span className="font-medium text-blue-600">{appointment.type}</span>
+                          <span className="mx-1 text-muted-foreground">•</span>
+                          <span className="font-medium text-green-600">{appointment.location}</span>
+                        </div>
+                        {/* Call/Maps Links */}
+                        <div className="mt-2">
+                          {appointment.type === "Video Call" ? (
+                            <a 
+                              href={getCallLink(appointment)} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center text-xs text-blue-600 hover:text-blue-800 hover:underline"
+                            >
+                              <Video className="w-3 h-3 mr-1" />
+                              Join Call
+                              <ExternalLink className="w-3 h-3 ml-1" />
+                            </a>
+                          ) : (
+                            <a 
+                              href={getMapsLink(appointment)} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center text-xs text-green-600 hover:text-green-800 hover:underline"
+                            >
+                              <MapPin className="w-3 h-3 mr-1" />
+                              View on Maps
+                              <ExternalLink className="w-3 h-3 ml-1" />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                        <div className="flex items-center space-x-2">
+                        <Button variant="outline" size="sm">
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                  </div>
+              
+              {/* Pagination */}
+              <div className="mt-6">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalItems={totalItems}
+                  itemsPerPage={itemsPerPage}
+                  onPageChange={setCurrentPage}
+                  onItemsPerPageChange={setItemsPerPage}
+                  itemsPerPageOptions={[5, 10, 15, 20]}
+                />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+        </TabsContent>
+
+        <TabsContent value="completed" className="space-y-6">
+          {/* Same structure as upcoming tab */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder={t('appointments.searchDoctors')}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </div>
+            <Select value={sortOrder} onValueChange={(value: "asc" | "desc") => setSortOrder(value)}>
+              <SelectTrigger className="w-full sm:w-48">
+                <SelectValue placeholder="Sort by date" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="asc">Date: Oldest First</SelectItem>
+                <SelectItem value="desc">Date: Newest First</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="w-full">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Calendar className="w-5 h-5 mr-2" />
+                  Completed Appointments ({totalItems})
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {paginatedAppointments.map((appointment) => {
                     const TypeIcon = getTypeIcon(appointment.type);
                     return (
                       <div key={appointment.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-muted/70 hover:shadow-lg transition-all duration-200">
@@ -316,63 +477,201 @@ const PatientAppointments = () => {
                               })()}
                               <span>{appointment.status}</span>
                             </Badge>
-                          </div>
-                              <p className="text-sm text-muted-foreground mb-1">{appointment.specialty}</p>
-                              <div className="flex items-center text-sm text-muted-foreground">
-                                <Clock className="w-4 h-4 mr-1" />
-                                {appointment.time} • {appointment.date}
-                              </div>
-                              <div className="flex items-center text-sm text-muted-foreground mt-1">
-                                <TypeIcon className="w-4 h-4 mr-1" />
-                                {appointment.type} • {appointment.location}
-                              </div>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <Button variant="outline" size="sm">
-                                <Eye className="w-4 h-4" />
-                              </Button>
-                              <Button variant="outline" size="sm">
-                                <Edit className="w-4 h-4" />
-                              </Button>
-                              <Button variant="outline" size="sm">
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
+                  </div>
+                          <p className="text-sm text-muted-foreground mb-1">{appointment.specialty}</p>
+                          <div className="flex items-center text-sm text-muted-foreground">
+                            <Clock className="w-4 h-4 mr-1" />
+                            {appointment.time} • {appointment.date}
+                  </div>
+                          <div className="flex items-center text-sm text-muted-foreground mt-1">
+                            <TypeIcon className="w-4 h-4 mr-1" />
+                            <span className="font-medium text-blue-600">{appointment.type}</span>
+                            <span className="mx-1 text-muted-foreground">•</span>
+                            <span className="font-medium text-green-600">{appointment.location}</span>
+                  </div>
+                          {/* Call/Maps Links */}
+                          <div className="mt-2">
+                            {appointment.type === "Video Call" ? (
+                              <a 
+                                href={getCallLink(appointment)} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center text-xs text-blue-600 hover:text-blue-800 hover:underline"
+                              >
+                                <Video className="w-3 h-3 mr-1" />
+                                Join Call
+                                <ExternalLink className="w-3 h-3 ml-1" />
+                              </a>
+                            ) : (
+                              <a 
+                                href={getMapsLink(appointment)} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center text-xs text-green-600 hover:text-green-800 hover:underline"
+                              >
+                                <MapPin className="w-3 h-3 mr-1" />
+                                View on Maps
+                                <ExternalLink className="w-3 h-3 ml-1" />
+                              </a>
+                            )}
+                  </div>
+                </div>
+                        <div className="flex items-center space-x-2">
+                          <Button variant="outline" size="sm">
+                            <Eye className="w-4 h-4" />
+                  </Button>
+                          <Button variant="outline" size="sm">
+                            <Edit className="w-4 h-4" />
+                  </Button>
+                          <Button variant="outline" size="sm">
+                            <Trash2 className="w-4 h-4" />
+                  </Button>
                         </div>
                       </div>
                     );
                   })}
                 </div>
+                
+                {/* Pagination */}
+                <div className="mt-6">
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    totalItems={totalItems}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={setCurrentPage}
+                    onItemsPerPageChange={setItemsPerPage}
+                    itemsPerPageOptions={[5, 10, 15, 20]}
+                  />
+                </div>
               </CardContent>
             </Card>
           </div>
-
-          </div>
-        </TabsContent>
-
-        <TabsContent value="today" className="space-y-6">
-            <div className="text-center py-8">
-              <Calendar className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No appointments today</h3>
-              <p className="text-muted-foreground">You don't have any appointments scheduled for today.</p>
-            </div>
-        </TabsContent>
-
-        <TabsContent value="completed" className="space-y-6">
-            <div className="text-center py-8">
-              <CheckCircle2 className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No completed appointments</h3>
-              <p className="text-muted-foreground">Your completed appointments will appear here.</p>
-              </div>
         </TabsContent>
 
         <TabsContent value="cancelled" className="space-y-6">
-          <div className="text-center py-8">
-            <X className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No cancelled appointments</h3>
-            <p className="text-muted-foreground">Your cancelled appointments will appear here.</p>
+          {/* Same structure as upcoming tab */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder={t('appointments.searchDoctors')}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </div>
+            <Select value={sortOrder} onValueChange={(value: "asc" | "desc") => setSortOrder(value)}>
+              <SelectTrigger className="w-full sm:w-48">
+                <SelectValue placeholder="Sort by date" />
+                      </SelectTrigger>
+                      <SelectContent>
+                <SelectItem value="asc">Date: Oldest First</SelectItem>
+                <SelectItem value="desc">Date: Newest First</SelectItem>
+                      </SelectContent>
+                    </Select>
+          </div>
+
+          <div className="w-full">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                  <Calendar className="w-5 h-5 mr-2" />
+                  Cancelled Appointments ({totalItems})
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                  {paginatedAppointments.map((appointment) => {
+                    const TypeIcon = getTypeIcon(appointment.type);
+                    return (
+                      <div key={appointment.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-muted/70 hover:shadow-lg transition-all duration-200">
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="font-semibold">{appointment.doctor}</h3>
+                            <Badge 
+                              className={`ml-2 flex items-center space-x-1 ${getStatusBadgeColor(appointment.status)}`}
+                            >
+                              {(() => {
+                                const StatusIcon = getStatusIcon(appointment.status);
+                                return <StatusIcon className="w-3 h-3" />;
+                              })()}
+                              <span>{appointment.status}</span>
+                          </Badge>
+                        </div>
+                          <p className="text-sm text-muted-foreground mb-1">{appointment.specialty}</p>
+                          <div className="flex items-center text-sm text-muted-foreground">
+                            <Clock className="w-4 h-4 mr-1" />
+                            {appointment.time} • {appointment.date}
+                      </div>
+                          <div className="flex items-center text-sm text-muted-foreground mt-1">
+                            <TypeIcon className="w-4 h-4 mr-1" />
+                            <span className="font-medium text-blue-600">{appointment.type}</span>
+                            <span className="mx-1 text-muted-foreground">•</span>
+                            <span className="font-medium text-green-600">{appointment.location}</span>
+                        </div>
+                          {/* Call/Maps Links */}
+                          <div className="mt-2">
+                            {appointment.type === "Video Call" ? (
+                              <a 
+                                href={getCallLink(appointment)} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center text-xs text-blue-600 hover:text-blue-800 hover:underline"
+                              >
+                          <Video className="w-3 h-3 mr-1" />
+                          Join Call
+                                <ExternalLink className="w-3 h-3 ml-1" />
+                              </a>
+                            ) : (
+                              <a 
+                                href={getMapsLink(appointment)} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center text-xs text-green-600 hover:text-green-800 hover:underline"
+                              >
+                                <MapPin className="w-3 h-3 mr-1" />
+                                View on Maps
+                                <ExternalLink className="w-3 h-3 ml-1" />
+                              </a>
+                      )}
+                    </div>
+                  </div>
+                        <div className="flex items-center space-x-2">
+                          <Button variant="outline" size="sm">
+                            <Eye className="w-4 h-4" />
+                          </Button>
+                          <Button variant="outline" size="sm">
+                            <Edit className="w-4 h-4" />
+                      </Button>
+                          <Button variant="outline" size="sm">
+                            <Trash2 className="w-4 h-4" />
+                      </Button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                        </div>
+                
+                {/* Pagination */}
+                <div className="mt-6">
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    totalItems={totalItems}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={setCurrentPage}
+                    onItemsPerPageChange={setItemsPerPage}
+                    itemsPerPageOptions={[5, 10, 15, 20]}
+                  />
+              </div>
+            </CardContent>
+          </Card>
           </div>
         </TabsContent>
-      </Tabs>
+        </Tabs>
       </div>
     </div>
   );
