@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import Pagination from "@/components/ui/pagination";
+import { usePagination } from "@/hooks/usePagination";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { 
   Calendar, 
@@ -150,6 +152,21 @@ const DoctorAppointments = () => {
     const matchesStatus = statusFilter === "all" || appointment.status === statusFilter;
     const matchesDate = dateFilter === "all" || appointment.date === dateFilter;
     return matchesSearch && matchesStatus && matchesDate;
+  });
+
+  // Pagination logic
+  const {
+    currentPage,
+    itemsPerPage,
+    totalPages,
+    totalItems,
+    paginatedData: paginatedAppointments,
+    setCurrentPage,
+    setItemsPerPage
+  } = usePagination({
+    data: filteredAppointments,
+    initialPage: 1,
+    initialItemsPerPage: 5
   });
 
   const getDateOptions = () => {
@@ -303,7 +320,7 @@ const DoctorAppointments = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredAppointments.map((appointment) => {
+                    {paginatedAppointments.map((appointment) => {
                       const StatusIcon = getStatusIcon(appointment.status);
                       const TypeIcon = getTypeIcon(appointment.type);
                       
@@ -407,6 +424,15 @@ const DoctorAppointments = () => {
                     })}
                   </TableBody>
                 </Table>
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalItems={totalItems}
+                  itemsPerPage={itemsPerPage}
+                  onPageChange={setCurrentPage}
+                  onItemsPerPageChange={setItemsPerPage}
+                  itemsPerPageOptions={[5, 10, 15, 20, 25]}
+                />
               </CardContent>
             </Card>
           </TabsContent>

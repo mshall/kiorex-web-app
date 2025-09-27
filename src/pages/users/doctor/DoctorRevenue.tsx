@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Pagination from "@/components/ui/pagination";
+import { usePagination } from "@/hooks/usePagination";
 import { 
   DollarSign, 
   CreditCard, 
@@ -116,6 +118,21 @@ const DoctorRevenue = () => {
                          transaction.invoiceNumber.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === 'all' || transaction.status === statusFilter;
     return matchesSearch && matchesStatus;
+  });
+
+  // Pagination logic
+  const {
+    currentPage,
+    itemsPerPage,
+    totalPages,
+    totalItems,
+    paginatedData: paginatedTransactions,
+    setCurrentPage,
+    setItemsPerPage
+  } = usePagination({
+    data: filteredTransactions,
+    initialPage: 1,
+    initialItemsPerPage: 5
   });
 
   const getStatusColor = (status: string) => {
@@ -312,12 +329,12 @@ const DoctorRevenue = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Receipt className="w-5 h-5 mr-2" />
-                  Transactions ({filteredTransactions.length})
+                  Transactions ({totalItems})
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {filteredTransactions.map((transaction) => (
+                  {paginatedTransactions.map((transaction) => (
                     <div key={transaction.id} className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-2">
@@ -360,6 +377,15 @@ const DoctorRevenue = () => {
                     </div>
                   ))}
                 </div>
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalItems={totalItems}
+                  itemsPerPage={itemsPerPage}
+                  onPageChange={setCurrentPage}
+                  onItemsPerPageChange={setItemsPerPage}
+                  itemsPerPageOptions={[5, 10, 15, 20, 25]}
+                />
               </CardContent>
             </Card>
           </TabsContent>

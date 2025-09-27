@@ -12,6 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import Pagination from "@/components/ui/pagination";
+import { usePagination } from "@/hooks/usePagination";
 import { 
   Users, 
   Phone, 
@@ -133,6 +135,21 @@ const DoctorPatients = () => {
                          patient.phone.includes(searchQuery);
     const matchesStatus = statusFilter === 'all' || patient.status === statusFilter;
     return matchesSearch && matchesStatus;
+  });
+
+  // Pagination logic
+  const {
+    currentPage,
+    itemsPerPage,
+    totalPages,
+    totalItems,
+    paginatedData: paginatedPatients,
+    setCurrentPage,
+    setItemsPerPage
+  } = usePagination({
+    data: filteredPatients,
+    initialPage: 1,
+    initialItemsPerPage: 5
   });
 
   const getStatusColor = (status: string) => {
@@ -300,13 +317,13 @@ const DoctorPatients = () => {
             </div>
 
             {/* Full Width Table */}
-            <Card>
-              <CardHeader>
+                <Card>
+                  <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center">
-                    <Users className="w-5 h-5 mr-2" />
-                    {t('navigation.patients')} ({filteredPatients.length})
-                  </CardTitle>
+                    <CardTitle className="flex items-center">
+                      <Users className="w-5 h-5 mr-2" />
+                    {t('navigation.patients')} ({totalItems})
+                    </CardTitle>
                   <div className="flex items-center space-x-2">
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
@@ -329,8 +346,8 @@ const DoctorPatients = () => {
                     </Select>
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent>
+                  </CardHeader>
+                  <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -343,7 +360,7 @@ const DoctorPatients = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredPatients.map((patient) => (
+                    {paginatedPatients.map((patient) => (
                       <TableRow key={patient.id} className="hover:bg-muted/50">
                         <TableCell>
                           <div className="flex items-center space-x-3">
@@ -352,11 +369,11 @@ const DoctorPatients = () => {
                                 {patient.name.split(' ').map(n => n[0]).join('')}
                               </span>
                             </div>
-                            <div>
+                              <div>
                               <p className="font-medium">{patient.name}</p>
                               <p className="text-sm text-muted-foreground">Age: {patient.age}</p>
-                            </div>
-                          </div>
+                              </div>
+                              </div>
                         </TableCell>
                         <TableCell>
                           <div className="space-y-1">
@@ -402,9 +419,9 @@ const DoctorPatients = () => {
                               onClick={() => handleViewPatientProfile(patient.id)}
                               className="h-8"
                             >
-                              <Eye className="w-3 h-3 mr-1" />
-                              View
-                            </Button>
+                                <Eye className="w-3 h-3 mr-1" />
+                                View
+                              </Button>
                             <Button
                               size="sm"
                               variant="outline"
@@ -412,7 +429,7 @@ const DoctorPatients = () => {
                               className="h-8"
                             >
                               <Phone className="w-3 h-3" />
-                            </Button>
+                              </Button>
                             <Button
                               size="sm"
                               variant="outline"
@@ -420,22 +437,31 @@ const DoctorPatients = () => {
                               className="h-8"
                             >
                               <MessageSquare className="w-3 h-3" />
-                            </Button>
+                              </Button>
                             <Button
                               size="sm"
                               variant="outline"
                               className="h-8"
                             >
                               <MoreHorizontal className="w-3 h-3" />
-                            </Button>
+                              </Button>
                           </div>
                         </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
-              </CardContent>
-            </Card>
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalItems={totalItems}
+                  itemsPerPage={itemsPerPage}
+                  onPageChange={setCurrentPage}
+                  onItemsPerPageChange={setItemsPerPage}
+                  itemsPerPageOptions={[5, 10, 15, 20, 25]}
+                />
+                  </CardContent>
+                </Card>
           </TabsContent>
 
           <TabsContent value="medical" className="space-y-6">
