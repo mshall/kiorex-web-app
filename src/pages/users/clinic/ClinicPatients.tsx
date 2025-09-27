@@ -91,6 +91,84 @@ const ClinicPatients = () => {
       doctor: "Dr. Smith",
       nextAppointment: "2024-01-22",
       address: "321 Elm St, Queens, NY"
+    },
+    { 
+      id: 5, 
+      name: "Lisa Rodriguez", 
+      age: 41, 
+      email: "lisa.r@email.com",
+      phone: "+1-555-0127",
+      lastVisit: "2024-01-09", 
+      status: "active", 
+      condition: "Migraine",
+      doctor: "Dr. Wilson",
+      nextAppointment: "2024-01-19",
+      address: "654 Maple Dr, Bronx, NY"
+    },
+    { 
+      id: 6, 
+      name: "David Chen", 
+      age: 38, 
+      email: "david.chen@email.com",
+      phone: "+1-555-0128",
+      lastVisit: "2024-01-11", 
+      status: "active", 
+      condition: "Asthma",
+      doctor: "Dr. Johnson",
+      nextAppointment: "2024-01-21",
+      address: "987 Cedar Ln, Staten Island, NY"
+    },
+    { 
+      id: 7, 
+      name: "Maria Garcia", 
+      age: 29, 
+      email: "maria.g@email.com",
+      phone: "+1-555-0129",
+      lastVisit: "2024-01-07", 
+      status: "inactive", 
+      condition: "Pregnancy",
+      doctor: "Dr. Brown",
+      nextAppointment: "2024-01-17",
+      address: "147 Birch St, Manhattan, NY"
+    },
+    { 
+      id: 8, 
+      name: "Robert Taylor", 
+      age: 47, 
+      email: "robert.t@email.com",
+      phone: "+1-555-0130",
+      lastVisit: "2024-01-13", 
+      status: "active", 
+      condition: "High Cholesterol",
+      doctor: "Dr. Smith",
+      nextAppointment: "2024-01-23",
+      address: "258 Spruce Ave, Brooklyn, NY"
+    },
+    { 
+      id: 9, 
+      name: "Jennifer Lee", 
+      age: 33, 
+      email: "jennifer.l@email.com",
+      phone: "+1-555-0131",
+      lastVisit: "2024-01-06", 
+      status: "active", 
+      condition: "Anxiety",
+      doctor: "Dr. Wilson",
+      nextAppointment: "2024-01-16",
+      address: "369 Willow Rd, Queens, NY"
+    },
+    { 
+      id: 10, 
+      name: "Thomas Anderson", 
+      age: 52, 
+      email: "thomas.a@email.com",
+      phone: "+1-555-0132",
+      lastVisit: "2024-01-04", 
+      status: "inactive", 
+      condition: "Sleep Apnea",
+      doctor: "Dr. Johnson",
+      nextAppointment: null,
+      address: "741 Poplar St, Bronx, NY"
     }
   ]);
 

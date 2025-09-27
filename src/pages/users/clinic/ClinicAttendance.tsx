@@ -98,6 +98,66 @@ const ClinicAttendance = () => {
       hoursWorked: 8.75,
       overtime: 0,
       notes: "Regular day"
+    },
+    { 
+      id: 6, 
+      staffId: 6,
+      staffName: "Dr. Robert Garcia", 
+      date: "2024-01-15",
+      checkIn: "08:15",
+      checkOut: "18:15",
+      status: "present",
+      hoursWorked: 10,
+      overtime: 1,
+      notes: "Overtime for emergency case"
+    },
+    { 
+      id: 7, 
+      staffId: 7,
+      staffName: "Dr. Jennifer Lee", 
+      date: "2024-01-15",
+      checkIn: "09:30",
+      checkOut: "17:00",
+      status: "late",
+      hoursWorked: 7.5,
+      overtime: 0,
+      notes: "Personal appointment in morning"
+    },
+    { 
+      id: 8, 
+      staffId: 8,
+      staffName: "Dr. David Kim", 
+      date: "2024-01-15",
+      checkIn: null,
+      checkOut: null,
+      status: "absent",
+      hoursWorked: 0,
+      overtime: 0,
+      notes: "Vacation day"
+    },
+    { 
+      id: 9, 
+      staffId: 9,
+      staffName: "Dr. Maria Santos", 
+      date: "2024-01-15",
+      checkIn: "08:00",
+      checkOut: "16:00",
+      status: "present",
+      hoursWorked: 8,
+      overtime: 0,
+      notes: "Regular shift"
+    },
+    { 
+      id: 10, 
+      staffId: 10,
+      staffName: "Dr. Thomas Anderson", 
+      date: "2024-01-15",
+      checkIn: "08:45",
+      checkOut: "18:30",
+      status: "present",
+      hoursWorked: 9.75,
+      overtime: 0.75,
+      notes: "Extended hours for patient care"
     }
   ]);
 

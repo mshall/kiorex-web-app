@@ -107,6 +107,76 @@ const ClinicStaff = () => {
       patients: 41,
       rating: 4.8,
       address: "654 Maple Dr, New York, NY"
+    },
+    { 
+      id: 6, 
+      name: "Dr. Robert Garcia", 
+      role: "Neurologist", 
+      department: "Neurology",
+      email: "robert.garcia@clinic.com",
+      phone: "+1-555-0106",
+      hireDate: "2017-11-08",
+      salary: 140000,
+      status: "active",
+      patients: 33,
+      rating: 4.9,
+      address: "987 Cedar Ln, New York, NY"
+    },
+    { 
+      id: 7, 
+      name: "Dr. Jennifer Lee", 
+      role: "Gynecologist", 
+      department: "Gynecology",
+      email: "jennifer.lee@clinic.com",
+      phone: "+1-555-0107",
+      hireDate: "2020-09-12",
+      salary: 130000,
+      status: "active",
+      patients: 47,
+      rating: 4.7,
+      address: "147 Birch St, New York, NY"
+    },
+    { 
+      id: 8, 
+      name: "Dr. David Kim", 
+      role: "Psychiatrist", 
+      department: "Psychiatry",
+      email: "david.kim@clinic.com",
+      phone: "+1-555-0108",
+      hireDate: "2019-04-22",
+      salary: 115000,
+      status: "on-leave",
+      patients: 25,
+      rating: 4.5,
+      address: "258 Spruce Ave, New York, NY"
+    },
+    { 
+      id: 9, 
+      name: "Dr. Maria Santos", 
+      role: "Ophthalmologist", 
+      department: "Ophthalmology",
+      email: "maria.santos@clinic.com",
+      phone: "+1-555-0109",
+      hireDate: "2021-07-03",
+      salary: 128000,
+      status: "active",
+      patients: 39,
+      rating: 4.8,
+      address: "369 Willow Rd, New York, NY"
+    },
+    { 
+      id: 10, 
+      name: "Dr. Thomas Anderson", 
+      role: "Urologist", 
+      department: "Urology",
+      email: "thomas.anderson@clinic.com",
+      phone: "+1-555-0110",
+      hireDate: "2018-12-18",
+      salary: 142000,
+      status: "active",
+      patients: 31,
+      rating: 4.6,
+      address: "741 Poplar St, New York, NY"
     }
   ]);
 

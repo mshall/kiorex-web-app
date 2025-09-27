@@ -71,6 +71,83 @@ const ClinicBilling = () => {
       invoiceNumber: "INV-003",
       dueDate: "2024-01-28",
       paymentMethod: "Cash"
+    },
+    { 
+      id: 4, 
+      patient: "David Chen", 
+      service: "Procedure", 
+      amount: 350, 
+      date: "2024-01-12", 
+      status: "paid",
+      invoiceNumber: "INV-004",
+      dueDate: "2024-01-27",
+      paymentMethod: "Bank Transfer"
+    },
+    { 
+      id: 5, 
+      patient: "Lisa Rodriguez", 
+      service: "Consultation", 
+      amount: 180, 
+      date: "2024-01-11", 
+      status: "pending",
+      invoiceNumber: "INV-005",
+      dueDate: "2024-01-26",
+      paymentMethod: "Insurance"
+    },
+    { 
+      id: 6, 
+      patient: "Robert Taylor", 
+      service: "Follow-up", 
+      amount: 140, 
+      date: "2024-01-10", 
+      status: "paid",
+      invoiceNumber: "INV-006",
+      dueDate: "2024-01-25",
+      paymentMethod: "Credit Card"
+    },
+    { 
+      id: 7, 
+      patient: "Maria Garcia", 
+      service: "Teleconsultation", 
+      amount: 90, 
+      date: "2024-01-09", 
+      status: "overdue",
+      invoiceNumber: "INV-007",
+      dueDate: "2024-01-24",
+      paymentMethod: "Cash"
+    },
+    { 
+      id: 8, 
+      patient: "James Wilson", 
+      service: "Consultation", 
+      amount: 200, 
+      date: "2024-01-08", 
+      status: "paid",
+      invoiceNumber: "INV-008",
+      dueDate: "2024-01-23",
+      paymentMethod: "Insurance"
+    },
+    { 
+      id: 9, 
+      patient: "Jennifer Lee", 
+      service: "Procedure", 
+      amount: 450, 
+      date: "2024-01-07", 
+      status: "pending",
+      invoiceNumber: "INV-009",
+      dueDate: "2024-01-22",
+      paymentMethod: "Bank Transfer"
+    },
+    { 
+      id: 10, 
+      patient: "Thomas Anderson", 
+      service: "Follow-up", 
+      amount: 160, 
+      date: "2024-01-06", 
+      status: "overdue",
+      invoiceNumber: "INV-010",
+      dueDate: "2024-01-21",
+      paymentMethod: "Cash"
     }
   ]);
 

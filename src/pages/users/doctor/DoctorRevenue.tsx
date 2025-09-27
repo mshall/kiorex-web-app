@@ -106,6 +106,50 @@ const DoctorRevenue = () => {
       invoiceNumber: "INV-006",
       paymentMethod: "Pending",
       clinic: "City Heart Center"
+    },
+    { 
+      id: 7, 
+      patient: "David Chen", 
+      service: "Follow-up", 
+      amount: 180, 
+      date: "2024-01-10", 
+      status: "paid",
+      invoiceNumber: "INV-007",
+      paymentMethod: "Bank Transfer",
+      clinic: "Metro Medical Clinic"
+    },
+    { 
+      id: 8, 
+      patient: "Lisa Rodriguez", 
+      service: "Consultation", 
+      amount: 140, 
+      date: "2024-01-08", 
+      status: "pending",
+      invoiceNumber: "INV-008",
+      paymentMethod: "Insurance",
+      clinic: "Downtown Health Center"
+    },
+    { 
+      id: 9, 
+      patient: "James Taylor", 
+      service: "Procedure", 
+      amount: 450, 
+      date: "2024-01-06", 
+      status: "paid",
+      invoiceNumber: "INV-009",
+      paymentMethod: "Credit Card",
+      clinic: "City Heart Center"
+    },
+    { 
+      id: 10, 
+      patient: "Jennifer Lee", 
+      service: "Teleconsultation", 
+      amount: 90, 
+      date: "2024-01-02", 
+      status: "outstanding",
+      invoiceNumber: "INV-010",
+      paymentMethod: "Pending",
+      clinic: "Metro Medical Clinic"
     }
   ]);
 

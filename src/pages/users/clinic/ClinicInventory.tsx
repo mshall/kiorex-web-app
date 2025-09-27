@@ -93,6 +93,66 @@ const ClinicInventory = () => {
       lastRestocked: "2023-11-15",
       expiryDate: "2025-08-20",
       status: "low-stock"
+    },
+    { 
+      id: 6, 
+      name: "Blood Pressure Cuff", 
+      category: "Equipment", 
+      quantity: 18, 
+      minQuantity: 8,
+      unitPrice: 45.00, 
+      supplier: "TechMed",
+      lastRestocked: "2024-01-08",
+      expiryDate: "2026-12-31",
+      status: "in-stock"
+    },
+    { 
+      id: 7, 
+      name: "Gauze Pads (Box of 100)", 
+      category: "First Aid", 
+      quantity: 2, 
+      minQuantity: 12,
+      unitPrice: 18.75, 
+      supplier: "HealthFirst",
+      lastRestocked: "2023-10-30",
+      expiryDate: "2025-10-30",
+      status: "low-stock"
+    },
+    { 
+      id: 8, 
+      name: "Stethoscope", 
+      category: "Equipment", 
+      quantity: 0, 
+      minQuantity: 3,
+      unitPrice: 85.00, 
+      supplier: "TechMed",
+      lastRestocked: "2023-09-15",
+      expiryDate: "2028-01-01",
+      status: "out-of-stock"
+    },
+    { 
+      id: 9, 
+      name: "Alcohol Wipes (Pack of 200)", 
+      category: "Medical Supplies", 
+      quantity: 15, 
+      minQuantity: 10,
+      unitPrice: 12.25, 
+      supplier: "MedSupply Co.",
+      lastRestocked: "2024-01-14",
+      expiryDate: "2025-11-30",
+      status: "in-stock"
+    },
+    { 
+      id: 10, 
+      name: "Cotton Swabs (Box of 1000)", 
+      category: "First Aid", 
+      quantity: 5, 
+      minQuantity: 8,
+      unitPrice: 9.99, 
+      supplier: "HealthFirst",
+      lastRestocked: "2024-01-03",
+      expiryDate: "2026-03-15",
+      status: "low-stock"
     }
   ]);
 
