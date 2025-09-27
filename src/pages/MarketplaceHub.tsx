@@ -161,9 +161,25 @@ const MarketplaceHub = () => {
   });
 
   const handleServiceClick = (service: any) => {
-    // Remove icon from service data to avoid DataCloneError
-    const { icon, ...serviceData } = service;
-    navigate(`/marketplace/${service.category}`, { state: { service: serviceData } });
+    // Map service categories to service types for ServiceDetail page
+    const categoryToServiceType = {
+      'surgery': 'doctors',
+      'lab': 'doctors', 
+      'pharmacy': 'doctors',
+      'nurse': 'nurses',
+      'physio': 'physiotherapists'
+    };
+    
+    const serviceType = categoryToServiceType[service.category as keyof typeof categoryToServiceType] || 'doctors';
+    
+    navigate('/service-detail', { 
+      state: { 
+        userType, 
+        providerType, 
+        serviceType,
+        serviceCategory: service.category
+      } 
+    });
   };
 
   const getCategoryStats = () => {
