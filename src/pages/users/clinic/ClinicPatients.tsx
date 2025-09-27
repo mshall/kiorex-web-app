@@ -487,35 +487,6 @@ const ClinicPatients = () => {
             />
           </CardContent>
         </Card>
-
-
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Recent Activity</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-3 text-sm">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span>Sarah Johnson checked in</span>
-                    <span className="text-muted-foreground ml-auto">2 min ago</span>
-                  </div>
-                  <div className="flex items-center space-x-3 text-sm">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                    <span>New patient registered</span>
-                    <span className="text-muted-foreground ml-auto">15 min ago</span>
-                  </div>
-                  <div className="flex items-center space-x-3 text-sm">
-                    <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                    <span>Appointment rescheduled</span>
-                    <span className="text-muted-foreground ml-auto">1 hour ago</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
       </div>
     </div>
   );

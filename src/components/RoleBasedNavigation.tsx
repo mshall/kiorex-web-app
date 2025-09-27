@@ -85,6 +85,7 @@ const RoleBasedNavigation = ({
           { href: "/clinic-dashboard", label: t('navigation.dashboard') },
           { href: "/clinic-appointments", label: t('navigation.appointments') },
           { href: "/clinic-staff", label: t('navigation.staff') },
+          { href: "/clinic-attendance", label: t('navigation.attendance') },
           { href: "/clinic-patients", label: t('navigation.patients') },
           { href: "/clinic-inventory", label: t('navigation.inventory') },
           { href: "/professional-calendar", label: t('navigation.calendar') },

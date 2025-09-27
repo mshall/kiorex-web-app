@@ -51,6 +51,7 @@
     "billing": "Billing",
     "analytics": "Analytics",
     "inventory": "Inventory",
+    "attendance": "Attendance",
     "expenses": "Expenses",
     "logout": "Logout",
     "login": "Login",
