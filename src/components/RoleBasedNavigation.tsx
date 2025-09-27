@@ -39,14 +39,13 @@ const RoleBasedNavigation = ({
   // Navigation items based on user role
   const getNavigationItems = () => {
     switch (userType) {
-          case 'patient':
-            return [
-              { href: "/patient-dashboard", label: t('navigation.dashboard') },
-              { href: "/patient-appointments", label: t('navigation.appointments') },
-              { href: "/search/doctors", label: t('navigation.doctors') },
-              { href: "/marketplace", label: t('navigation.services') },
-              { href: "/notifications", label: t('navigation.notifications') }
-            ];
+      case 'patient':
+        return [
+          { href: "/patient-dashboard", label: t('navigation.dashboard') },
+          { href: "/patient-appointments", label: t('navigation.appointments') },
+          { href: "/search/doctors", label: t('navigation.doctors') },
+          { href: "/marketplace", label: t('navigation.services') }
+        ];
       
       case 'doctor':
         return [

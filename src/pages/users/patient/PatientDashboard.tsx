@@ -141,80 +141,6 @@ const PatientDashboard = () => {
           ))}
         </div>
 
-        {/* Health Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="group hover:shadow-md transition-all duration-300">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Heart Rate</p>
-                  <p className="text-2xl font-bold text-primary">{healthMetrics.heartRate.value} {healthMetrics.heartRate.unit}</p>
-                  <div className="flex items-center text-sm text-success">
-                    <ArrowUp className="w-3 h-3 mr-1" />
-                    Normal
-                  </div>
-                </div>
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Heart className="w-6 h-6 text-primary" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="group hover:shadow-md transition-all duration-300">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Blood Pressure</p>
-                  <p className="text-2xl font-bold text-secondary">{healthMetrics.bloodPressure.value}</p>
-                  <div className="flex items-center text-sm text-success">
-                    <CheckCircle className="w-3 h-3 mr-1" />
-                    Optimal
-                  </div>
-                </div>
-                <div className="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Activity className="w-6 h-6 text-secondary" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="group hover:shadow-md transition-all duration-300">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Weight</p>
-                  <p className="text-2xl font-bold text-info">{healthMetrics.weight.value} {healthMetrics.weight.unit}</p>
-                  <div className="flex items-center text-sm text-success">
-                    <ArrowDown className="w-3 h-3 mr-1" />
-                    Healthy
-                  </div>
-                </div>
-                <div className="w-12 h-12 bg-info/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <TrendingUp className="w-6 h-6 text-info" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="group hover:shadow-md transition-all duration-300">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">Steps Today</p>
-                  <p className="text-2xl font-bold text-accent">{healthMetrics.steps.value.toLocaleString()}</p>
-                  <div className="flex items-center text-sm text-success">
-                    <ArrowUp className="w-3 h-3 mr-1" />
-                    85% of goal
-                  </div>
-                </div>
-                <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Users className="w-6 h-6 text-accent" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
@@ -555,53 +481,76 @@ const PatientDashboard = () => {
         </TabsContent>
 
         <TabsContent value="health" className="space-y-6">
-          {/* Health Tab Content */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card>
+          {/* Health Metrics */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <Card className="group hover:shadow-md transition-all duration-300">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground">Heart Rate</p>
-                    <p className="text-2xl font-bold text-primary">{healthMetrics.heartRate.value}</p>
-                    <p className="text-sm text-muted-foreground">{healthMetrics.heartRate.unit}</p>
+                    <p className="text-2xl font-bold text-primary">{healthMetrics.heartRate.value} {healthMetrics.heartRate.unit}</p>
+                    <div className="flex items-center text-sm text-success">
+                      <ArrowUp className="w-3 h-3 mr-1" />
+                      Normal
+                    </div>
                   </div>
-                  <Heart className="w-8 h-8 text-red-500" />
+                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Heart className="w-6 h-6 text-primary" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
-            <Card>
+
+            <Card className="group hover:shadow-md transition-all duration-300">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground">Blood Pressure</p>
-                    <p className="text-2xl font-bold text-primary">{healthMetrics.bloodPressure.value}</p>
-                    <p className="text-sm text-muted-foreground">{healthMetrics.bloodPressure.unit}</p>
+                    <p className="text-2xl font-bold text-secondary">{healthMetrics.bloodPressure.value}</p>
+                    <div className="flex items-center text-sm text-success">
+                      <CheckCircle className="w-3 h-3 mr-1" />
+                      Optimal
+                    </div>
                   </div>
-                  <Activity className="w-8 h-8 text-blue-500" />
+                  <div className="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Activity className="w-6 h-6 text-secondary" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
-            <Card>
+
+            <Card className="group hover:shadow-md transition-all duration-300">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground">Weight</p>
-                    <p className="text-2xl font-bold text-primary">{healthMetrics.weight.value}</p>
-                    <p className="text-sm text-muted-foreground">{healthMetrics.weight.unit}</p>
+                    <p className="text-2xl font-bold text-info">{healthMetrics.weight.value} {healthMetrics.weight.unit}</p>
+                    <div className="flex items-center text-sm text-success">
+                      <ArrowDown className="w-3 h-3 mr-1" />
+                      Healthy
+                    </div>
                   </div>
-                  <TrendingUp className="w-8 h-8 text-green-500" />
+                  <div className="w-12 h-12 bg-info/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <TrendingUp className="w-6 h-6 text-info" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
-            <Card>
+
+            <Card className="group hover:shadow-md transition-all duration-300">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground">Steps Today</p>
-                    <p className="text-2xl font-bold text-primary">{healthMetrics.steps.value.toLocaleString()}</p>
-                    <p className="text-sm text-muted-foreground">{healthMetrics.steps.unit}</p>
+                    <p className="text-2xl font-bold text-accent">{healthMetrics.steps.value.toLocaleString()}</p>
+                    <div className="flex items-center text-sm text-success">
+                      <ArrowUp className="w-3 h-3 mr-1" />
+                      85% of goal
+                    </div>
                   </div>
-                  <Activity className="w-8 h-8 text-purple-500" />
+                  <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Users className="w-6 h-6 text-accent" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
