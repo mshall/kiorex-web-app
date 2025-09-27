@@ -31,7 +31,8 @@
     "paste": "Paste",
     "cut": "Cut",
     "undo": "Undo",
-    "redo": "Redo"
+    "redo": "Redo",
+    "management": "Management"
   },
   "navigation": {
     "dashboard": "Dashboard",
@@ -162,8 +163,9 @@
     "labResults": "Lab Results",
     "vitalSigns": "Vital Signs",
     "allergies": "Allergies",
-    "emergencyContact": "Emergency Contact",
-    "insuranceInfo": "Insurance Information"
+      "emergencyContact": "Emergency Contact",
+      "insuranceInfo": "Insurance Information",
+      "managePatients": "Manage your patients and their medical information"
   },
   "calendar": {
     "title": "Calendar",
