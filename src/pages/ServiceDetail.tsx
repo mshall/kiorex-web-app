@@ -1082,11 +1082,20 @@ const ServiceDetail = () => {
           </div>
         </div>
         <CardContent className="p-6">
+          {/* Professional Picture */}
+          <div className="flex justify-center mb-4">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
+              <span className="text-2xl font-bold text-white">
+                {provider.image}
+              </span>
+            </div>
+          </div>
+          
           <div className="flex items-start justify-between mb-3">
-            <div className="flex-1">
+            <div className="flex-1 text-center">
               <h3 className="font-semibold text-lg mb-1">{provider.name}</h3>
               <p className="text-sm text-muted-foreground mb-2">{provider.specialty}</p>
-              <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+              <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground">
                 <MapPin className="w-3 h-3" />
                 <span>{provider.location}</span>
               </div>
