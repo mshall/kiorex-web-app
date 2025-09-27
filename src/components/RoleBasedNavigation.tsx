@@ -166,6 +166,11 @@ const RoleBasedNavigation = ({
       return null;
     }
     
+    // Handle service-detail pages - don't show breadcrumb for these
+    if (path.startsWith('/service-detail')) {
+      return null;
+    }
+    
     // Fallback for pages not in navigation
     const pathSegments = path.split('/').filter(Boolean);
     const lastSegment = pathSegments[pathSegments.length - 1];
