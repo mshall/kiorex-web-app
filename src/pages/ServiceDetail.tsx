@@ -47,7 +47,8 @@ const ServiceDetail = () => {
   
   const [searchQuery, setSearchQuery] = useState("");
   const [priceFilter, setPriceFilter] = useState("all");
-  const [locationFilter, setLocationFilter] = useState("all");
+  const [countryFilter, setCountryFilter] = useState("all");
+  const [cityFilter, setCityFilter] = useState("all");
   const [serviceTypeFilter, setServiceTypeFilter] = useState("all");
   const [sortBy, setSortBy] = useState("rating");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
@@ -966,13 +967,18 @@ const ServiceDetail = () => {
         (priceFilter === "100-150" && provider.price > 100 && provider.price <= 150) ||
         (priceFilter === "over-150" && provider.price > 150);
       
-      const matchesLocation = locationFilter === "all" || 
-        provider.location.toLowerCase().includes(locationFilter.toLowerCase());
+      const matchesCountry = countryFilter === "all" || 
+        provider.country?.toLowerCase().includes(countryFilter.toLowerCase()) ||
+        provider.location.toLowerCase().includes(countryFilter.toLowerCase());
+      
+      const matchesCity = cityFilter === "all" || 
+        provider.city?.toLowerCase().includes(cityFilter.toLowerCase()) ||
+        provider.location.toLowerCase().includes(cityFilter.toLowerCase());
       
       const matchesServiceType = serviceTypeFilter === "all" || 
         provider.serviceType.toLowerCase().includes(serviceTypeFilter.toLowerCase());
       
-      return matchesSearch && matchesPrice && matchesLocation && matchesServiceType;
+      return matchesSearch && matchesPrice && matchesCountry && matchesCity && matchesServiceType;
     });
 
     // Sort data
@@ -1009,7 +1015,7 @@ const ServiceDetail = () => {
     });
 
     return filtered;
-  }, [serviceData, searchQuery, priceFilter, locationFilter, serviceTypeFilter, sortBy, sortOrder]);
+  }, [serviceData, searchQuery, priceFilter, countryFilter, cityFilter, serviceTypeFilter, sortBy, sortOrder]);
 
   // Pagination
   const {
@@ -1175,7 +1181,7 @@ const ServiceDetail = () => {
         {/* Filters and Search */}
         <Card className="mb-6">
           <CardContent className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
               <div className="lg:col-span-2">
                 <div className="relative">
                   <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -1201,16 +1207,40 @@ const ServiceDetail = () => {
                 </SelectContent>
               </Select>
               
-              <Select value={locationFilter} onValueChange={setLocationFilter}>
+              <Select value={countryFilter} onValueChange={setCountryFilter}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Location" />
+                  <SelectValue placeholder="Country" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Locations</SelectItem>
-                  <SelectItem value="downtown">Downtown</SelectItem>
-                  <SelectItem value="city">City Center</SelectItem>
-                  <SelectItem value="available">Available Citywide</SelectItem>
-                  <SelectItem value="24/7">Available 24/7</SelectItem>
+                  <SelectItem value="all">All Countries</SelectItem>
+                  <SelectItem value="united states">United States</SelectItem>
+                  <SelectItem value="canada">Canada</SelectItem>
+                  <SelectItem value="united kingdom">United Kingdom</SelectItem>
+                  <SelectItem value="australia">Australia</SelectItem>
+                  <SelectItem value="germany">Germany</SelectItem>
+                  <SelectItem value="france">France</SelectItem>
+                  <SelectItem value="spain">Spain</SelectItem>
+                  <SelectItem value="italy">Italy</SelectItem>
+                  <SelectItem value="japan">Japan</SelectItem>
+                </SelectContent>
+              </Select>
+              
+              <Select value={cityFilter} onValueChange={setCityFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="City" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Cities</SelectItem>
+                  <SelectItem value="new york">New York</SelectItem>
+                  <SelectItem value="los angeles">Los Angeles</SelectItem>
+                  <SelectItem value="chicago">Chicago</SelectItem>
+                  <SelectItem value="houston">Houston</SelectItem>
+                  <SelectItem value="toronto">Toronto</SelectItem>
+                  <SelectItem value="vancouver">Vancouver</SelectItem>
+                  <SelectItem value="london">London</SelectItem>
+                  <SelectItem value="sydney">Sydney</SelectItem>
+                  <SelectItem value="berlin">Berlin</SelectItem>
+                  <SelectItem value="paris">Paris</SelectItem>
                 </SelectContent>
               </Select>
               
@@ -1336,7 +1366,9 @@ const ServiceDetail = () => {
                       </TableCell>
                       
                       <TableCell>
-                        <Badge variant="outline">{provider.specialty}</Badge>
+                        <div className="flex justify-center">
+                          <Badge variant="outline" className="text-center">{provider.specialty}</Badge>
+                        </div>
                       </TableCell>
                       
                       <TableCell>
