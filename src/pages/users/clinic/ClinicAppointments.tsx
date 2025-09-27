@@ -44,7 +44,6 @@ const ClinicAppointments = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
   const [selectedAppointment, setSelectedAppointment] = useState(null);
-  const [activeStatusTab, setActiveStatusTab] = useState("all");
   const [customDateFrom, setCustomDateFrom] = useState("");
   const [customDateTo, setCustomDateTo] = useState("");
 
@@ -383,17 +382,7 @@ const ClinicAppointments = () => {
       }
     }
     
-    // Status tab filtering
-    let matchesStatusTab = true;
-    if (activeStatusTab !== "all") {
-      if (activeStatusTab === "upcoming") {
-        matchesStatusTab = appointment.status === "pending";
-      } else {
-        matchesStatusTab = appointment.status === activeStatusTab;
-      }
-    }
-    
-    return matchesSearch && matchesStatus && matchesDate && matchesStatusTab;
+    return matchesSearch && matchesStatus && matchesDate;
   });
 
   // Pagination logic
@@ -544,12 +533,42 @@ const ClinicAppointments = () => {
               <SelectValue placeholder="Filter by status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="confirmed">Confirmed</SelectItem>
-              <SelectItem value="pending">Pending</SelectItem>
-                      <SelectItem value="waiting">Waiting</SelectItem>
-              <SelectItem value="completed">Completed</SelectItem>
-              <SelectItem value="cancelled">Cancelled</SelectItem>
+              <SelectItem value="all">
+                <div className="flex items-center space-x-2">
+                  <Calendar className="w-4 h-4" />
+                  <span>All Status</span>
+                </div>
+              </SelectItem>
+              <SelectItem value="confirmed">
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-green-600" />
+                  <span>Confirmed</span>
+                </div>
+              </SelectItem>
+              <SelectItem value="pending">
+                <div className="flex items-center space-x-2">
+                  <Clock className="w-4 h-4 text-yellow-600" />
+                  <span>Upcoming</span>
+                </div>
+              </SelectItem>
+              <SelectItem value="waiting">
+                <div className="flex items-center space-x-2">
+                  <AlertCircle className="w-4 h-4 text-orange-600" />
+                  <span>Waiting</span>
+                </div>
+              </SelectItem>
+              <SelectItem value="completed">
+                <div className="flex items-center space-x-2">
+                  <TrendingUp className="w-4 h-4 text-purple-600" />
+                  <span>Completed</span>
+                </div>
+              </SelectItem>
+              <SelectItem value="cancelled">
+                <div className="flex items-center space-x-2">
+                  <XCircle className="w-4 h-4 text-red-600" />
+                  <span>Cancelled</span>
+                </div>
+              </SelectItem>
             </SelectContent>
           </Select>
                   <Select value={dateFilter} onValueChange={setDateFilter}>
@@ -594,36 +613,6 @@ const ClinicAppointments = () => {
                 )}
               </CardContent>
             </Card>
-
-            {/* Status Tabs */}
-            <Tabs value={activeStatusTab} onValueChange={setActiveStatusTab} className="space-y-4">
-              <TabsList className="grid w-full grid-cols-6">
-                <TabsTrigger value="all" className="flex items-center space-x-2">
-                  <Calendar className="w-4 h-4" />
-                  <span>All</span>
-                </TabsTrigger>
-                <TabsTrigger value="upcoming" className="flex items-center space-x-2">
-                  <Clock className="w-4 h-4" />
-                  <span>Upcoming</span>
-                </TabsTrigger>
-                <TabsTrigger value="confirmed" className="flex items-center space-x-2">
-                  <CheckCircle className="w-4 h-4" />
-                  <span>Confirmed</span>
-                </TabsTrigger>
-                <TabsTrigger value="waiting" className="flex items-center space-x-2">
-                  <AlertCircle className="w-4 h-4" />
-                  <span>Waiting</span>
-                </TabsTrigger>
-                <TabsTrigger value="completed" className="flex items-center space-x-2">
-                  <TrendingUp className="w-4 h-4" />
-                  <span>Completed</span>
-                </TabsTrigger>
-                <TabsTrigger value="cancelled" className="flex items-center space-x-2">
-                  <XCircle className="w-4 h-4" />
-                  <span>Cancelled</span>
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
 
             {/* Appointments Table */}
             <Card>
