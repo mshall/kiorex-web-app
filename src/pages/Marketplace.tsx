@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import RoleBasedNavigation from "@/components/RoleBasedNavigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,15 +20,112 @@ import {
   Users,
   Calendar,
   Video,
-  Phone
+  Phone,
+  Heart,
+  Brain,
+  Bone,
+  Eye,
+  Baby,
+  Scissors,
+  Pill,
+  Microscope,
+  Shield,
+  ArrowRight
 } from "lucide-react";
 
 const Marketplace = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const userType = location.state?.userType || 'patient';
   const providerType = location.state?.providerType || 'Patient';
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState("services");
   
+  // Service categories with dummy data
+  const serviceCategories = [
+    {
+      id: 'surgery',
+      name: 'Surgery',
+      icon: Scissors,
+      description: 'Advanced surgical procedures',
+      providers: 25,
+      avgPrice: 2500,
+      color: 'bg-red-500'
+    },
+    {
+      id: 'cardiology',
+      name: 'Cardiology',
+      icon: Heart,
+      description: 'Heart and cardiovascular care',
+      providers: 18,
+      avgPrice: 200,
+      color: 'bg-red-500'
+    },
+    {
+      id: 'neurology',
+      name: 'Neurology',
+      icon: Brain,
+      description: 'Brain and nervous system care',
+      providers: 12,
+      avgPrice: 180,
+      color: 'bg-purple-500'
+    },
+    {
+      id: 'orthopedics',
+      name: 'Orthopedics',
+      icon: Bone,
+      description: 'Bone and joint treatment',
+      providers: 22,
+      avgPrice: 220,
+      color: 'bg-blue-500'
+    },
+    {
+      id: 'ophthalmology',
+      name: 'Ophthalmology',
+      icon: Eye,
+      description: 'Eye care and vision treatment',
+      providers: 15,
+      avgPrice: 150,
+      color: 'bg-green-500'
+    },
+    {
+      id: 'pediatrics',
+      name: 'Pediatrics',
+      icon: Baby,
+      description: 'Children's healthcare',
+      providers: 20,
+      avgPrice: 120,
+      color: 'bg-pink-500'
+    },
+    {
+      id: 'dermatology',
+      name: 'Dermatology',
+      icon: Shield,
+      description: 'Skin care and treatment',
+      providers: 16,
+      avgPrice: 130,
+      color: 'bg-yellow-500'
+    },
+    {
+      id: 'pharmacy',
+      name: 'Pharmacy',
+      icon: Pill,
+      description: 'Medication and prescriptions',
+      providers: 30,
+      avgPrice: 50,
+      color: 'bg-indigo-500'
+    },
+    {
+      id: 'lab-tests',
+      name: 'Lab Tests',
+      icon: Microscope,
+      description: 'Diagnostic testing services',
+      providers: 14,
+      avgPrice: 80,
+      color: 'bg-teal-500'
+    }
+  ];
+
   const doctors = [
     { 
       id: 1, 
@@ -135,6 +232,71 @@ const Marketplace = () => {
       specializations: ["Developmental Delays", "Neurological Conditions", "Posture Correction"]
     }
   ];
+
+  const ServiceCard = ({ service }: { service: any }) => {
+    const IconComponent = service.icon;
+    return (
+      <Card className="group hover:shadow-lg transition-all duration-300 cursor-pointer border-l-4 border-l-primary">
+        <CardContent className="p-6">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex items-center space-x-4">
+              <div className={`w-16 h-16 ${service.color} rounded-lg flex items-center justify-center text-white`}>
+                <IconComponent className="w-8 h-8" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold">{service.name}</h3>
+                <p className="text-muted-foreground">{service.description}</p>
+                <div className="flex items-center space-x-4 mt-2 text-sm text-muted-foreground">
+                  <div className="flex items-center">
+                    <Users className="w-4 h-4 mr-1" />
+                    {service.providers} providers
+                  </div>
+                  <div className="flex items-center">
+                    <DollarSign className="w-4 h-4 mr-1" />
+                    From ${service.avgPrice}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ArrowRight className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
+          </div>
+          
+          <div className="flex space-x-2 mt-4">
+            <Button 
+              variant="medical" 
+              className="flex-1"
+              onClick={() => navigate('/service-detail', { 
+                state: { 
+                  userType, 
+                  providerType, 
+                  serviceType: 'doctors',
+                  serviceCategory: service.id
+                } 
+              })}
+            >
+              <Users className="w-4 h-4 mr-2" />
+              View Providers
+            </Button>
+            <Button 
+              variant="outline" 
+              className="flex-1"
+              onClick={() => navigate('/service-detail', { 
+                state: { 
+                  userType, 
+                  providerType, 
+                  serviceType: 'doctors',
+                  serviceCategory: service.id
+                } 
+              })}
+            >
+              <ArrowRight className="w-4 h-4 mr-2" />
+              View Details
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
 
   const ProviderCard = ({ provider, type }: { provider: any; type: string }) => (
     <Card className="group hover:shadow-md transition-all duration-300 border-l-4 border-l-primary">
@@ -318,12 +480,25 @@ const Marketplace = () => {
         </div>
 
         {/* Provider Tabs */}
-        <Tabs defaultValue="doctors" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-4 mb-8">
+            <TabsTrigger value="services">Healthcare Services</TabsTrigger>
             <TabsTrigger value="doctors">Doctors On-Demand</TabsTrigger>
             <TabsTrigger value="nurses">Nurses On-Demand</TabsTrigger>
             <TabsTrigger value="physiotherapists">Physiotherapists</TabsTrigger>
           </TabsList>
+          
+          <TabsContent value="services" className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-bold">Healthcare Services</h2>
+              <p className="text-muted-foreground">Choose a service to find providers</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {serviceCategories.map((service) => (
+                <ServiceCard key={service.id} service={service} />
+              ))}
+            </div>
+          </TabsContent>
           
           <TabsContent value="doctors" className="space-y-6">
             <div className="flex justify-between items-center">

@@ -44,23 +44,345 @@ const ServiceDetail = () => {
   const [sortBy, setSortBy] = useState("rating");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
-  // Expanded dummy data with 10 providers for each service type
-  const doctors = [
-    { 
-      id: 1, 
-      name: "Dr. Emily Richardson", 
-      specialty: "Cardiologist", 
-      rating: 4.9, 
-      reviews: 156, 
-      price: 150, 
-      location: "Downtown Medical Center",
-      experience: "15 years",
-      nextAvailable: "Today 2:30 PM",
-      image: "ER",
-      verified: true,
-      languages: ["English", "Spanish"],
-      serviceType: "Cardiology"
-    },
+  // Get service-specific data based on service category
+  const getServiceSpecificData = () => {
+    const serviceCategory = location.state?.serviceCategory || 'cardiology';
+    
+    // Surgery providers
+    if (serviceCategory === 'surgery') {
+      return [
+        { 
+          id: 1, 
+          name: "Dr. Michael Thompson", 
+          specialty: "Cardiac Surgeon", 
+          rating: 4.9, 
+          reviews: 89, 
+          price: 2500, 
+          location: "Heart Surgery Center",
+          experience: "18 years",
+          nextAvailable: "Tomorrow 8:00 AM",
+          image: "MT",
+          verified: true,
+          languages: ["English", "Spanish"],
+          serviceType: "Cardiac Surgery",
+          clinic: "Downtown Medical Center"
+        },
+        { 
+          id: 2, 
+          name: "Dr. Sarah Williams", 
+          specialty: "Orthopedic Surgeon", 
+          rating: 4.8, 
+          reviews: 76, 
+          price: 2200, 
+          location: "Sports Medicine Center",
+          experience: "15 years",
+          nextAvailable: "Today 3:00 PM",
+          image: "SW",
+          verified: true,
+          languages: ["English"],
+          serviceType: "Orthopedic Surgery",
+          clinic: "City Orthopedic Clinic"
+        },
+        { 
+          id: 3, 
+          name: "Dr. David Chen", 
+          specialty: "Neurosurgeon", 
+          rating: 4.9, 
+          reviews: 95, 
+          price: 3000, 
+          location: "Neurological Institute",
+          experience: "20 years",
+          nextAvailable: "Monday 9:00 AM",
+          image: "DC",
+          verified: true,
+          languages: ["English", "Mandarin"],
+          serviceType: "Neurosurgery",
+          clinic: "Advanced Neuro Center"
+        },
+        { 
+          id: 4, 
+          name: "Dr. Lisa Rodriguez", 
+          specialty: "Plastic Surgeon", 
+          rating: 4.7, 
+          reviews: 112, 
+          price: 1800, 
+          location: "Aesthetic Surgery Center",
+          experience: "12 years",
+          nextAvailable: "Today 5:00 PM",
+          image: "LR",
+          verified: true,
+          languages: ["English", "Spanish"],
+          serviceType: "Plastic Surgery",
+          clinic: "Beauty & Wellness Clinic"
+        },
+        { 
+          id: 5, 
+          name: "Dr. James Wilson", 
+          specialty: "General Surgeon", 
+          rating: 4.6, 
+          reviews: 134, 
+          price: 1500, 
+          location: "General Surgery Center",
+          experience: "16 years",
+          nextAvailable: "Tomorrow 10:30 AM",
+          image: "JW",
+          verified: true,
+          languages: ["English"],
+          serviceType: "General Surgery",
+          clinic: "City General Hospital"
+        },
+        { 
+          id: 6, 
+          name: "Dr. Maria Garcia", 
+          specialty: "Pediatric Surgeon", 
+          rating: 4.9, 
+          reviews: 67, 
+          price: 2000, 
+          location: "Children's Surgery Center",
+          experience: "14 years",
+          nextAvailable: "Today 2:00 PM",
+          image: "MG",
+          verified: true,
+          languages: ["English", "Spanish"],
+          serviceType: "Pediatric Surgery",
+          clinic: "Children's Hospital"
+        },
+        { 
+          id: 7, 
+          name: "Dr. Robert Kim", 
+          specialty: "Urological Surgeon", 
+          rating: 4.8, 
+          reviews: 89, 
+          price: 1900, 
+          location: "Urology Surgery Center",
+          experience: "17 years",
+          nextAvailable: "Monday 11:00 AM",
+          image: "RK",
+          verified: true,
+          languages: ["English", "Korean"],
+          serviceType: "Urological Surgery",
+          clinic: "Urology Specialists"
+        },
+        { 
+          id: 8, 
+          name: "Dr. Jennifer Lee", 
+          specialty: "Ophthalmic Surgeon", 
+          rating: 4.7, 
+          reviews: 78, 
+          price: 1600, 
+          location: "Eye Surgery Center",
+          experience: "13 years",
+          nextAvailable: "Today 4:30 PM",
+          image: "JL",
+          verified: true,
+          languages: ["English"],
+          serviceType: "Ophthalmic Surgery",
+          clinic: "Vision Care Center"
+        },
+        { 
+          id: 9, 
+          name: "Dr. Thomas Anderson", 
+          specialty: "Vascular Surgeon", 
+          rating: 4.9, 
+          reviews: 92, 
+          price: 2400, 
+          location: "Vascular Surgery Center",
+          experience: "19 years",
+          nextAvailable: "Tomorrow 1:00 PM",
+          image: "TA",
+          verified: true,
+          languages: ["English"],
+          serviceType: "Vascular Surgery",
+          clinic: "Cardiovascular Institute"
+        },
+        { 
+          id: 10, 
+          name: "Dr. Amanda Davis", 
+          specialty: "Gynecological Surgeon", 
+          rating: 4.8, 
+          reviews: 105, 
+          price: 1700, 
+          location: "Women's Surgery Center",
+          experience: "15 years",
+          nextAvailable: "Today 6:00 PM",
+          image: "AD",
+          verified: true,
+          languages: ["English", "Spanish"],
+          serviceType: "Gynecological Surgery",
+          clinic: "Women's Health Center"
+        }
+      ];
+    }
+    
+    // Cardiology providers
+    if (serviceCategory === 'cardiology') {
+      return [
+        { 
+          id: 1, 
+          name: "Dr. Emily Richardson", 
+          specialty: "Cardiologist", 
+          rating: 4.9, 
+          reviews: 156, 
+          price: 200, 
+          location: "Heart Care Center",
+          experience: "15 years",
+          nextAvailable: "Today 2:30 PM",
+          image: "ER",
+          verified: true,
+          languages: ["English", "Spanish"],
+          serviceType: "Cardiology",
+          clinic: "Downtown Medical Center"
+        },
+        { 
+          id: 2, 
+          name: "Dr. Michael Chen", 
+          specialty: "Interventional Cardiologist", 
+          rating: 4.8, 
+          reviews: 134, 
+          price: 250, 
+          location: "Cardiac Intervention Center",
+          experience: "12 years",
+          nextAvailable: "Today 4:00 PM",
+          image: "MC",
+          verified: true,
+          languages: ["English", "Mandarin"],
+          serviceType: "Cardiology",
+          clinic: "City Heart Clinic"
+        },
+        { 
+          id: 3, 
+          name: "Dr. Sarah Johnson", 
+          specialty: "Pediatric Cardiologist", 
+          rating: 4.9, 
+          reviews: 98, 
+          price: 180, 
+          location: "Children's Heart Center",
+          experience: "10 years",
+          nextAvailable: "Tomorrow 10:00 AM",
+          image: "SJ",
+          verified: true,
+          languages: ["English"],
+          serviceType: "Cardiology",
+          clinic: "Children's Hospital"
+        },
+        { 
+          id: 4, 
+          name: "Dr. David Rodriguez", 
+          specialty: "Electrophysiologist", 
+          rating: 4.7, 
+          reviews: 87, 
+          price: 300, 
+          location: "Heart Rhythm Center",
+          experience: "14 years",
+          nextAvailable: "Today 1:00 PM",
+          image: "DR",
+          verified: true,
+          languages: ["English", "Spanish"],
+          serviceType: "Cardiology",
+          clinic: "Cardiac Specialists"
+        },
+        { 
+          id: 5, 
+          name: "Dr. Lisa Wang", 
+          specialty: "Heart Failure Specialist", 
+          rating: 4.8, 
+          reviews: 112, 
+          price: 220, 
+          location: "Heart Failure Clinic",
+          experience: "13 years",
+          nextAvailable: "Tomorrow 9:00 AM",
+          image: "LW",
+          verified: true,
+          languages: ["English", "Mandarin"],
+          serviceType: "Cardiology",
+          clinic: "Advanced Heart Center"
+        },
+        { 
+          id: 6, 
+          name: "Dr. James Thompson", 
+          specialty: "Preventive Cardiologist", 
+          rating: 4.6, 
+          reviews: 76, 
+          price: 150, 
+          location: "Preventive Care Center",
+          experience: "11 years",
+          nextAvailable: "Today 3:30 PM",
+          image: "JT",
+          verified: true,
+          languages: ["English"],
+          serviceType: "Cardiology",
+          clinic: "Wellness Heart Clinic"
+        },
+        { 
+          id: 7, 
+          name: "Dr. Maria Garcia", 
+          specialty: "Cardiac Imaging Specialist", 
+          rating: 4.9, 
+          reviews: 89, 
+          price: 280, 
+          location: "Cardiac Imaging Center",
+          experience: "16 years",
+          nextAvailable: "Today 5:00 PM",
+          image: "MG",
+          verified: true,
+          languages: ["English", "Spanish"],
+          serviceType: "Cardiology",
+          clinic: "Diagnostic Heart Center"
+        },
+        { 
+          id: 8, 
+          name: "Dr. Robert Kim", 
+          specialty: "Adult Congenital Cardiologist", 
+          rating: 4.7, 
+          reviews: 65, 
+          price: 240, 
+          location: "Adult Congenital Center",
+          experience: "9 years",
+          nextAvailable: "Tomorrow 2:00 PM",
+          image: "RK",
+          verified: true,
+          languages: ["English", "Korean"],
+          serviceType: "Cardiology",
+          clinic: "Specialized Heart Care"
+        },
+        { 
+          id: 9, 
+          name: "Dr. Jennifer Lee", 
+          specialty: "Cardiac Rehabilitation Specialist", 
+          rating: 4.8, 
+          reviews: 103, 
+          price: 160, 
+          location: "Cardiac Rehab Center",
+          experience: "8 years",
+          nextAvailable: "Today 4:30 PM",
+          image: "JL",
+          verified: true,
+          languages: ["English"],
+          serviceType: "Cardiology",
+          clinic: "Recovery Heart Center"
+        },
+        { 
+          id: 10, 
+          name: "Dr. Thomas Anderson", 
+          specialty: "Cardiothoracic Surgeon", 
+          rating: 4.9, 
+          reviews: 124, 
+          price: 350, 
+          location: "Cardiothoracic Surgery Center",
+          experience: "18 years",
+          nextAvailable: "Monday 8:00 AM",
+          image: "TA",
+          verified: true,
+          languages: ["English"],
+          serviceType: "Cardiology",
+          clinic: "Advanced Cardiac Surgery"
+        }
+      ];
+    }
+    
+    // Default to general doctors if no specific category
+    return doctors;
+  };
     { 
       id: 2, 
       name: "Dr. Michael Chen", 
@@ -506,6 +828,13 @@ const ServiceDetail = () => {
 
   // Get the appropriate data based on service type
   const getServiceData = () => {
+    // First try to get service-specific data
+    const serviceSpecificData = getServiceSpecificData();
+    if (serviceSpecificData !== doctors) {
+      return serviceSpecificData;
+    }
+    
+    // Fallback to general service type data
     switch (serviceType) {
       case 'doctors': return doctors;
       case 'nurses': return nurses;
@@ -605,7 +934,7 @@ const ServiceDetail = () => {
   } = usePagination({
     data: filteredAndSortedData,
     initialPage: 1,
-    initialItemsPerPage: 5
+    initialItemsPerPage: 6
   });
 
   const handleSort = (field: string) => {
@@ -880,7 +1209,7 @@ const ServiceDetail = () => {
                 itemsPerPage={itemsPerPage}
                 onPageChange={setCurrentPage}
                 onItemsPerPageChange={setItemsPerPage}
-                itemsPerPageOptions={[5, 10, 15, 20, 25]}
+                itemsPerPageOptions={[6, 9, 12, 15, 20]}
               />
             </div>
           </CardContent>

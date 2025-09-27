@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Marketplace from "./pages/Marketplace";
+import ServiceDetail from "./pages/ServiceDetail";
 import PatientPortal from "./pages/PatientPortal";
 import { DoctorDashboard, ProviderProfile, DoctorPatients, DoctorRevenue } from "./pages/users/doctor";
 import DoctorAppointments from "./pages/users/doctor/DoctorAppointments";
@@ -83,6 +84,7 @@ const App = () => (
               <Route path="/booking" element={<Booking />} />
               <Route path="/consultation" element={<Teleconsultation />} />
               <Route path="/marketplace" element={<MarketplaceHub />} />
+              <Route path="/service-detail" element={<ServiceDetail />} />
           
               {/* Provider Routes */}
               <Route path="/provider-profile" element={<ProviderProfile />} />
