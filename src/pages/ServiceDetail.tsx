@@ -1070,7 +1070,7 @@ const ServiceDetail = () => {
     };
     
     return (
-      <Card className="w-full max-w-md cursor-pointer hover:shadow-lg transition-all duration-300 group border-l-4 border-l-primary">
+      <Card className="w-full max-w-md cursor-pointer hover:shadow-lg transition-all duration-300 group border border-primary/20">
         <div className="aspect-video bg-gradient-to-br from-blue-500 to-purple-600 rounded-t-lg flex items-center justify-center">
           <div className="text-center text-white">
             <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-2">
@@ -1427,7 +1427,7 @@ const ServiceDetail = () => {
 
         {/* Provider Details Dialog */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="max-w-md p-0 border-0 shadow-none bg-transparent">
+          <DialogContent className="max-w-md p-0 border-0 shadow-none bg-transparent [&>button]:hidden">
             <div className="relative">
               <Button 
                 variant="ghost" 
