@@ -1153,14 +1153,24 @@ const ServiceDetail = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold flex items-center space-x-3">
-              <ServiceIcon className="w-8 h-8 text-primary" />
-              <span>{getServiceTitle()}</span>
-            </h1>
-            <p className="text-muted-foreground mt-2">
-              Find and book {getServiceTitle().toLowerCase()} in your area
-            </p>
+          <div className="flex items-center space-x-4">
+            <Button 
+              variant="outline" 
+              onClick={() => navigate('/marketplace')}
+              className="flex items-center space-x-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Marketplace</span>
+            </Button>
+            <div>
+              <h1 className="text-3xl font-bold flex items-center space-x-3">
+                <ServiceIcon className="w-8 h-8 text-primary" />
+                <span>{getServiceTitle()}</span>
+              </h1>
+              <p className="text-muted-foreground mt-2">
+                Find and book {getServiceTitle().toLowerCase()} in your area
+              </p>
+            </div>
           </div>
         </div>
 

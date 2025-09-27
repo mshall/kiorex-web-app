@@ -213,19 +213,8 @@ const RoleBasedNavigation = ({
     <nav className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border sticky top-0 z-50" dir={direction}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className={`flex justify-between items-center h-16 ${isRTL ? 'flex-row-reverse' : ''}`}>
-          {/* Logo and Back Button */}
+          {/* Logo */}
           <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'}`}>
-            {breadcrumb && (
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={handleBackToDashboard}
-                className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}
-              >
-                <ArrowLeft className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />
-                <span className="hidden sm:inline">{t('common.back')}</span>
-              </Button>
-            )}
             <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-2' : 'space-x-2'}`}>
               <Link to="/" className="flex items-center">
                 <KiorexLogo size="md" showText={true} />
