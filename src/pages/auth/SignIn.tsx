@@ -61,7 +61,15 @@ const SignIn = () => {
         const userType = formData.email.includes('doctor') ? 'doctor' : 
                         formData.email.includes('admin') ? 'admin' : 'patient';
         
-        navigate('/dashboard', { state: { userType } });
+        // Navigate to appropriate dashboard based on user type
+        const dashboardPath = userType === 'doctor' ? '/doctor-dashboard' :
+                             userType === 'admin' ? '/admin-dashboard' :
+                             userType === 'nurse' ? '/nurse-dashboard' :
+                             userType === 'pharmacy' ? '/pharmacy-dashboard' :
+                             userType === 'clinic' ? '/clinic-dashboard' :
+                             '/patient-dashboard';
+        
+        navigate(dashboardPath, { state: { userType, providerType: userType === 'patient' ? 'Patient' : userType } });
       }
       setIsLoading(false);
     }, 1500);

@@ -62,7 +62,7 @@ const PatientSignIn = () => {
     setTimeout(() => {
       // Demo login - accept any valid email/password
       if (formData.email && formData.password) {
-        navigate('/dashboard', { state: { userType: 'patient' } });
+        navigate('/patient-dashboard', { state: { userType: 'patient', providerType: 'Patient' } });
       }
       setIsLoading(false);
     }, 1500);

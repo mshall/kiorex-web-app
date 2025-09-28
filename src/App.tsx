@@ -54,6 +54,7 @@ const App = () => (
       <BrowserRouter future={{ v7_relativeSplatPath: true }}>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           
               {/* Authentication Routes */}
               <Route path="/auth/welcome" element={<Welcome />} />
