@@ -180,7 +180,11 @@ const ClinicDashboard = () => {
                   <UserPlus className="w-4 h-4 mr-2" />
                   Add New Patient
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start"
+                  onClick={() => navigate('/booking', { state: { userType: 'clinic', providerType: 'Clinic' } })}
+                >
                   <Calendar className="w-4 h-4 mr-2" />
                   Schedule Appointment
                 </Button>

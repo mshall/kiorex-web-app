@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useRTL } from "@/hooks/useRTL";
 import RoleBasedNavigation from "@/components/RoleBasedNavigation";
@@ -35,6 +35,7 @@ import {
 
 const ClinicAppointments = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const { isRTL, direction } = useRTL();
   const userType = location.state?.userType || 'clinic';
@@ -513,6 +514,14 @@ const ClinicAppointments = () => {
           </TabsList>
 
           <TabsContent value="appointments" className="space-y-6">
+            {/* Add Booking Button */}
+            <div className="flex justify-end mb-4">
+              <Button onClick={() => navigate('/booking', { state: { userType: 'clinic', providerType: 'Clinic' } })}>
+                <Calendar className="w-4 h-4 mr-2" />
+                Add New Booking
+              </Button>
+            </div>
+
             {/* Filters */}
             <Card>
               <CardContent className="p-6">
