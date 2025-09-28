@@ -1410,7 +1410,14 @@ const MarketplaceHub = () => {
                         <Clock className="w-3 h-3 mr-1" />
                         {service.availability}
                       </Badge>
-                      <Button size="sm" className="group-hover:bg-primary">
+                      <Button 
+                        size="sm" 
+                        className="group-hover:bg-primary"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleServiceClick(service);
+                        }}
+                      >
                         View Details
                         <ArrowRight className="w-4 h-4 ml-2" />
                       </Button>
@@ -1457,7 +1464,13 @@ const MarketplaceHub = () => {
                             <Badge variant="secondary" className="text-xs">
                               {service.availability}
                             </Badge>
-                            <Button size="sm">
+                            <Button 
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleServiceClick(service);
+                              }}
+                            >
                               View Details
                               <ArrowRight className="w-4 h-4 ml-2" />
                             </Button>
