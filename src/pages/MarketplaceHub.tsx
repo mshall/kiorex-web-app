@@ -41,7 +41,8 @@ import {
   SortAsc,
   SortDesc,
   ChevronUp,
-  ChevronDown as ChevronDownIcon
+  ChevronDown as ChevronDownIcon,
+  X
 } from "lucide-react";
 import KiorexLogo from "@/components/KiorexLogo";
 
@@ -240,6 +241,82 @@ const MarketplaceHub = () => {
             country: "United States",
             city: "Los Angeles",
             consultationTypes: ["Video Call", "In-Person"]
+          },
+          { 
+            id: 3, 
+            name: "Dr. James Rodriguez", 
+            specialty: "Neurosurgeon", 
+            rating: 4.9, 
+            reviews: 124, 
+            price: 3500, 
+            location: "Neuroscience Institute",
+            experience: "22 years",
+            nextAvailable: "Next Week",
+            profileImage: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=150&h=150&fit=crop&crop=face",
+            verified: true,
+            languages: ["English", "Spanish"],
+            serviceType: "Neurosurgery",
+            clinic: "Advanced Medical Center",
+            country: "United States",
+            city: "Chicago",
+            consultationTypes: ["Video Call", "In-Person"]
+          },
+          { 
+            id: 4, 
+            name: "Dr. Emily Chen", 
+            specialty: "Plastic Surgeon", 
+            rating: 4.7, 
+            reviews: 98, 
+            price: 1800, 
+            location: "Aesthetic Surgery Center",
+            experience: "12 years",
+            nextAvailable: "Today 2:00 PM",
+            profileImage: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=150&h=150&fit=crop&crop=face",
+            verified: true,
+            languages: ["English", "Mandarin"],
+            serviceType: "Plastic Surgery",
+            clinic: "Beauty & Health Clinic",
+            country: "United States",
+            city: "Miami",
+            consultationTypes: ["Video Call", "In-Person"]
+          },
+          { 
+            id: 5, 
+            name: "Dr. Robert Johnson", 
+            specialty: "General Surgeon", 
+            rating: 4.6, 
+            reviews: 67, 
+            price: 1500, 
+            location: "City General Hospital",
+            experience: "14 years",
+            nextAvailable: "Tomorrow 10:00 AM",
+            profileImage: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150&h=150&fit=crop&crop=face",
+            verified: true,
+            languages: ["English"],
+            serviceType: "General Surgery",
+            clinic: "City General Hospital",
+            country: "United States",
+            city: "Seattle",
+            consultationTypes: ["Video Call", "In-Person"]
+          },
+          { 
+            id: 6, 
+            name: "Dr. Maria Garcia", 
+            specialty: "Pediatric Surgeon", 
+            rating: 4.8, 
+            reviews: 112, 
+            price: 2000, 
+            location: "Children's Medical Center",
+            experience: "16 years",
+            nextAvailable: "This Week",
+            profileImage: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=150&h=150&fit=crop&crop=face",
+            verified: true,
+            languages: ["English", "Spanish"],
+            serviceType: "Pediatric Surgery",
+            clinic: "Children's Medical Center",
+            country: "United States",
+            city: "San Francisco",
+            consultationTypes: ["Video Call", "In-Person"]
           }
         ];
       case 'physio':
@@ -428,8 +505,8 @@ const MarketplaceHub = () => {
       
       const matchesPrice = priceFilter === 'all' || 
         (priceFilter === 'low' && provider.price < 100) ||
-        (priceFilter === 'medium' && provider.price >= 100 && provider.price < 500) ||
-        (priceFilter === 'high' && provider.price >= 500);
+        (priceFilter === 'medium' && provider.price >= 100 && provider.price < 1000) ||
+        (priceFilter === 'high' && provider.price >= 1000);
       
       const matchesCountry = countryFilter === 'all' || provider.country === countryFilter;
       const matchesCity = cityFilter === 'all' || provider.city === cityFilter;
@@ -873,8 +950,8 @@ const MarketplaceHub = () => {
                   <SelectContent>
                     <SelectItem value="all">All Prices</SelectItem>
                     <SelectItem value="low">Under $100</SelectItem>
-                    <SelectItem value="medium">$100 - $500</SelectItem>
-                    <SelectItem value="high">Over $500</SelectItem>
+                    <SelectItem value="medium">$100 - $1000</SelectItem>
+                    <SelectItem value="high">Over $1000</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
