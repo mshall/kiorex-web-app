@@ -29,14 +29,17 @@ export const usePagination = <T>({
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [itemsPerPage, setItemsPerPage] = useState(initialItemsPerPage);
 
-  const totalItems = data.length;
+  // Safety check to ensure data is always an array
+  const safeData = data || [];
+  
+  const totalItems = safeData.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    return data.slice(startIndex, endIndex);
-  }, [data, currentPage, itemsPerPage]);
+    return safeData.slice(startIndex, endIndex);
+  }, [safeData, currentPage, itemsPerPage]);
 
   const goToPage = (page: number) => {
     if (page >= 1 && page <= totalPages) {

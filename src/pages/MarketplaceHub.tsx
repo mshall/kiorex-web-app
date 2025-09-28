@@ -413,6 +413,12 @@ const MarketplaceHub = () => {
   // Get filtered and sorted data for service detail view
   const filteredAndSortedData = useMemo(() => {
     const data = getServiceSpecificData();
+    
+    // Return empty array if no data or if 'all' category is selected
+    if (!data || data.length === 0 || selectedCategory === 'all') {
+      return [];
+    }
+    
     let filtered = data.filter(provider => {
       const matchesSearch = serviceDetailSearch === '' || 
         provider.name.toLowerCase().includes(serviceDetailSearch.toLowerCase()) ||
@@ -461,7 +467,7 @@ const MarketplaceHub = () => {
     paginatedData,
     setCurrentPage,
     setItemsPerPage
-  } = usePagination(filteredAndSortedData, { initialItemsPerPage: 6 });
+  } = usePagination(filteredAndSortedData || [], { initialItemsPerPage: 6 });
 
   // Handle booking appointment
   const handleBookAppointment = (provider: any) => {
