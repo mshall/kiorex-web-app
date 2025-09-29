@@ -183,6 +183,7 @@ const MarketplaceHub = () => {
   });
 
   const handleServiceClick = (service: any) => {
+    console.log('🔍 Service clicked:', service.title, '- Category:', service.category);
     setSelectedCategory(service.category);
     setShowServiceDetail(true);
   };
@@ -1172,15 +1173,12 @@ const MarketplaceHub = () => {
     }
   };
 
-  // Get filtered and sorted data for service detail view
-  const filteredAndSortedData = useMemo(() => {
-    const data = getServiceSpecificData();
-    
-    // Return empty array if no data or if 'all' category is selected
-    if (!data || data.length === 0 || selectedCategory === 'all') {
-      return [];
-    }
-    
+  // Get filtered and sorted data for service detail view - SIMPLIFIED VERSION
+  const data = getServiceSpecificData();
+  console.log('🔍 Raw data for category', selectedCategory, ':', data?.length, 'items');
+  
+  // Return empty array if no data or if 'all' category is selected
+  const filteredAndSortedData = (!data || data.length === 0 || selectedCategory === 'all') ? [] : (() => {
     let filtered = data.filter(provider => {
       const matchesSearch = serviceDetailSearch === '' || 
         provider.name.toLowerCase().includes(serviceDetailSearch.toLowerCase()) ||
@@ -1217,10 +1215,26 @@ const MarketplaceHub = () => {
       return sortOrder === 'asc' ? comparison : -comparison;
     });
 
+    console.log('🔍 Filtered data:', filtered?.length, 'items');
     return filtered;
-  }, [selectedCategory, serviceDetailSearch, priceFilter, countryFilter, cityFilter, sortBy, sortOrder]);
+  })();
 
   // Pagination hook
+  console.log('🔍 Before pagination - filteredAndSortedData:', filteredAndSortedData);
+  console.log('🔍 Before pagination - isArray:', Array.isArray(filteredAndSortedData));
+  console.log('🔍 Before pagination - length:', filteredAndSortedData?.length);
+  
+  const paginationData = filteredAndSortedData || [];
+  console.log('🔍 Pagination data:', paginationData);
+  console.log('🔍 Pagination data length:', paginationData.length);
+  
+  const paginationConfig = { 
+    data: paginationData, 
+    initialItemsPerPage: 6 
+  };
+  console.log('🔍 Pagination config:', paginationConfig);
+  console.log('🔍 Pagination data being passed:', paginationData);
+  
   const {
     currentPage,
     itemsPerPage,
@@ -1229,7 +1243,13 @@ const MarketplaceHub = () => {
     paginatedData,
     setCurrentPage,
     setItemsPerPage
-  } = usePagination(filteredAndSortedData || [], { initialItemsPerPage: 6 });
+  } = usePagination(paginationConfig);
+  
+  console.log('🔍 After pagination - paginatedData:', paginatedData);
+  console.log('🔍 After pagination - paginatedData length:', paginatedData?.length);
+  console.log('🔍 After pagination - totalItems:', totalItems);
+  console.log('🔍 After pagination - currentPage:', currentPage);
+  console.log('🔍 After pagination - itemsPerPage:', itemsPerPage);
 
   // Handle booking appointment
   const handleBookAppointment = (provider: any) => {
@@ -1613,6 +1633,15 @@ const MarketplaceHub = () => {
                    selectedCategory === 'pharmacy' ? 'Available Pharmacies' :
                    'Available Providers'}
                 </h1>
+                <Button onClick={() => {
+                  console.log('🔍 TEST - Current state:', { selectedCategory, showServiceDetail, serviceDetailSearch, priceFilter, countryFilter, cityFilter });
+                  const testData = getServiceSpecificData();
+                  console.log('🔍 TEST - Raw data:', testData);
+                  console.log('🔍 TEST - Filtered data:', filteredAndSortedData);
+                  console.log('🔍 TEST - Paginated data:', paginatedData);
+                }} className="mt-2 text-sm">
+                  Debug Test
+                </Button>
                 <p className="text-muted-foreground mt-2">
                   Choose from our verified {selectedCategory === 'surgery' ? 'surgeons' :
                    selectedCategory === 'physio' ? 'physiotherapists' :
@@ -1724,8 +1753,9 @@ const MarketplaceHub = () => {
 
           {/* Results */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            {paginatedData.map((provider) => (
-              <Card key={provider.id} className="hover:shadow-lg transition-all duration-200">
+            {paginatedData.length > 0 ? (
+              paginatedData.map((provider: any) => (
+                <Card key={provider.id} className="hover:shadow-lg transition-all duration-200">
                 <CardContent className="p-6">
                   <div className="flex items-start space-x-4">
                     <div className="w-20 h-20 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
@@ -1824,8 +1854,26 @@ const MarketplaceHub = () => {
                     </div>
                   </div>
                 </CardContent>
-              </Card>
-            ))}
+                </Card>
+              ))
+            ) : (
+              <div className="col-span-full">
+                <Card className="text-center py-12">
+                  <CardContent>
+                    <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Search className="w-12 h-12 text-muted-foreground" />
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2">No providers found</h3>
+                    <p className="text-muted-foreground mb-4">
+                      No providers available for {selectedCategory}. Try adjusting your filters.
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Debug: {totalItems} total items, {paginatedData.length} paginated items
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
           </div>
 
           {/* Pagination */}

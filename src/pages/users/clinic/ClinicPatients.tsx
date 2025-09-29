@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import RoleBasedNavigation from "@/components/RoleBasedNavigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -36,6 +36,7 @@ import { usePagination } from "@/hooks/usePagination";
 
 const ClinicPatients = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const userType = location.state?.userType || 'clinic';
   const providerType = location.state?.providerType || 'Clinic';
 
@@ -210,7 +211,12 @@ const ClinicPatients = () => {
 
   const handleViewPatientProfile = (patientId: number) => {
     // Navigate to patient profile with clinic context
-    window.location.href = `/patient-profile/${patientId}?userType=clinic&providerType=Clinic`;
+    navigate(`/patient-profile/${patientId}`, {
+      state: { 
+        userType: 'clinic',
+        providerType: 'Clinic'
+      }
+    });
   };
 
   const handleDeletePatient = (patientId: number) => {

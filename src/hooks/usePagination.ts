@@ -26,14 +26,25 @@ export const usePagination = <T>({
   initialPage = 1,
   initialItemsPerPage = 5
 }: UsePaginationProps<T>): UsePaginationReturn<T> => {
+  console.log('🔍 usePagination - data received:', data);
+  console.log('🔍 usePagination - data length:', data?.length);
+  console.log('🔍 usePagination - initialItemsPerPage:', initialItemsPerPage);
+  
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [itemsPerPage, setItemsPerPage] = useState(initialItemsPerPage);
 
   // Safety check to ensure data is always an array
   const safeData = data || [];
+  console.log('🔍 usePagination - safeData:', safeData);
+  console.log('🔍 usePagination - safeData length:', safeData.length);
   
   const totalItems = safeData.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
+  
+  console.log('🔍 usePagination - totalItems:', totalItems);
+  console.log('🔍 usePagination - totalPages:', totalPages);
+  console.log('🔍 usePagination - currentPage:', currentPage);
+  console.log('🔍 usePagination - itemsPerPage:', itemsPerPage);
 
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
